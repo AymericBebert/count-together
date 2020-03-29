@@ -1,9 +1,12 @@
 {
   "app-name": "Count Together",
   "misc": {
-    "language": "langue"
+    "dark-mode": "Thème sombre",
+    "language": "langue",
+    "pin-sidenav": "Épingler",
+    "version": "Version :"
   },
   "nav": {
-    "menu-title": "Menu"
+    "menu-title": "Paramètres"
   }
 }

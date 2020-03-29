@@ -15,6 +15,8 @@ export class AppComponent {
     translate.addLangs(['fr', 'en']);
     translate.setDefaultLang('fr');
     this.navService.applyStoredLanguage();
+    this.navService.applyStoredDarkMode();
+    this.navService.applyPinSideNav();
   }
 
 }

@@ -12,6 +12,10 @@ ARG BUILD_CONFIGURATION=production
 
 RUN ng build --configuration="${BUILD_CONFIGURATION}"
 
+ARG VERSION=untagged
+
+RUN for i in ./dist/count-together/main-*.js; do; sed -i 's/##[APP_VERSION]##/${VERSION}/g' $i; done
+
 #
 # Go back from a light nginx image
 #

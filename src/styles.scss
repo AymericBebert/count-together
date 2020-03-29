@@ -159,3 +159,15 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.very-light-text {
+  color: #cccccc;
+
+  .myrtille-dark-theme & {
+    color: #666666;
+  }
+}
+
+.hide-focus:focus {
+  outline: 0 solid transparent;
+}

@@ -1,9 +1,11 @@
 import {Component, ViewChild} from '@angular/core';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-// import {DeviceService} from '../service/device.service';
-import {MatSidenav} from '@angular/material/sidenav';
 import {NavService} from '../service/nav.service';
+import {environment} from '../../environments/environment';
+import {SettingsService} from '../service/settings.service';
+import {DeviceService} from '../service/device.service';
+import {MatSidenav} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-nav',
@@ -13,8 +15,11 @@ import {NavService} from '../service/nav.service';
 export class NavComponent {
   @ViewChild('drawer', {static: true}) public navDrawer: MatSidenav;
 
+  public appVersion = environment.appVersion;
+
   constructor(public navService: NavService,
-              // public deviceService: DeviceService,
+              public settingsService: SettingsService,
+              public deviceService: DeviceService,
               private route: ActivatedRoute,
               private router: Router,
   ) {
@@ -39,9 +44,9 @@ export class NavComponent {
       });
   }
 
-  // public closeDrawer(): void {
-  //   if (this.deviceService.isHandset$.getValue()) {
-  //     this.navDrawer.close().catch(err => console.error('Could not close drawer?', err));
-  //   }
-  // }
+  public closeDrawer(): void {
+    if (this.deviceService.isHandset$.getValue()) {
+      this.navDrawer.close().catch(err => console.error('Could not close drawer?', err));
+    }
+  }
 }

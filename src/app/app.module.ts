@@ -18,6 +18,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {HomeComponent} from './home/home.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -51,6 +52,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

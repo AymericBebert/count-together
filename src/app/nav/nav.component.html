@@ -1,26 +1,48 @@
-<mat-sidenav-container class="sidenav-container">
-<!--  <mat-sidenav #drawer class="sidenav" fixedInViewport-->
-<!--               [attr.role]="(deviceService.isHandset$ | async) ? 'dialog' : 'navigation'"-->
-<!--               [mode]="(deviceService.isHandset$ | async) ? 'over' : 'side'"-->
-<!--               [opened]="(deviceService.isHandset$ | async) === false">-->
-<!--    <mat-toolbar (click)="closeDrawer()">{{ 'nav.menu-title' | translate }}</mat-toolbar>-->
-<!--    <mat-nav-list (click)="closeDrawer()">-->
-<!--      <app-change-language-list-item (langSet)="closeDrawer()"></app-change-language-list-item>-->
-<!--    </mat-nav-list>-->
-<!--  </mat-sidenav>-->
+<mat-sidenav-container class="sidenav-container" [ngClass]="{'myrtille-dark-theme': settingsService.darkMode$ | async}">
+
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               position="end"
+               [attr.role]="(navService.pinSideNav$ | async) ? 'navigation' : 'dialog'"
+               [mode]="(navService.pinSideNav$ | async) ? 'side' : 'over'"
+               [opened]="navService.pinSideNav$ | async">
+
+    <mat-toolbar (click)="closeDrawer()">{{ 'nav.menu-title' | translate }}</mat-toolbar>
+    <mat-nav-list (click)="closeDrawer()">
+
+      <mat-list-item>
+        <mat-slide-toggle color="accent" [checked]="settingsService.darkMode$ | async"
+                          (change)="navService.setDarkMode($event.checked)">
+          {{ 'misc.dark-mode' | translate }}
+        </mat-slide-toggle>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="(deviceService.isHandset$ | async) === false">
+        <mat-slide-toggle color="accent" [checked]="navService.pinSideNav$ | async"
+                          (change)="navService.setPinSideNav($event.checked)">
+          {{ 'misc.pin-sidenav' | translate }}
+        </mat-slide-toggle>
+      </mat-list-item>
+
+      <mat-list-item>
+        <app-change-language-list-item (langSet)="navService.setLanguage($event); closeDrawer()">
+        </app-change-language-list-item>
+      </mat-list-item>
+
+      <mat-list-item>
+        <span class="very-light-text">
+          {{ 'misc.version' | translate }} {{ appVersion }}
+        </span>
+      </mat-list-item>
+
+    </mat-nav-list>
+
+  </mat-sidenav>
 
   <mat-sidenav-content>
 
     <!-- Toolbar on top -->
     <mat-toolbar color="primary">
-<!--      <button-->
-<!--        type="button"-->
-<!--        aria-label="Toggle sidenav"-->
-<!--        mat-icon-button-->
-<!--        *ngIf="(navService.showBackButton$ | async) === false && (deviceService.isHandset$ | async)"-->
-<!--        (click)="drawer.toggle()">-->
-<!--        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>-->
-<!--      </button>-->
+
       <button
         type="button"
         aria-label="Back button"
@@ -29,19 +51,32 @@
         (click)="navService.backClicked()">
         <mat-icon aria-label="Back arrow icon">arrow_back</mat-icon>
       </button>
+
       <img routerLink="/" [src]="'assets/icons/icon-512x512.png'" alt="icon"
            class="hide-focus" style="height: 60%; margin-right: 4px"/>
       <!--      <span routerLink="/" class="hide-focus main-title">{{ (navService.mainTitle$ | async) || ('app-name' | translate) }}</span>-->
       <span routerLink="/" class="hide-focus main-title">{{ 'app-name' | translate }}</span>
+
       <span class="nav__fill-remaining-space"></span>
+
       <button
-        type="button"
-        mat-icon-button
         *ngFor="let buttonId of navService.navButtons$ | async"
+        mat-icon-button
+        type="button"
         [attr.aria-label]="'Button' + buttonId"
         (click)="navService.navButtonClicked(buttonId)">
         <mat-icon>{{ buttonId }}</mat-icon>
       </button>
+
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        *ngIf="(navService.pinSideNav$ | async) === false"
+        (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
     </mat-toolbar>
 
     <!-- Main application area -->

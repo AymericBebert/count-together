@@ -4,26 +4,24 @@ import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-language-list-item',
-  template: `<mat-list-item (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
-      <mat-icon style="margin-right: 8px">arrow_drop_down</mat-icon>
+  template: `<div (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
+      <mat-icon style="margin-right: 8px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
       <span>
           {{'misc.language' | translate}}
           &ensp;·&ensp;
           <span class="lang-flag">{{langToFlag(translateService.currentLang)}}</span>{{translateService.currentLang}}
       </span>
       <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  *ngFor="let lang of translateService.langs"
-                  (click)="navService.setLanguage(lang); langClicked()">
+          <button mat-menu-item *ngFor="let lang of translateService.langs" (click)="langClicked(lang)">
               <span class="lang-flag">{{langToFlag(lang)}}</span>{{lang}}
           </button>
       </mat-menu>
-  </mat-list-item>`,
+  </div>`,
   styles: ['span.lang-flag { vertical-align: middle; }']
 })
 export class ChangeLanguageComponent {
 
-  @Output() public langSet = new EventEmitter<void>();
+  @Output() public langSet = new EventEmitter<string>();
 
   public flagMap: { [lang: string]: string } = {
     fr: '🇫🇷',
@@ -37,7 +35,7 @@ export class ChangeLanguageComponent {
 
   constructor(public navService: NavService, public translateService: TranslateService) {}
 
-  langClicked() {
-    this.langSet.emit();
+  langClicked(lang: string) {
+    this.langSet.emit(lang);
   }
 }

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import {NavService} from './service/nav.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,12 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class AppComponent {
 
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService,
+              private navService: NavService,
+  ) {
     translate.addLangs(['fr', 'en']);
     translate.setDefaultLang('fr');
-    translate.use('fr');
+    this.navService.applyStoredLanguage();
   }
 
 }

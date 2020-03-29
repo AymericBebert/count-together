@@ -1,1 +1,161 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@include mat-core();
+
+$mat-myrtille: (
+  50: #e9e5f6,
+  100: #c9bfe8,
+  200: #a594d9,
+  300: #8169c9,
+  400: #6648be,
+  500: #4b28b2,
+  600: #4424ab,
+  700: #3b1ea2,
+  800: #331899,
+  900: #230f8a,
+  A100: #c4bbff,
+  A200: #9888ff,
+  A400: #6c55ff,
+  A700: #563bff,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $light-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  ),
+);
+
+$mat-raspberry: (
+  50 : #fae3ec,
+  100 : #f3b8ce,
+  200 : #eb89ae,
+  300 : #e2598e,
+  400 : #dc3675,
+  500 : #d6125d,
+  600 : #d11055,
+  700 : #cc0d4b,
+  800 : #c60a41,
+  900 : #bc0530,
+  A100 : #ffe6ea,
+  A200 : #ffb3c0,
+  A400 : #ff8096,
+  A700 : #ff6681,
+  contrast: (
+    50 : $dark-primary-text,
+    100 : $dark-primary-text,
+    200 : $dark-primary-text,
+    300 : $dark-primary-text,
+    400 : $light-primary-text,
+    500 : $light-primary-text,
+    600 : $light-primary-text,
+    700 : $light-primary-text,
+    800 : $light-primary-text,
+    900 : $light-primary-text,
+    A100 : $dark-primary-text,
+    A200 : $dark-primary-text,
+    A400 : $dark-primary-text,
+    A700 : $dark-primary-text,
+  ),
+);
+
+$count-together-primary: mat-palette($mat-myrtille);
+$count-together-accent: mat-palette($mat-raspberry, A200, A100, A400);
+$count-together-warn: mat-palette($mat-red);
+$count-together-theme: mat-light-theme($count-together-primary, $count-together-accent, $count-together-warn);
+
+@include angular-material-theme($count-together-theme);
+
+// Defines an alternate dark theme.
+$mat-myrtille-dark: (
+  50 : #e6e3ec,
+  100 : #bfbad0,
+  200 : #958cb1,
+  300 : #6b5e92,
+  400 : #4b3c7a,
+  500 : #2b1963,
+  600 : #26165b,
+  700 : #201251,
+  800 : #1a0e47,
+  900 : #100835,
+  A100 : #836eff,
+  A200 : #573bff,
+  A400 : #2b08ff,
+  A700 : #2100ee,
+  contrast: (
+    50 : $dark-primary-text,
+    100 : $dark-primary-text,
+    200 : $dark-primary-text,
+    300 : $light-primary-text,
+    400 : $light-primary-text,
+    500 : $light-primary-text,
+    600 : $light-primary-text,
+    700 : $light-primary-text,
+    800 : $light-primary-text,
+    900 : $light-primary-text,
+    A100 : $dark-primary-text,
+    A200 : $light-primary-text,
+    A400 : $light-primary-text,
+    A700 : $light-primary-text,
+  ),
+);
+
+$mat-raspberry-dark: (
+  50 : #eae2e5,
+  100 : #cbb7bf,
+  200 : #a98794,
+  300 : #875669,
+  400 : #6d3249,
+  500 : #530e29,
+  600 : #4c0c24,
+  700 : #420a1f,
+  800 : #390819,
+  900 : #29040f,
+  A100 : #ff6386,
+  A200 : #ff305e,
+  A400 : #fc0038,
+  A700 : #e30032,
+  contrast: (
+    50 : $dark-primary-text,
+    100 : $dark-primary-text,
+    200 : $dark-primary-text,
+    300 : $light-primary-text,
+    400 : $light-primary-text,
+    500 : $light-primary-text,
+    600 : $light-primary-text,
+    700 : $light-primary-text,
+    800 : $light-primary-text,
+    900 : $light-primary-text,
+    A100 : $dark-primary-text,
+    A200 : $light-primary-text,
+    A400 : $light-primary-text,
+    A700 : $light-primary-text,
+  ),
+);
+
+$dark-primary: mat-palette($mat-myrtille-dark);
+$dark-accent: mat-palette($mat-raspberry-dark, A200, A100, A400);
+$dark-warn: mat-palette($mat-deep-orange);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+.myrtille-dark-theme {
+  @include angular-material-theme($dark-theme);
+}
+
+// CSS
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

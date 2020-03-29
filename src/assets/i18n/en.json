@@ -1,1 +1,9 @@
-{}
+{
+  "app-name": "Count Together",
+  "misc": {
+    "language": "language"
+  },
+  "nav": {
+    "menu-title": "Menu"
+  }
+}

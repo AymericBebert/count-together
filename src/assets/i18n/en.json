@@ -1,12 +1,20 @@
 {
   "app-name": "Count Together",
+  "edit": {
+    "cancel": "Cancel",
+    "confirm": "Ok",
+    "edit-game": "Game name",
+    "edit-player-name": "Player name",
+    "edit-score": "Score",
+    "header": "Edition"
+  },
   "game": {
     "add-player": "Add player",
-    "edit-game": "Edit game",
     "remove-player": "Remove player"
   },
   "home": {
-    "new-game": "New game"
+    "new-game": "New game",
+    "welcome": "Count the score for every player of your favorite games!"
   },
   "misc": {
     "dark-mode": "Dark mode",

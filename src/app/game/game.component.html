@@ -1,37 +1,54 @@
 <div *ngIf="game$ | async as game" class="wrapper" fxLayout="column" fxLayoutAlign="center center">
-  <span class="header">{{ game.name }}</span>
+  <div class="header" fxLayout="row" fxLayoutAlign="center center">
+    <span (click)="editGameOpen()">{{ game.name || '...' }}</span>
+    <button mat-button style="padding: 0 10px" (click)="toggleWin()">
+      <mat-icon>{{ game.lowerScoreWins ? 'arrow_drop_down' : 'arrow_drop_up' }}</mat-icon>
+      <img class="crown-icon-bw icon-64" [src]="'assets/icons/crown-black-64.png'" alt="crown" style="height: 24px"/>
+    </button>
+  </div>
   <div class="actions" fxLayout="row wrap">
-   <button mat-button color="primary">
-     <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
-     <span>{{ 'game.add-player' | translate }}</span>
-   </button>
-   <button mat-button color="primary">
-     <mat-icon style="margin-right: 5px">highlight_off</mat-icon>
-     <span>{{ 'game.remove-player' | translate }}</span>
-   </button>
-   <button mat-button color="primary">
-     <mat-icon style="margin-right: 5px">edit</mat-icon>
-     <span>{{ 'game.edit-game' | translate }}</span>
-   </button>
+    <button mat-button color="primary" (click)="addPlayer()">
+      <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
+      <span>{{ 'game.add-player' | translate }}</span>
+    </button>
+    <button mat-button color="primary" (click)="removePlayer()">
+      <mat-icon style="margin-right: 5px">highlight_off</mat-icon>
+      <span>{{ 'game.remove-player' | translate }}</span>
+    </button>
   </div>
 
   <div class="columns-wrapper mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
-    <div *ngFor="let player of players$ | async" class="column" fxLayout="column" fxLayoutAlign="start center">
+    <div *ngFor="let player of players$ | async; let p = index" class="column"
+         fxLayout="column" fxLayoutAlign="start center">
 
       <div class="rank">{{ player.rank }}</div>
 
-      <div class="player-name">{{ player.name }}</div>
+      <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name }}</div>
 
       <div class="total-cell" style="width: 100%">
         <div class="total">{{ player.total }}</div>
       </div>
 
       <div *ngFor="let score of player.scores; let i = index" class="cell" fxLayout="column" style="width: 100%">
-        <span class="add-score" fxLayout="row" fxLayoutAlign="end">{{ score !== null ? score : '/' }}</span>
-        <div fxLayout="row" fxLayoutAlign="center">{{ player.scoresCumSum[i] }}</div>
+        <span class="add-score" fxLayout="row" fxLayoutAlign="end" (click)="editScoreOpen(p, i)">
+          {{ score !== null ? score : '/' }}
+        </span>
+        <div fxLayout="row" fxLayoutAlign="center">
+          {{ player.scoresCumSum[i] != null ? player.scoresCumSum[i] : '/' }}
+        </div>
       </div>
 
-      <div class="add-score"><mat-icon>add_circle_outline</mat-icon></div>
+      <div class="add-score-item">
+        <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <div class="add-score-item">
+        <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
+          <mat-icon>remove_circle_outline</mat-icon>
+        </button>
+      </div>
 
     </div>
   </div>

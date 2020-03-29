@@ -69,13 +69,13 @@ $mat-raspberry: (
   ),
 );
 
-$count-together-primary: mat-palette($mat-myrtille);
-$count-together-accent: mat-palette($mat-raspberry, A200, A100, A400);
-$count-together-warn: mat-palette($mat-red);
-$count-together-theme: mat-light-theme($count-together-primary, $count-together-accent, $count-together-warn);
+$light-primary: mat-palette($mat-myrtille);
+$light-accent: mat-palette($mat-raspberry, A200, A100, A400);
+$light-warn: mat-palette($mat-red);
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
-@include angular-material-theme($count-together-theme);
-@include custom-components-theme($count-together-theme);
+@include angular-material-theme($light-theme);
+@include custom-components-theme($light-theme);
 
 // Defines an alternate dark theme.
 $mat-myrtille-dark: (
@@ -172,6 +172,29 @@ body {
   }
 }
 
+.mat-button.mat-primary {
+
+  .myrtille-dark-theme & {
+    color: mat-color($light-primary, 100);
+  }
+}
+
+.crown-icon-bw {
+  &.icon-64 {
+    content: url('assets/icons/crown-black-64.png');
+  }
+
+  .myrtille-dark-theme & {
+    &.icon-64 {
+      content: url('assets/icons/crown-white-64.png');
+    }
+  }
+}
+
 .hide-focus:focus {
   outline: 0 solid transparent;
+}
+
+.edit-score div.mat-form-field-infix {
+    width: 140px;
 }

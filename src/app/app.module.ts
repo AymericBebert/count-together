@@ -20,6 +20,10 @@ import {MatButtonModule} from '@angular/material/button';
 import {HomeComponent} from './home/home.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {GameComponent} from './game/game.component';
+import {EditionDialogComponent} from './edition-dialog/edition-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,6 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChangeLanguageComponent,
     HomeComponent,
     GameComponent,
+    EditionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,9 +60,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatToolbarModule,
     MatButtonModule,
     MatSlideToggleModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
+  entryComponents: [
+    EditionDialogComponent,
+  ],
 })
 export class AppModule {
 }

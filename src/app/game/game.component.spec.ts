@@ -4,6 +4,7 @@ import {GameComponent} from './game.component';
 import {MatIconModule} from '@angular/material/icon';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {MatDialogModule} from '@angular/material/dialog';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -15,6 +16,7 @@ describe('GameComponent', () => {
         HttpClientTestingModule,
         TranslateTestingModule,
         MatIconModule,
+        MatDialogModule,
       ],
       declarations: [
         GameComponent,

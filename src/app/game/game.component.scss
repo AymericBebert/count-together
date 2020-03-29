@@ -2,6 +2,11 @@
   font-weight: bold;
   font-size: 1.4em;
   padding-bottom: 10px;
+
+  span {
+    margin-right: 10px;
+    cursor: pointer;
+  }
 }
 
 .actions {
@@ -15,6 +20,7 @@
 .player-name {
   padding: 0 20px 10px 20px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .total-cell {
@@ -35,6 +41,7 @@
 .add-score {
   font-size: 0.9em;
   margin-bottom: -5px;
+  cursor: pointer;
 }
 
 .columns-wrapper {

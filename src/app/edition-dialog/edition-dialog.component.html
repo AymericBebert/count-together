@@ -1,0 +1,27 @@
+<div mat-dialog-title style="min-width: 200px">
+  <span class="dialog-header">{{ 'edit.header' | translate }}</span>
+</div>
+
+<div mat-dialog-content>
+  <mat-form-field class="edit-score" *ngIf="data.editScore">
+    <mat-label>{{ 'edit.edit-score' | translate }}</mat-label>
+    <input matInput type="number" [(ngModel)]="editScoreValue">
+  </mat-form-field>
+  <button mat-icon-button *ngIf="data.editScore" color="primary" aria-label="Add Score" [mat-dialog-close]="null">
+    <mat-icon>clear</mat-icon>
+  </button>
+
+  <mat-form-field *ngIf="data.editGame">
+    <mat-label>{{ 'edit.edit-game' | translate }}</mat-label>
+    <input matInput [(ngModel)]="editGameValue">
+  </mat-form-field>
+  <mat-form-field *ngIf="data.editPlayerName">
+    <mat-label>{{ 'edit.edit-player-name' | translate }}</mat-label>
+    <input matInput [(ngModel)]="editPlayerNameValue">
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+  <button mat-button color="primary" [mat-dialog-close]="undefined">{{ 'edit.cancel' | translate }}</button>
+  <button mat-button color="primary" [mat-dialog-close]="returnValue()">{{ 'edit.confirm' | translate }}</button>
+</div>

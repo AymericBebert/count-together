@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+
+@mixin game-component-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  //$warn: map-get($theme, warn);
+  //$foreground: map-get($theme, foreground);
+  //$background: map-get($theme, background);
+
+  .add-score {
+    color: mat-color($accent, text);
+  }
+
+  .total-cell {
+    border-bottom: 1px solid mat-color($primary, 300);
+  }
+
+  .cell {
+    border-bottom: 1px solid mat-color($primary, 300, 0.2);
+  }
+}

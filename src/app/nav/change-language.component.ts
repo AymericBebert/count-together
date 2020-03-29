@@ -3,7 +3,7 @@ import {NavService} from '../service/nav.service';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-change-language-list-item',
+  selector: 'app-change-language',
   template: `<div (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
       <mat-icon style="margin-right: 8px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
       <span>

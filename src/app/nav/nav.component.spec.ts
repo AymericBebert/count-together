@@ -9,6 +9,10 @@ import {DeviceService} from '../service/device.service';
 import {ChangeLanguageComponent} from './change-language.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatListModule} from '@angular/material/list';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -27,6 +31,10 @@ describe('NavComponent', () => {
         RouterTestingModule,
         MatSidenavModule,
         MatToolbarModule,
+        MatListModule,
+        MatSlideToggleModule,
+        MatIconModule,
+        MatMenuModule,
       ],
       providers: [
         CookieService,

@@ -1,28 +1,30 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {HomeComponent} from './home.component';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {GameComponent} from './game.component';
+import {MatIconModule} from '@angular/material/icon';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {TranslateTestingModule} from '../testing/translate-testing-module';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('GameComponent', () => {
+  let component: GameComponent;
+  let fixture: ComponentFixture<GameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         TranslateTestingModule,
+        MatIconModule,
       ],
       declarations: [
-        HomeComponent,
+        GameComponent,
       ],
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

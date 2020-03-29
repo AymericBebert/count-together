@@ -24,8 +24,7 @@
       </mat-list-item>
 
       <mat-list-item>
-        <app-change-language-list-item (langSet)="navService.setLanguage($event); closeDrawer()">
-        </app-change-language-list-item>
+        <app-change-language (langSet)="navService.setLanguage($event); closeDrawer()"></app-change-language>
       </mat-list-item>
 
       <mat-list-item>
@@ -52,7 +51,7 @@
         <mat-icon aria-label="Back arrow icon">arrow_back</mat-icon>
       </button>
 
-      <img routerLink="/" [src]="'assets/icons/icon-512x512.png'" alt="icon"
+      <img routerLink="/" [src]="'assets/icons/icon-no-border.png'" alt="icon"
            class="hide-focus" style="height: 60%; margin-right: 4px"/>
       <!--      <span routerLink="/" class="hide-focus main-title">{{ (navService.mainTitle$ | async) || ('app-name' | translate) }}</span>-->
       <span routerLink="/" class="hide-focus main-title">{{ 'app-name' | translate }}</span>

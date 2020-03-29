@@ -1,0 +1,52 @@
+.header {
+  font-weight: bold;
+  font-size: 1.4em;
+  padding-bottom: 10px;
+}
+
+.actions {
+  padding-bottom: 10px;
+}
+
+.wrapper {
+  padding: 20px 0;
+}
+
+.player-name {
+  padding: 0 20px 10px 20px;
+  font-weight: bold;
+}
+
+.total-cell {
+  padding-bottom: 4px;
+  margin-bottom: 5px;
+
+  .total {
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.cell {
+  padding: 0 20px;
+  margin-bottom: 5px;
+}
+
+.add-score {
+  font-size: 0.9em;
+  margin-bottom: -5px;
+}
+
+.columns-wrapper {
+  width: 100%;
+  overflow-x: scroll;
+  padding: 10px 0;
+}
+
+@media (screen and min-width: 600px) {
+  .columns-wrapper {
+    width: 600px;
+    min-width: 600px;
+    margin: auto;
+  }
+}

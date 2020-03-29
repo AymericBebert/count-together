@@ -1,0 +1,39 @@
+<div *ngIf="game$ | async as game" class="wrapper" fxLayout="column" fxLayoutAlign="center center">
+  <span class="header">{{ game.name }}</span>
+  <div class="actions" fxLayout="row wrap">
+   <button mat-button color="primary">
+     <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
+     <span>{{ 'game.add-player' | translate }}</span>
+   </button>
+   <button mat-button color="primary">
+     <mat-icon style="margin-right: 5px">highlight_off</mat-icon>
+     <span>{{ 'game.remove-player' | translate }}</span>
+   </button>
+   <button mat-button color="primary">
+     <mat-icon style="margin-right: 5px">edit</mat-icon>
+     <span>{{ 'game.edit-game' | translate }}</span>
+   </button>
+  </div>
+
+  <div class="columns-wrapper mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
+    <div *ngFor="let player of players$ | async" class="column" fxLayout="column" fxLayoutAlign="start center">
+
+      <div class="rank">{{ player.rank }}</div>
+
+      <div class="player-name">{{ player.name }}</div>
+
+      <div class="total-cell" style="width: 100%">
+        <div class="total">{{ player.total }}</div>
+      </div>
+
+      <div *ngFor="let score of player.scores; let i = index" class="cell" fxLayout="column" style="width: 100%">
+        <span class="add-score" fxLayout="row" fxLayoutAlign="end">{{ score !== null ? score : '/' }}</span>
+        <div fxLayout="row" fxLayoutAlign="center">{{ player.scoresCumSum[i] }}</div>
+      </div>
+
+      <div class="add-score"><mat-icon>add_circle_outline</mat-icon></div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,5 +1,13 @@
 {
   "app-name": "Count Together",
+  "game": {
+    "add-player": "Joueur",
+    "edit-game": "Éditer partie",
+    "remove-player": "Joueur"
+  },
+  "home": {
+    "new-game": "Nouveau jeu"
+  },
   "misc": {
     "dark-mode": "Thème sombre",
     "language": "langue",

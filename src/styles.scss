@@ -1,6 +1,8 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
+@import './custom-component-themes.scss';
+
 $mat-myrtille: (
   50: #e9e5f6,
   100: #c9bfe8,
@@ -45,10 +47,10 @@ $mat-raspberry: (
   700 : #cc0d4b,
   800 : #c60a41,
   900 : #bc0530,
-  A100 : #ffe6ea,
-  A200 : #ffb3c0,
-  A400 : #ff8096,
-  A700 : #ff6681,
+  A100 : #f090b8,
+  A200 : #e64585,
+  A400 : #d4205f,
+  A700 : #ff0055,
   contrast: (
     50 : $dark-primary-text,
     100 : $dark-primary-text,
@@ -73,6 +75,7 @@ $count-together-warn: mat-palette($mat-red);
 $count-together-theme: mat-light-theme($count-together-primary, $count-together-accent, $count-together-warn);
 
 @include angular-material-theme($count-together-theme);
+@include custom-components-theme($count-together-theme);
 
 // Defines an alternate dark theme.
 $mat-myrtille-dark: (
@@ -148,6 +151,7 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
 .myrtille-dark-theme {
   @include angular-material-theme($dark-theme);
+  @include custom-components-theme($dark-theme);
 }
 
 // CSS

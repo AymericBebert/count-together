@@ -4,6 +4,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {StorageService} from './storage.service';
 import {NavButtonsService} from './nav-buttons.service';
 import {SettingsService} from './settings.service';
+import {DeviceService} from './device.service';
+import {filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +20,11 @@ export class NavService {
 
   constructor(private navButtonsService: NavButtonsService,
               private settingsService: SettingsService,
+              private deviceService: DeviceService,
               private translateService: TranslateService,
               private storageService: StorageService,
   ) {
+    this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
   }
 
   public setBackRouterLink(backRouterNavigate: string) {

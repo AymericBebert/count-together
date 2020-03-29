@@ -1,0 +1,5 @@
+@import './app/nav/nav.component.theme';
+
+@mixin custom-components-theme($theme) {
+  @include sidenav-content-component-theme($theme);
+}

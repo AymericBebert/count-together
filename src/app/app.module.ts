@@ -8,6 +8,7 @@ import {AppComponent} from './app.component';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {NavComponent} from './nav/nav.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
 import {MatIconModule} from '@angular/material/icon';
@@ -16,6 +17,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
+import {HomeComponent} from './home/home.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -27,6 +29,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     NavComponent,
     ChangeLanguageComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
     BrowserAnimationsModule,
+    FlexLayoutModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,

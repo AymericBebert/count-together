@@ -1,7 +1,7 @@
 {
   "name": "Count Together",
   "short_name": "CounT",
-  "theme_color": "#4b28b2",
+  "theme_color": "#331899",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

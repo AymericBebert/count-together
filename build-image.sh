@@ -53,7 +53,7 @@ then
 fi
 
 echo "Building count-together:$version..."
-docker build -t aymericbernard/count-together:$version --build-arg BUILD_CONFIGURATION=$BUILD_CONFIGURATION . || { echo 'building failed' ; exit 1; }
+docker build -t aymericbernard/count-together:$version --build-arg BUILD_CONFIGURATION=$BUILD_CONFIGURATION --build-arg VERSION=$version . || { echo 'building failed' ; exit 1; }
 
 echo "Pushing count-together:$version to docker registry..."
 docker push aymericbernard/count-together:$version || { echo 'pushing failed' ; exit 1; }

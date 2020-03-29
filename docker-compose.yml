@@ -1,0 +1,18 @@
+version: "3"
+services:
+  code:
+    image: aymericbernard/count-together:latest
+    container_name: cn_count_together
+    restart: always
+#    networks:
+#      - proxy
+    ports:
+      - "4200:80"
+#    environment:
+#      - VIRTUAL_HOST=count-together.kyr.pw
+#      - LETSENCRYPT_HOST=count-together.kyr.pw
+#      - LETSENCRYPT_EMAIL=nope@exxample.com
+#networks:
+#  proxy:
+#    external:
+#      name: nginx-proxy

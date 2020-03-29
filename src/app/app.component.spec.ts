@@ -1,35 +1,39 @@
-import {TestBed, async} from '@angular/core/testing';
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppComponent} from './app.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {TranslateTestingModule} from './testing/translate-testing-module';
+import {NavComponent} from './nav/nav.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule,
         RouterTestingModule,
+        MatSidenavModule,
+        MatToolbarModule,
       ],
       declarations: [
         AppComponent,
+        NavComponent,
       ],
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'count-together'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('count-together');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('count-together app is running!');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

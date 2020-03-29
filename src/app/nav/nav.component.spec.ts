@@ -1,18 +1,14 @@
-import { LayoutModule } from '@angular/cdk/layout';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NavComponent } from './nav.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {NavComponent} from './nav.component';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
-import {AuthService} from '../auth/auth.service';
-import {AuthTestingService} from '../testing/auth-testing.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {CookieService} from 'ngx-cookie-service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {DeviceService} from '../service/device.service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CustomMaterialModule} from '../material/custom-material.module';
-import {MatListModule} from '@angular/material';
 import {ChangeLanguageComponent} from './change-language.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -25,18 +21,14 @@ describe('NavComponent', () => {
         ChangeLanguageComponent,
       ],
       imports: [
-        FormsModule,
-        ReactiveFormsModule,
+        HttpClientTestingModule,
         TranslateTestingModule,
         NoopAnimationsModule,
-        LayoutModule,
-        CustomMaterialModule,
-        MatListModule,
-        HttpClientTestingModule,
         RouterTestingModule,
+        MatSidenavModule,
+        MatToolbarModule,
       ],
       providers: [
-        {provide: AuthService, useClass: AuthTestingService},
         CookieService,
         DeviceService,
       ]

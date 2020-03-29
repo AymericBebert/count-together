@@ -15,8 +15,7 @@ export class NavService {
 
   public language$ = new BehaviorSubject<string>('');
 
-  constructor(private router: Router,
-              private navButtonsService: NavButtonsService,
+  constructor(private navButtonsService: NavButtonsService,
               private translateService: TranslateService,
               private storageService: StorageService,
   ) {

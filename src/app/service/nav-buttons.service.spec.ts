@@ -9,18 +9,17 @@ import {CookieService} from 'ngx-cookie-service';
 describe('NavButtonsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      TranslateTestingModule,
       HttpClientTestingModule,
+      TranslateTestingModule,
       RouterTestingModule,
     ],
     providers: [
       CookieService,
-    ]
-
+    ],
   }));
 
   it('should be created', () => {
-    const service: NavButtonsService = TestBed.get(NavButtonsService);
+    const service: NavButtonsService = TestBed.inject(NavButtonsService);
     expect(service).toBeTruthy();
   });
 });

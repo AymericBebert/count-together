@@ -8,13 +8,12 @@ COPY package-lock.json ./package-lock.json
 RUN npm ci && npm install -g @angular/cli@9.1.0
 COPY . .
 
+ARG VERSION=untagged
 ARG BUILD_CONFIGURATION=production
 
+RUN echo "export const version = '$VERSION';\n" > ./src/version.ts
+
 RUN ng build --configuration="${BUILD_CONFIGURATION}"
-
-ARG VERSION=untagged
-
-RUN for i in ./dist/count-together/main-*.js; do sed -i 's/##[APP_VERSION]##/${VERSION}/g' $i; done
 
 #
 # Go back from a light nginx image

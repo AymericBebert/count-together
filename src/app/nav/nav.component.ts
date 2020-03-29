@@ -2,10 +2,10 @@ import {Component, ViewChild} from '@angular/core';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {NavService} from '../service/nav.service';
-import {environment} from '../../environments/environment';
 import {SettingsService} from '../service/settings.service';
 import {DeviceService} from '../service/device.service';
 import {MatSidenav} from '@angular/material/sidenav';
+import {version} from '../../version';
 
 @Component({
   selector: 'app-nav',
@@ -15,7 +15,7 @@ import {MatSidenav} from '@angular/material/sidenav';
 export class NavComponent {
   @ViewChild('drawer', {static: true}) public navDrawer: MatSidenav;
 
-  public appVersion = environment.appVersion;
+  public appVersion = version;
 
   constructor(public navService: NavService,
               public settingsService: SettingsService,

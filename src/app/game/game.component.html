@@ -21,7 +21,7 @@
     <div *ngFor="let player of players$ | async; let p = index" class="column"
          fxLayout="column" fxLayoutAlign="start center">
 
-      <div class="rank">{{ player.rank }}</div>
+      <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
 
       <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name }}</div>
 

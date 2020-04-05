@@ -17,6 +17,9 @@ const routes: Routes = [
   {
     path: 'game/:gameId',
     component: GameComponent,
+    data: {
+      backRouterNavigate: '/home',
+    },
   },
 ];
 

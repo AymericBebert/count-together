@@ -24,6 +24,7 @@ import {EditionDialogComponent} from './edition-dialog/edition-dialog.component'
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
+import {RankIconComponent} from './rank-icon/rank-icon.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -38,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     GameComponent,
     EditionDialogComponent,
+    RankIconComponent,
   ],
   imports: [
     BrowserModule,

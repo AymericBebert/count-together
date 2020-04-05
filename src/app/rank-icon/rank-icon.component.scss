@@ -1,0 +1,18 @@
+.wrapper {
+  position: relative;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+span {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  place-content: center;
+}

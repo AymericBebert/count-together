@@ -50,7 +50,8 @@ export class GameComponent implements OnInit, OnDestroy {
         return {
           ...player,
           scores: newScores,
-          rank: totals.indexOf(player.total) + 1
+          rank: totals.indexOf(player.total) + 1,
+          last: player.total === totals[totals.length - 1],
         };
       });
     }),

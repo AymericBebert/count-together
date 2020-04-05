@@ -7,15 +7,17 @@
   //$foreground: map-get($theme, foreground);
   //$background: map-get($theme, background);
 
-  .add-score {
-    color: mat-color($accent, text);
-  }
+  app-game {
+    .add-score {
+      color: mat-color($accent, text);
+    }
 
-  .total-cell {
-    border-bottom: 1px solid mat-color($primary, 300);
-  }
+    .total-cell {
+      border-bottom: 1px solid mat-color($primary, 300);
+    }
 
-  .cell {
-    border-bottom: 1px solid mat-color($primary, 300, 0.2);
+    .cell {
+      border-bottom: 1px solid mat-color($primary, 300, 0.2);
+    }
   }
 }

@@ -8,5 +8,6 @@ export interface EnrichedPlayer
   scoresCumSum: number[];
   total: number;
   rank: number;
+  last: boolean;
   track: string;
 }

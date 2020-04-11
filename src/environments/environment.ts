@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  backendUrl: 'http://localhost:4050',
+  debugSocket: true,
+  debugHttp: true,
 };
 
 /*

@@ -3,6 +3,9 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {HomeComponent} from './home.component';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ApiErrorModule} from '../api-error/api-error.module';
+import {SocketTestingModule} from '../testing/socket-testing.module';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -13,6 +16,9 @@ describe('HomeComponent', () => {
       imports: [
         HttpClientTestingModule,
         TranslateTestingModule,
+        SocketTestingModule,
+        RouterTestingModule,
+        ApiErrorModule,
       ],
       declarations: [
         HomeComponent,

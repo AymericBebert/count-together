@@ -1,11 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Game} from '../model/game';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {EnrichedPlayer} from '../model/player';
-import {debounceTime, filter, map, takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
 import {StorageService} from '../service/storage.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EditionDialogComponent} from '../edition-dialog/edition-dialog.component';
+import {NavButtonsService} from '../service/nav-buttons.service';
+import {ShareButtonService} from '../share-button/share-button.service';
+import {TranslateService} from '@ngx-translate/core';
+import {SocketService} from '../socket/socket.service';
+import {ActivatedRoute} from '@angular/router';
+import {GamesService} from '../service/games.service';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-game',
@@ -14,25 +20,7 @@ import {EditionDialogComponent} from '../edition-dialog/edition-dialog.component
 })
 export class GameComponent implements OnInit, OnDestroy {
 
-  public game$ = new BehaviorSubject<Game>({
-    id: 'offline',
-    name: 'Test Game',
-    lowerScoreWins: true,
-    players: [
-      {
-        name: 'Aymeric',
-        scores: [12, 5, 0, 4],
-      },
-      {
-        name: 'Loulou',
-        scores: [15, 7, 3, 2],
-      },
-      {
-        name: 'Cloclo',
-        scores: [24, -5, 12, null],
-      },
-    ],
-  });
+  public game$ = this.gamesService.currentGame$;
 
   public players$: Observable<EnrichedPlayer[]> = this.game$.pipe(
     map(game => {
@@ -51,7 +39,7 @@ export class GameComponent implements OnInit, OnDestroy {
           ...player,
           scores: newScores,
           rank: totals.indexOf(player.total) + 1,
-          last: player.total === totals[totals.length - 1],
+          last: player.total !== totals[0] && player.total === totals[totals.length - 1],
         };
       });
     }),
@@ -66,29 +54,36 @@ export class GameComponent implements OnInit, OnDestroy {
     );
   }
 
-  constructor(private storageService: StorageService,
+  constructor(private route: ActivatedRoute,
+              private storageService: StorageService,
+              private navButtonsService: NavButtonsService,
+              private shareButtonService: ShareButtonService,
+              private translateService: TranslateService,
+              private gamesService: GamesService,
+              private socket: SocketService,
               private dialog: MatDialog,
   ) {
-  }
-
-  ngOnInit(): void {
-    const gameFromStorage = this.storageService.getItem('offlineGame');
-    if (gameFromStorage) {
-      try {
-        this.game$.next(JSON.parse(gameFromStorage));
-      } catch (err) {
-        console.error('Could not parse game fron storage:', err);
-      }
-    }
-
-    this.game$
-      .pipe(filter(game => game.id === 'offline'), debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(game => {
-        this.storageService.setItem('offlineGame', JSON.stringify(game));
+    this.navButtonsService.navButtonClicked$('share')
+      .pipe(withLatestFrom(this.game$, this.translateService.get('game.share.title'), this.translateService.get('game.share.text')))
+      .subscribe(([, game, title, text]) => {
+        // TODO make new game if offline
+        if (game !== null) {
+          this.shareButtonService.shareOrCopy(title, text, environment.backendUrl + `/game/${game.gameId}`);
+        } else {
+          console.error('Trying to share but game is null?');
+        }
       });
   }
 
+  ngOnInit(): void {
+    this.route.paramMap
+      .pipe(map(params => params.get('gameId')), takeUntil(this.destroy$))
+      .subscribe(gameId => this.gamesService.setCurrentGameId(gameId));
+  }
+
   ngOnDestroy(): void {
+    this.gamesService.setCurrentGameId(null);
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -101,7 +96,7 @@ export class GameComponent implements OnInit, OnDestroy {
   removeScore(p: number) {
     const currentGame = this.game$.getValue();
     currentGame.players[p].scores.pop();
-    this.game$.next(currentGame);
+    this.gamesService.editGame(currentGame);
   }
 
   editScoreOpen(p: number, i: number) {
@@ -121,7 +116,7 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       currentGame.players[p].scores[i] = s;
     }
-    this.game$.next(currentGame);
+    this.gamesService.editGame(currentGame);
   }
 
   editPlayerNameOpen(p: number) {
@@ -137,12 +132,12 @@ export class GameComponent implements OnInit, OnDestroy {
   editPlayerName(p: number, newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.players[p].name = newName;
-    this.game$.next(currentGame);
+    this.gamesService.editGame(currentGame);
   }
 
   addPlayer() {
     const currentGame = this.game$.getValue();
-    this.game$.next({
+    this.gamesService.editGame({
       ...currentGame,
       players: [...currentGame.players, {name: `P${currentGame.players.length + 1}`, scores: []}],
     });
@@ -151,7 +146,7 @@ export class GameComponent implements OnInit, OnDestroy {
   removePlayer() {
     const currentGame = this.game$.getValue();
     currentGame.players.pop();
-    this.game$.next(currentGame);
+    this.gamesService.editGame(currentGame);
   }
 
   editGameOpen() {
@@ -167,11 +162,11 @@ export class GameComponent implements OnInit, OnDestroy {
   editGame(newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.name = newName;
-    this.game$.next(currentGame);
+    this.gamesService.editGame(currentGame);
   }
 
   toggleWin() {
     const currentGame = this.game$.getValue();
-    this.game$.next({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
+    this.gamesService.editGame({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
   }
 }

@@ -5,6 +5,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
 import {MatDialogModule} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
+import {EMPTY} from 'rxjs';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ShareButtonModule} from '../share-button/share-button.module';
+import {SocketTestingModule} from '../testing/socket-testing.module';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -15,11 +20,17 @@ describe('GameComponent', () => {
       imports: [
         HttpClientTestingModule,
         TranslateTestingModule,
+        RouterTestingModule,
+        SocketTestingModule,
+        ShareButtonModule,
         MatIconModule,
         MatDialogModule,
       ],
       declarations: [
         GameComponent,
+      ],
+      providers: [
+        {provide: ActivatedRoute, useValue: {paramMap: EMPTY}},
       ],
     })
     .compileComponents();

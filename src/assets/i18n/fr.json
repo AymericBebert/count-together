@@ -10,10 +10,15 @@
   },
   "game": {
     "add-player": "Joueur",
-    "remove-player": "Joueur"
+    "remove-player": "Joueur",
+    "share": {
+      "text": "Joins ma partie sur Count Together !",
+      "title": "Count Together"
+    }
   },
   "home": {
     "new-game": "Nouveau jeu",
+    "offline": "Hors-ligne",
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
   "misc": {
@@ -24,5 +29,11 @@
   },
   "nav": {
     "menu-title": "Paramètres"
+  },
+  "share": {
+    "copied": "Lien copié",
+    "copy": "Copier",
+    "disabled": "Partage désactivé",
+    "share": "Partager"
   }
 }

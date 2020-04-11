@@ -5,14 +5,13 @@ WORKDIR /count-together
 
 COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
-RUN npm ci && npm install -g @angular/cli@9.1.0
+RUN npm ci && npm install -g @angular/cli@9.1.1
 COPY . .
 
 ARG VERSION=untagged
-ARG BUILD_CONFIGURATION=production
-
 RUN echo "export const version = '$VERSION';\n" > ./src/version.ts
 
+ARG BUILD_CONFIGURATION=production
 RUN ng build --configuration="${BUILD_CONFIGURATION}"
 
 #

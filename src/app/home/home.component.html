@@ -1,4 +1,5 @@
 <div style="padding: 20px" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
   <span>{{ 'home.welcome' | translate }}</span>
-  <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.new-game' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="newGame()">{{ 'home.new-game' | translate }}</button>
+  <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.offline' | translate }}</button>
 </div>

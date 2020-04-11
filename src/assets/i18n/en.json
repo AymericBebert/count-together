@@ -10,10 +10,15 @@
   },
   "game": {
     "add-player": "Add player",
-    "remove-player": "Remove player"
+    "remove-player": "Remove player",
+    "share": {
+      "text": "Join my game on Count Together",
+      "title": "Count Together"
+    }
   },
   "home": {
     "new-game": "New game",
+    "offline": "Offline mode",
     "welcome": "Count the score for every player of your favorite games!"
   },
   "misc": {
@@ -24,5 +29,11 @@
   },
   "nav": {
     "menu-title": "Settings"
+  },
+  "share": {
+    "copied": "Copied",
+    "copy": "Copy",
+    "disabled": "Sharing disabled",
+    "share": "Share"
   }
 }

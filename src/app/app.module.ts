@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppRoutingModule} from './app-routing.module';
@@ -25,6 +25,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import {RankIconComponent} from './rank-icon/rank-icon.component';
+import {ShareButtonModule} from './share-button/share-button.module';
+import {SocketModule} from './socket/socket.module';
+import {DebugHttpInterceptor} from './utils/debug-http.interceptor';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -65,8 +68,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDialogModule,
     MatInputModule,
     FormsModule,
+    ShareButtonModule,
+    SocketModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DebugHttpInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     EditionDialogComponent,

@@ -19,6 +19,7 @@ const routes: Routes = [
     component: GameComponent,
     data: {
       backRouterNavigate: '/home',
+      navButtons: ['share'],
     },
   },
 ];

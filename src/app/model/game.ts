@@ -1,7 +1,7 @@
 import {Player} from './player';
 
 export interface Game {
-  id: string;
+  gameId: string;
   name: string;
   lowerScoreWins: boolean;
   players: Player[];

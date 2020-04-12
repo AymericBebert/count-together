@@ -68,7 +68,7 @@ export class GameComponent implements OnInit, OnDestroy {
       .subscribe(([, game, title, text]) => {
         // TODO make new game if offline
         if (game !== null) {
-          this.shareButtonService.shareOrCopy(title, text, environment.backendUrl + `/game/${game.gameId}`);
+          this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${game.gameId}`);
         } else {
           console.error('Trying to share but game is null?');
         }

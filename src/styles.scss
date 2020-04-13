@@ -1,4 +1,6 @@
 @import '~@angular/material/theming';
+@import '_fonts.scss';
+
 @include mat-core();
 
 @import './custom-component-themes.scss';

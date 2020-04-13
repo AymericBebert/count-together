@@ -9,7 +9,7 @@ import {NavButtonsService} from '../service/nav-buttons.service';
 import {ShareButtonService} from '../share-button/share-button.service';
 import {TranslateService} from '@ngx-translate/core';
 import {SocketService} from '../socket/socket.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {GamesService} from '../service/games.service';
 import {environment} from '../../environments/environment';
 
@@ -23,6 +23,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public game$ = this.gamesService.currentGame$;
 
   public players$: Observable<EnrichedPlayer[]> = this.game$.pipe(
+    filter(game => game !== null),
     map(game => {
       const playersNoRank = game.players.map(player => ({
         ...player,
@@ -57,6 +58,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private storageService: StorageService,
               private navButtonsService: NavButtonsService,
               private shareButtonService: ShareButtonService,
@@ -71,11 +73,16 @@ export class GameComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(([, game, title, text]) => {
-        // TODO make new game if offline
-        if (game !== null) {
-          this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${game.gameId}`);
-        } else {
+        if (game === null) {
           console.error('Trying to share but game is null?');
+        } else if (game.gameId === 'offline') {
+          this.gamesService.postNewGame(game).subscribe(newGame => {
+            this.router.navigate(['game', newGame.gameId]).then(() => {
+              this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${newGame.gameId}`);
+            });
+          });
+        } else {
+          this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${game.gameId}`);
         }
       });
   }
@@ -93,18 +100,18 @@ export class GameComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  addScore(p: number) {
+  public addScore(p: number) {
     const currentGame = this.game$.getValue();
     this.editScoreOpen(p, currentGame.players[p].scores.length);
   }
 
-  removeScore(p: number) {
+  public removeScore(p: number) {
     const currentGame = this.game$.getValue();
     currentGame.players[p].scores.pop();
     this.gamesService.editGame(currentGame);
   }
 
-  editScoreOpen(p: number, i: number) {
+  public editScoreOpen(p: number, i: number) {
     const current = this.game$.getValue().players[p].scores[i] ?? null;
     this.dialog.open(EditionDialogComponent, {data: {editScore: {current, p, i}}})
       .afterClosed()
@@ -114,7 +121,7 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  editScore(p: number, i: number, s: number) {
+  public editScore(p: number, i: number, s: number) {
     const currentGame = this.game$.getValue();
     if (i === currentGame.players[p].scores.length) {
       currentGame.players[p].scores.push(s);
@@ -124,7 +131,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gamesService.editGame(currentGame);
   }
 
-  editPlayerNameOpen(p: number) {
+  public editPlayerNameOpen(p: number) {
     const current = this.game$.getValue().players[p].name;
     this.dialog.open(EditionDialogComponent, {data: {editPlayerName: {current, p}}})
       .afterClosed()
@@ -134,13 +141,13 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  editPlayerName(p: number, newName: string) {
+  public editPlayerName(p: number, newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.players[p].name = newName;
     this.gamesService.editGame(currentGame);
   }
 
-  addPlayer() {
+  public addPlayer() {
     const currentGame = this.game$.getValue();
     this.gamesService.editGame({
       ...currentGame,
@@ -148,13 +155,13 @@ export class GameComponent implements OnInit, OnDestroy {
     });
   }
 
-  removePlayer() {
+  public removePlayer() {
     const currentGame = this.game$.getValue();
     currentGame.players.pop();
     this.gamesService.editGame(currentGame);
   }
 
-  editGameOpen() {
+  public editGameOpen() {
     const current = this.game$.getValue().name;
     this.dialog.open(EditionDialogComponent, {data: {editGame: {current}}})
       .afterClosed()
@@ -164,13 +171,13 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  editGame(newName: string) {
+  public editGame(newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.name = newName;
     this.gamesService.editGame(currentGame);
   }
 
-  toggleWin() {
+  public toggleWin() {
     const currentGame = this.game$.getValue();
     this.gamesService.editGame({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
   }

@@ -45,6 +45,8 @@ export class GameComponent implements OnInit, OnDestroy {
     }),
   );
 
+  public connectionError$ = this.socket.connectionError$;
+
   private destroy$ = new Subject<void>();
 
   private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {

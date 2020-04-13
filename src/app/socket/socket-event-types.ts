@@ -1,6 +1,7 @@
 import {Game} from '../model/game';
 
 export interface ReceivedEventTypes {
+  'connect': void;
   'disconnect': void;
   'game joined': string;
   'game exited': string;

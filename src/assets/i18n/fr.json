@@ -22,6 +22,7 @@
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
   "misc": {
+    "connection-error": "Déconnecté",
     "dark-mode": "Thème sombre",
     "language": "langue",
     "pin-sidenav": "Épingler",

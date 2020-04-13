@@ -22,6 +22,7 @@
     "welcome": "Count the score for every player of your favorite games!"
   },
   "misc": {
+    "connection-error": "Disconnected",
     "dark-mode": "Dark mode",
     "language": "language",
     "pin-sidenav": "Pin Sidenav",

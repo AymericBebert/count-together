@@ -93,7 +93,10 @@ export class GamesService {
 
   public connectGame(gameId: string) {
     this.socket.connectSocket();
-    this.socket.emit('game join', gameId);
+
+    this.socket.connected$
+      .pipe(filter(c => c), takeUntil(this.gameLeft$))
+      .subscribe(() => this.socket.emit('game join', gameId));
 
     this.socket.on('game')
       .pipe(takeUntil(this.gameLeft$))

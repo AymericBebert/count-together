@@ -66,7 +66,10 @@ export class GameComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
   ) {
     this.navButtonsService.navButtonClicked$('share')
-      .pipe(withLatestFrom(this.game$, this.translateService.get('game.share.title'), this.translateService.get('game.share.text')))
+      .pipe(
+        withLatestFrom(this.game$, this.translateService.get('game.share.title'), this.translateService.get('game.share.text')),
+        takeUntil(this.destroy$),
+      )
       .subscribe(([, game, title, text]) => {
         // TODO make new game if offline
         if (game !== null) {

@@ -1,5 +1,16 @@
 <div style="padding: 20px" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
   <span>{{ 'home.welcome' | translate }}</span>
-  <button mat-raised-button color="primary" (click)="newGame()">{{ 'home.new-game' | translate }}</button>
   <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.offline' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="newGame()">{{ 'home.new-game' | translate }}</button>
 </div>
+
+<ng-container *ngIf="visitedGames$ | async as visitedGames">
+  <div *ngIf="(visitedGames || []).length > 0" fxLayout="column" fxLayoutAlign="start center">
+    <h3>{{ 'home.visited-games' | translate }}</h3>
+    <div *ngFor="let game of visitedGames">
+      <button mat-button color="primary" [routerLink]="['..', 'game', game.gameId]">
+        {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
+      </button>
+    </div>
+  </div>
+</ng-container>

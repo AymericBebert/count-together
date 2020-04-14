@@ -4,10 +4,11 @@
                position="end"
                [attr.role]="(navService.pinSideNav$ | async) ? 'navigation' : 'dialog'"
                [mode]="(navService.pinSideNav$ | async) ? 'side' : 'over'"
-               [opened]="navService.pinSideNav$ | async">
+               [opened]="navService.pinSideNav$ | async"
+               (click)="closeDrawer()">
 
-    <mat-toolbar (click)="closeDrawer()">{{ 'nav.menu-title' | translate }}</mat-toolbar>
-    <mat-nav-list (click)="closeDrawer()">
+    <mat-toolbar>{{ 'nav.menu-title' | translate }}</mat-toolbar>
+    <mat-nav-list>
 
       <mat-list-item>
         <mat-slide-toggle color="accent" [checked]="settingsService.darkMode$ | async"

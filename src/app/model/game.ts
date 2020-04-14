@@ -6,3 +6,9 @@ export interface Game {
   lowerScoreWins: boolean;
   players: Player[];
 }
+
+export interface StoredGame {
+  gameId: string;
+  name: string;
+  date: Date;
+}

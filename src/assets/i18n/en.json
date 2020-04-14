@@ -19,6 +19,7 @@
   "home": {
     "new-game": "New game",
     "offline": "Offline mode",
+    "visited-games": "Visited games",
     "welcome": "Count the score for every player of your favorite games!"
   },
   "misc": {

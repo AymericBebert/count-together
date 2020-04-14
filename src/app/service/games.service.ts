@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map, skip, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
 import {ApiErrorService} from '../api-error/api-error.service';
-import {Game} from '../model/game';
+import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
 import {StorageService} from './storage.service';
 import {SocketService} from '../socket/socket.service';
@@ -36,6 +36,10 @@ export class GamesService {
     this.registerGame$
       .pipe(filter(game => game && game.gameId === 'offline'), debounceTime(500))
       .subscribe(game => this.saveOfflineGameToStorage(game));
+
+    this.currentGame$
+      .pipe(filter(game => game && game.gameId !== 'offline'), debounceTime(5000))
+      .subscribe(game => this.addToVisitedGames(game));
 
     this.registerGame$
       .pipe(
@@ -123,6 +127,18 @@ export class GamesService {
       tap(res => res.error && this.apiError.displayError(`getGame: ${res.error}`)),
       map(res => res.result),
     );
+  }
+
+  private addToVisitedGames(game: Game) {
+    const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
+    const visitedGames: StoredGame[] = JSON.parse(visitedGamesFromStorage);
+    const foundAtIndex = visitedGames.map(sg => sg.gameId).indexOf(game.gameId);
+    if (foundAtIndex >= 0) {
+      visitedGames[foundAtIndex] = {gameId: game.gameId, name: game.name, date: new Date()};
+    } else {
+      visitedGames.push({gameId: game.gameId, name: game.name, date: new Date()});
+    }
+    this.storageService.setItem('visitedGames', JSON.stringify(visitedGames));
   }
 
   // public getAllGames(): void {

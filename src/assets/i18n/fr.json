@@ -19,6 +19,7 @@
   "home": {
     "new-game": "Nouveau jeu",
     "offline": "Hors-ligne",
+    "visited-games": "Jeux visités",
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
   "misc": {

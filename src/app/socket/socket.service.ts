@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, fromEvent, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, fromEvent, Observable, of, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, shareReplay, skip, startWith, take, takeUntil, tap} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
@@ -8,7 +8,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class SocketService {
 
-  public connected$ = new BehaviorSubject<boolean>(false);
+  public connected$ = new Subject<boolean>();
 
   private socket: SocketIOClient.Socket | null = null;
   private shouldBeConnected$ = new BehaviorSubject<boolean>(false);
@@ -54,6 +54,10 @@ export class SocketService {
   }
 
   public on<T extends keyof ReceivedEventTypes>(eventName: T): Observable<ReceivedEventTypes[T]> {
+    if (this.socket === null) {
+      console.error('Cannot receive event: null socket');
+      return of();
+    }
     return fromEvent<ReceivedEventTypes[T]>(this.socket, eventName)
       .pipe(tap(data => environment.debugSocket && console.log(`socket> ${eventName}:`, data)), takeUntil(this.disconnect$));
   }
@@ -64,6 +68,7 @@ export class SocketService {
 
   public emit<T extends keyof EmittedEventTypes>(eventName: T, ...args: Array<EmittedEventTypes[T]>): void {
     if (this.socket === null) {
+      console.error('Cannot emit event: null socket');
       return;
     }
     if (environment.debugSocket) {

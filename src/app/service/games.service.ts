@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, map, skip, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
 import {ApiErrorService} from '../api-error/api-error.service';
 import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
@@ -14,12 +14,12 @@ import {SocketService} from '../socket/socket.service';
 export class GamesService {
 
   public currentGame$ = new BehaviorSubject<Game | null>(null);
+  private currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
+
   private gameLeft$ = this.currentGame$.pipe(skip(1), filter(g => !g), map<null, void>(() => void 0));
 
   private registerGameChange$ = new Subject<void>();
   private registerGame$ = this.registerGameChange$.pipe(withLatestFrom(this.currentGame$), map(([, game]) => game));
-
-  // public gamesList$ = new BehaviorSubject<Game[]>([]);
 
   constructor(private http: HttpClient,
               private apiError: ApiErrorService,
@@ -49,6 +49,27 @@ export class GamesService {
       )
       .subscribe(game => this.socket.emit('game update', game));
 
+    combineLatest([
+      this.currentGameId$,
+      this.socket.connected$,
+    ])
+      .pipe(filter(([gid, c]) => c && gid && gid !== 'offline'))
+      .subscribe(([gameId]) => {
+        this.socket.emit('game exit');
+        this.socket.emit('game join', gameId);
+      });
+
+    this.socket.connected$
+      .pipe(
+        filter(c => c),
+        switchMap(() => this.socket.on('game')),
+        takeUntil(this.gameLeft$),
+      )
+      .subscribe(g => {
+        console.log('Received game update');
+        this.currentGame$.next(g);
+      });
+
     this.gameLeft$.subscribe(() => console.log('game left'));
   }
 
@@ -57,7 +78,39 @@ export class GamesService {
     this.registerGameChange$.next();
   }
 
-  public loadOfflineGameFromStorage() {
+  public setCurrentGameId(gameId: string | null) {
+    const currentGame = this.currentGame$.getValue();
+    if (currentGame && !gameId) {
+      this.socket.disconnectSocket();
+    }
+    if (currentGame && currentGame.gameId !== gameId) {
+      this.currentGame$.next(null);
+    }
+    if (gameId && (!currentGame || currentGame.gameId !== gameId)) {
+      if (gameId === 'offline') {
+        this.loadOfflineGameFromStorage();
+      } else {
+        this.getGame(gameId).subscribe(game => this.currentGame$.next(game));
+        this.socket.connectSocket();
+      }
+    }
+  }
+
+  public postNewGame(game: Game): Observable<Game | null> {
+    return this.http.post<{ result: Game | null; error: string; }>(gamesBackendRoutes.postNewGame(), game).pipe(
+      tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
+      map(res => res.result),
+    );
+  }
+
+  private getGame(gameId: string): Observable<Game | null> {
+    return this.http.get<{ result: Game | null; error: string }>(gamesBackendRoutes.getGame(gameId)).pipe(
+      tap(res => res.error && this.apiError.displayError(`getGame: ${res.error}`)),
+      map(res => res.result),
+    );
+  }
+
+  private loadOfflineGameFromStorage() {
     const gameFromStorage = this.storageService.getItem('offlineGame');
     if (gameFromStorage) {
       try {
@@ -72,61 +125,9 @@ export class GamesService {
     }
   }
 
-  public saveOfflineGameToStorage(game: Game) {
+  private saveOfflineGameToStorage(game: Game) {
     console.log('Saving game to storage');
     this.storageService.setItem('offlineGame', JSON.stringify(game));
-  }
-
-  public setCurrentGameId(gameId: string | null) {
-    const currentGame = this.currentGame$.getValue();
-    if (currentGame && !gameId) {
-      this.disconnectGame();
-    }
-    if (currentGame && currentGame.gameId !== gameId) {
-      this.currentGame$.next(null);
-    }
-    if (gameId && (!currentGame || currentGame.gameId !== gameId)) {
-      if (gameId === 'offline') {
-        this.loadOfflineGameFromStorage();
-      } else {
-        this.getGame(gameId).subscribe(game => this.currentGame$.next(game));
-        this.connectGame(gameId);
-      }
-    }
-  }
-
-  public connectGame(gameId: string) {
-    this.socket.connectSocket();
-
-    this.socket.connected$
-      .pipe(filter(c => c), takeUntil(this.gameLeft$))
-      .subscribe(() => this.socket.emit('game join', gameId));
-
-    this.socket.on('game')
-      .pipe(takeUntil(this.gameLeft$))
-      .subscribe(g => {
-        console.log('Received game update');
-        this.currentGame$.next(g);
-      });
-  }
-
-  public disconnectGame() {
-    this.socket.emit('game exit');
-    this.socket.disconnectSocket();
-  }
-
-  public postNewGame(game: Game): Observable<Game | null> {
-    return this.http.post<{ result: Game | null; error: string; }>(gamesBackendRoutes.postNewGame(), game).pipe(
-      tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
-      map(res => res.result),
-    );
-  }
-
-  public getGame(gameId: string): Observable<Game | null> {
-    return this.http.get<{ result: Game | null; error: string }>(gamesBackendRoutes.getGame(gameId)).pipe(
-      tap(res => res.error && this.apiError.displayError(`getGame: ${res.error}`)),
-      map(res => res.result),
-    );
   }
 
   private addToVisitedGames(game: Game) {
@@ -141,21 +142,23 @@ export class GamesService {
     this.storageService.setItem('visitedGames', JSON.stringify(visitedGames));
   }
 
-  // public getAllGames(): void {
+  // public gamesList$ = new BehaviorSubject<Game[]>([]);
+
+  // private getAllGames(): void {
   //   this.http.get<{ result: Game[]; error: string }>(gamesBackendRoutes.getAllGames()).pipe(
   //     tap(res => res.error && this.apiError.displayError(`getAllGames: ${res.error}`)),
   //     map(res => res.result),
   //   ).subscribe(games => this.gamesList$.next(games));
   // }
 
-  // public putGame(game: Game): void {
+  // private putGame(game: Game): void {
   //   this.http.put<{ result: Game | null; error: string }>(gamesBackendRoutes.putGame(game.gameId), game).pipe(
   //     tap(res => res.error && this.apiError.displayError(`getAllGames: ${res.error}`)),
   //     map(res => res.result),
   //   ).subscribe(updatedGame => this.currentGame$.next(updatedGame));
   // }
 
-  // public deleteGame(gameId: string): Observable<boolean> {
+  // private deleteGame(gameId: string): Observable<boolean> {
   //   return this.http.delete<{ error: string; }>(gamesBackendRoutes.deleteGame(gameId)).pipe(
   //     tap(res => res.error && this.apiError.displayError(`deleteGame: ${res.error}`)),
   //     map(res => !!res.error),

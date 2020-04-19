@@ -20,7 +20,7 @@
       <mat-list-item *ngIf="(deviceService.isHandset$ | async) === false">
         <mat-slide-toggle color="accent" [checked]="navService.pinSideNav$ | async"
                           (change)="navService.setPinSideNav($event.checked)">
-          {{ 'misc.pin-sidenav' | translate }}
+          {{ 'nav.pin-sidenav' | translate }}
         </mat-slide-toggle>
       </mat-list-item>
 
@@ -28,17 +28,17 @@
         <app-change-language (langSet)="navService.setLanguage($event); closeDrawer()"></app-change-language>
       </mat-list-item>
 
-      <mat-list-item *ngIf="navService.displayUpdatesAvailable$ | async as ua" (click)="navService.update()">
+      <mat-list-item *ngIf="navService.displayUpdatesAvailable$ | async" (click)="navService.update()">
         <mat-icon color="warn" style="margin-right: 5px">update</mat-icon>
         <span>
-          {{ ua }}
+          {{ 'nav.update-available' | translate }}
         </span>
       </mat-list-item>
 
-      <mat-list-item *ngIf="navService.displayUpdatesActivated$ | async as ua">
-        <mat-icon color="warn" style="margin-right: 5px">sync</mat-icon>
+      <mat-list-item *ngIf="navService.displayUpdatesActivated$ | async">
+        <mat-icon style="margin-right: 5px">sync</mat-icon>
         <span>
-          {{ ua }}
+          {{ 'nav.update-activated' | translate }}
         </span>
       </mat-list-item>
 
@@ -47,14 +47,6 @@
           {{ 'misc.version' | translate }} {{ appVersion }}
         </span>
       </mat-list-item>
-
-<!--      <mat-list-item (click)="navService.refreshPage()">-->
-<!--        <span class="very-light-text">Refresh page</span>-->
-<!--      </mat-list-item>-->
-
-<!--      <mat-list-item (click)="navService.clearRefreshPage()">-->
-<!--        <span class="very-light-text">Clear & Refresh</span>-->
-<!--      </mat-list-item>-->
 
     </mat-nav-list>
 

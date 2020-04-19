@@ -26,11 +26,13 @@
     "connection-error": "Disconnected",
     "dark-mode": "Dark mode",
     "language": "language",
-    "pin-sidenav": "Pin Sidenav",
     "version": "Version:"
   },
   "nav": {
-    "menu-title": "Settings"
+    "menu-title": "Settings",
+    "pin-sidenav": "Pin Sidenav",
+    "update-activated": "Update activated",
+    "update-available": "Update available"
   },
   "share": {
     "copied": "Copied",

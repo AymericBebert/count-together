@@ -15,8 +15,8 @@ export class NavService {
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);
   public notificationBadge$ = new BehaviorSubject<string>('');
-  public displayUpdatesAvailable$ = new BehaviorSubject<string>('');
-  public displayUpdatesActivated$ = new BehaviorSubject<string>('');
+  public displayUpdatesAvailable$ = new BehaviorSubject<boolean>(false);
+  public displayUpdatesActivated$ = new BehaviorSubject<boolean>(false);
 
   public language$ = new BehaviorSubject<string>('');
 
@@ -29,14 +29,14 @@ export class NavService {
   ) {
     this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
 
-    this.updater.updatesAvailable$.subscribe(ua => {
+    this.updater.updatesAvailable$.subscribe(() => {
       this.notificationBadge$.next('1');
-      this.displayUpdatesAvailable$.next(`${ua.current} -> ${ua.available}`);
+      this.displayUpdatesAvailable$.next(true);
     });
 
-    this.updater.updatesActivated$.subscribe(ua => {
+    this.updater.updatesActivated$.subscribe(() => {
       this.notificationBadge$.next('1');
-      this.displayUpdatesActivated$.next(`${ua.previous} -> ${ua.current}`);
+      this.displayUpdatesActivated$.next(true);
     });
   }
 

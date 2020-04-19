@@ -12,6 +12,10 @@ export class UpdaterService {
   constructor(private appRef: ApplicationRef,
               private updates: SwUpdate,
   ) {
+    if (!this.updates.isEnabled) {
+      return;
+    }
+
     // Allow the app to stabilize first, before starting polling for updates with `interval()`.
     const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
     const checkInterval$ = interval(5 * 60 * 1000);  // TODO increase those 5 min
@@ -19,21 +23,24 @@ export class UpdaterService {
 
     everyCheckIntervalOnceAppIsStable$.subscribe(() => {
       console.log('Checking for updates');
-      updates.checkForUpdate().catch(err => console.error('checkForUpdate error', err));
+      this.updates.checkForUpdate().catch(err => console.error('checkForUpdate error', err));
     });
 
-    updates.available.subscribe(event => {
+    this.updates.available.subscribe(event => {
       console.log('Current version is', event.current);
       console.log('Available version is', event.available);
     });
 
-    updates.activated.subscribe(event => {
+    this.updates.activated.subscribe(event => {
       console.log('Old version was', event.previous);
       console.log('New version is', event.current);
     });
   }
 
   public update() {
+    if (!this.updates.isEnabled) {
+      return;
+    }
     this.updates.activateUpdate().then(() => document.location.reload());
   }
 }

@@ -41,8 +41,6 @@ export class SocketService {
           this.socket = null;
         }
       });
-
-    this.connectionError$.subscribe(b => console.log('connectionError$:', b));
   }
 
   public connectSocket() {

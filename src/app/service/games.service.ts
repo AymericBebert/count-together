@@ -8,9 +8,7 @@ import {gamesBackendRoutes} from '../games-backend.routes';
 import {StorageService} from './storage.service';
 import {SocketService} from '../socket/socket.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GamesService {
 
   public currentGame$ = new BehaviorSubject<Game | null>(null);
@@ -80,7 +78,7 @@ export class GamesService {
 
   public setCurrentGameId(gameId: string | null) {
     const currentGame = this.currentGame$.getValue();
-    if (currentGame && !gameId) {
+    if (!gameId) {
       this.socket.disconnectSocket();
     }
     if (currentGame && currentGame.gameId !== gameId) {

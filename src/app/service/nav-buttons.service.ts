@@ -4,9 +4,7 @@ import {Router} from '@angular/router';
 import {simplifyURL} from '../utils/utils';
 import {filter} from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NavButtonsService {
   public backRouterNavigate = '';
 

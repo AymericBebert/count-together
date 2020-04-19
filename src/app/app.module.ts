@@ -28,6 +28,14 @@ import {RankIconComponent} from './rank-icon/rank-icon.component';
 import {ShareButtonModule} from './share-button/share-button.module';
 import {SocketModule} from './socket/socket.module';
 import {DebugHttpInterceptor} from './utils/debug-http.interceptor';
+import {DeviceService} from './service/device.service';
+import {GamesService} from './service/games.service';
+import {NavService} from './service/nav.service';
+import {NavButtonsService} from './service/nav-buttons.service';
+import {SettingsService} from './service/settings.service';
+import {StorageService} from './service/storage.service';
+import {UpdaterService} from './service/updater.service';
+import {MatBadgeModule} from '@angular/material/badge';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -70,6 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ShareButtonModule,
     SocketModule,
+    MatBadgeModule,
   ],
   providers: [
     {
@@ -77,6 +86,13 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: DebugHttpInterceptor,
       multi: true
     },
+    DeviceService,
+    GamesService,
+    NavService,
+    NavButtonsService,
+    SettingsService,
+    StorageService,
+    UpdaterService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

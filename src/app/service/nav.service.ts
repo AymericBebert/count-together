@@ -7,15 +7,16 @@ import {SettingsService} from './settings.service';
 import {DeviceService} from './device.service';
 import {filter, switchMap, tap} from 'rxjs/operators';
 import {version} from '../../version';
+import {UpdaterService} from './updater.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NavService {
   public pinSideNav$ = new BehaviorSubject<boolean>(false);
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);
-  // public mainTitle$ = new BehaviorSubject<string>('');
+  public notificationBadge$ = new BehaviorSubject<string>('');
+  public displayUpdatesAvailable$ = new BehaviorSubject<string>('');
+  public displayUpdatesActivated$ = new BehaviorSubject<string>('');
 
   public language$ = new BehaviorSubject<string>('');
 
@@ -24,8 +25,19 @@ export class NavService {
               private deviceService: DeviceService,
               private translateService: TranslateService,
               private storageService: StorageService,
+              private updater: UpdaterService,
   ) {
     this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
+
+    this.updater.updatesAvailable$.subscribe(ua => {
+      this.notificationBadge$.next('1');
+      this.displayUpdatesAvailable$.next(`${ua.current} -> ${ua.available}`);
+    });
+
+    this.updater.updatesActivated$.subscribe(ua => {
+      this.notificationBadge$.next('1');
+      this.displayUpdatesActivated$.next(`${ua.previous} -> ${ua.current}`);
+    });
   }
 
   public setBackRouterLink(backRouterNavigate: string) {
@@ -83,6 +95,10 @@ export class NavService {
     if (pinSideNavFromStorage && JSON.parse(pinSideNavFromStorage)) {
       this.setPinSideNav(true);
     }
+  }
+
+  public update() {
+    this.updater.update();
   }
 
   public checkForUpdates() {

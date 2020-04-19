@@ -3,9 +3,7 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {BehaviorSubject} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DeviceService {
 
   public isHandset$ = new BehaviorSubject<boolean>(true);

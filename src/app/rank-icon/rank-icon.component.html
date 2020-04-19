@@ -1,6 +1,6 @@
 <div class="wrapper">
 <img *ngIf="isLast" [src]="'assets/icons/tp-64.png'" alt="rank-icon"/>
 <img *ngIf="!isLast && rank < 4" [src]="'assets/icons/crown-' + rank + '-64.png'" alt="rank-icon"/>
-<img *ngIf="!isLast && rank > 3" [src]="'assets/icons/crown-2-64.png'" alt="rank-icon" style="opacity: 10%"/>
+<img *ngIf="!isLast && rank > 3" [src]="'assets/icons/crown-2-64.png'" alt="rank-icon" style="opacity: 0.1"/>
 <span>{{ rank }}</span>
 </div>

@@ -26,7 +26,7 @@ export class SocketService {
 
   constructor() {
     this.shouldBeConnected$
-      .pipe(skip(1), distinctUntilChanged())
+      .pipe(distinctUntilChanged(), skip(1))
       .subscribe(shouldConnect => {
         if (shouldConnect) {
           console.log('Socket should connect');

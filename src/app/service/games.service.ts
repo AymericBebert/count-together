@@ -121,7 +121,12 @@ export class GamesService {
         console.error('Storage value:', gameFromStorage);
       }
     } else {
-      this.currentGame$.next({gameId: 'offline', name: 'New Game', players: [], lowerScoreWins: false});
+      this.currentGame$.next({
+        gameId: 'offline',
+        name: 'New Game',
+        players: [{name: '<P1>', scores: []}],
+        lowerScoreWins: false,
+      });
     }
   }
 

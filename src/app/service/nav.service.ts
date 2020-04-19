@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, from} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {StorageService} from './storage.service';
 import {NavButtonsService} from './nav-buttons.service';
 import {SettingsService} from './settings.service';
 import {DeviceService} from './device.service';
-import {filter} from 'rxjs/operators';
+import {filter, switchMap, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +82,23 @@ export class NavService {
     if (pinSideNavFromStorage && JSON.parse(pinSideNavFromStorage)) {
       this.setPinSideNav(true);
     }
+  }
+
+  public checkForUpdates() {
+    console.log('checkForUpdates clicked');
+    from(window.caches.keys())
+      .pipe(
+        tap(keys => console.log('Cache keys:', keys)),
+        filter(keys => keys.length > 0),
+        switchMap(keys => Promise.all(keys.map(key => caches.delete(key)))),
+        tap(deleted => console.log('Deleted?:', deleted)),
+        filter(deleted => deleted.some(d => d)),
+      )
+      .subscribe(() => this.refreshPage());
+  }
+
+  public refreshPage() {
+    console.log('Refreshing page...');
+    location.reload();
   }
 }

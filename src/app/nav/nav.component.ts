@@ -16,6 +16,8 @@ export class NavComponent {
   @ViewChild('drawer', {static: true}) public navDrawer: MatSidenav;
 
   public appVersion = version;
+  public checkForUpdates = this.navService.checkForUpdates;
+  public refreshPage = this.navService.refreshPage;
 
   constructor(public navService: NavService,
               public settingsService: SettingsService,

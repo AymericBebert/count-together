@@ -28,18 +28,18 @@
         <app-change-language (langSet)="navService.setLanguage($event); closeDrawer()"></app-change-language>
       </mat-list-item>
 
-      <mat-list-item>
+      <mat-list-item (click)="checkForUpdates()">
         <span class="very-light-text">
           {{ 'misc.version' | translate }} {{ appVersion }}
         </span>
       </mat-list-item>
 
-      <mat-list-item>
-        <span class="very-light-text" (click)="checkForUpdates()">Check for updates</span>
+      <mat-list-item (click)="refreshPage()">
+        <span class="very-light-text">Refresh page</span>
       </mat-list-item>
 
-      <mat-list-item>
-        <span class="very-light-text" (click)="refreshPage()">Refresh page</span>
+      <mat-list-item (click)="clearRefreshPage()">
+        <span class="very-light-text">Clear & Refresh</span>
       </mat-list-item>
 
     </mat-nav-list>

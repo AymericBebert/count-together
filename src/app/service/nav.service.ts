@@ -6,6 +6,7 @@ import {NavButtonsService} from './nav-buttons.service';
 import {SettingsService} from './settings.service';
 import {DeviceService} from './device.service';
 import {filter, switchMap, tap} from 'rxjs/operators';
+import {version} from '../../version';
 
 @Injectable({
   providedIn: 'root'
@@ -86,13 +87,19 @@ export class NavService {
 
   public checkForUpdates() {
     console.log('checkForUpdates clicked');
+    console.log(`Current version: ${version}`);
+    this.clearRefreshPage(false);
+  }
+
+  public clearRefreshPage(alwaysRefresh: boolean = true) {
+    console.log('checkForUpdates clicked');
     from(window.caches.keys())
       .pipe(
         tap(keys => console.log('Cache keys:', keys)),
-        filter(keys => keys.length > 0),
+        filter(keys => alwaysRefresh || keys.length > 0),
         switchMap(keys => Promise.all(keys.map(key => caches.delete(key)))),
         tap(deleted => console.log('Deleted?:', deleted)),
-        filter(deleted => deleted.some(d => d)),
+        filter(deleted => alwaysRefresh || deleted.some(d => d)),
       )
       .subscribe(() => this.refreshPage());
   }

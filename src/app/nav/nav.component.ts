@@ -17,6 +17,7 @@ export class NavComponent {
 
   public appVersion = version;
   public checkForUpdates = this.navService.checkForUpdates;
+  public clearRefreshPage = this.navService.clearRefreshPage;
   public refreshPage = this.navService.refreshPage;
 
   constructor(public navService: NavService,

@@ -28,6 +28,15 @@ import {RankIconComponent} from './rank-icon/rank-icon.component';
 import {ShareButtonModule} from './share-button/share-button.module';
 import {SocketModule} from './socket/socket.module';
 import {DebugHttpInterceptor} from './utils/debug-http.interceptor';
+import {DeviceService} from './service/device.service';
+import {GamesService} from './service/games.service';
+import {NavService} from './service/nav.service';
+import {NavButtonsService} from './service/nav-buttons.service';
+import {SettingsService} from './service/settings.service';
+import {MatBadgeModule} from '@angular/material/badge';
+import {StorageModule} from './storage/storage.module';
+import {UpdaterModule} from './updater/updater.module';
+import {ApiErrorModule} from './api-error/api-error.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -56,6 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    FormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatIconModule,
@@ -67,9 +77,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSlideToggleModule,
     MatDialogModule,
     MatInputModule,
-    FormsModule,
+    MatBadgeModule,
     ShareButtonModule,
     SocketModule,
+    ApiErrorModule,
+    StorageModule,
+    UpdaterModule,
   ],
   providers: [
     {
@@ -77,6 +90,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: DebugHttpInterceptor,
       multi: true
     },
+    DeviceService,
+    GamesService,
+    NavService,
+    NavButtonsService,
+    SettingsService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

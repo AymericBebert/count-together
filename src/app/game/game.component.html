@@ -8,10 +8,10 @@
 <div *ngIf="game$ | async as game" class="wrapper" fxLayout="column" fxLayoutAlign="center center">
   <div class="header" fxLayout="row" fxLayoutAlign="center center">
     <span (click)="editGameOpen()">{{ game.name || '...' }}</span>
-    <button mat-button style="padding: 0 10px" (click)="toggleWin()">
+    <div fxLayout="row" fxLayoutAlign="enter" style="padding: 0 10px; cursor: pointer" (click)="toggleWin()">
       <mat-icon>{{ game.lowerScoreWins ? 'arrow_drop_down' : 'arrow_drop_up' }}</mat-icon>
-      <img class="crown-icon-bw icon-64" [src]="'assets/icons/crown-black-64.png'" alt="crown" style="height: 24px"/>
-    </button>
+      <div class="crown-icon-bw icon-64" style="height: 24px; width: 24px"></div>
+    </div>
   </div>
   <div class="actions" fxLayout="row wrap">
     <button mat-button color="primary" (click)="addPlayer()">

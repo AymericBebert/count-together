@@ -183,12 +183,18 @@ body {
 
 .crown-icon-bw {
   &.icon-64 {
-    content: url('assets/icons/crown-black-64.png');
+    background: url('assets/icons/crown-black-64.png');
+    background-size: contain;
+    height: 32px;
+    width: 32px;
   }
 
   .myrtille-dark-theme & {
     &.icon-64 {
-      content: url('assets/icons/crown-white-64.png');
+      background: url('assets/icons/crown-white-64.png');
+      background-size: contain;
+      height: 32px;
+      width: 32px;
     }
   }
 }

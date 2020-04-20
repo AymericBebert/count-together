@@ -8,11 +8,12 @@ describe('ApiErrorService', () => {
       MatSnackBarModule,
     ],
     providers: [
+      ApiErrorService,
     ]
   }));
 
   it('should be created', () => {
-    const service: ApiErrorService = TestBed.get(ApiErrorService);
+    const service: ApiErrorService = TestBed.inject(ApiErrorService);
     expect(service).toBeTruthy();
   });
 });

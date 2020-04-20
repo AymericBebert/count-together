@@ -20,7 +20,7 @@
       <mat-list-item *ngIf="(deviceService.isHandset$ | async) === false">
         <mat-slide-toggle color="accent" [checked]="navService.pinSideNav$ | async"
                           (change)="navService.setPinSideNav($event.checked)">
-          {{ 'misc.pin-sidenav' | translate }}
+          {{ 'nav.pin-sidenav' | translate }}
         </mat-slide-toggle>
       </mat-list-item>
 
@@ -28,7 +28,21 @@
         <app-change-language (langSet)="navService.setLanguage($event); closeDrawer()"></app-change-language>
       </mat-list-item>
 
-      <mat-list-item>
+      <mat-list-item *ngIf="navService.displayUpdatesAvailable$ | async" (click)="navService.update()">
+        <mat-icon color="warn" style="margin-right: 5px">update</mat-icon>
+        <span>
+          {{ 'nav.update-available' | translate }}
+        </span>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="navService.displayUpdatesActivated$ | async">
+        <mat-icon style="margin-right: 5px">sync</mat-icon>
+        <span>
+          {{ 'nav.update-activated' | translate }}
+        </span>
+      </mat-list-item>
+
+      <mat-list-item (click)="navService.checkForUpdates()">
         <span class="very-light-text">
           {{ 'misc.version' | translate }} {{ appVersion }}
         </span>
@@ -69,12 +83,17 @@
       </button>
 
       <button
+        *ngIf="(navService.pinSideNav$ | async) === false"
+        mat-icon-button
         type="button"
         aria-label="Toggle sidenav"
-        mat-icon-button
-        *ngIf="(navService.pinSideNav$ | async) === false"
         (click)="drawer.toggle()">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        <mat-icon
+          aria-label="Side nav toggle icon"
+          [matBadge]="navService.notificationBadge$ | async"
+          matBadgeColor="warn">
+          menu
+        </mat-icon>
       </button>
 
     </mat-toolbar>

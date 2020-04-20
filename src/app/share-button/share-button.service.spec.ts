@@ -10,6 +10,9 @@ describe('ShareButtonService', () => {
       TranslateTestingModule,
       MatSnackBarModule,
     ],
+    providers: [
+      ShareButtonService,
+    ]
   }));
 
   it('should be created', () => {

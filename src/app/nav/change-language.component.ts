@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {NavService} from '../service/nav.service';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -33,7 +32,7 @@ export class ChangeLanguageComponent {
     return this.flagMap[lang] || this.flagMap.unknown;
   }
 
-  constructor(public navService: NavService, public translateService: TranslateService) {}
+  constructor(public translateService: TranslateService) {}
 
   langClicked(lang: string) {
     this.langSet.emit(lang);

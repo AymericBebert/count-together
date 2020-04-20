@@ -26,11 +26,13 @@
     "connection-error": "Déconnecté",
     "dark-mode": "Thème sombre",
     "language": "langue",
-    "pin-sidenav": "Épingler",
     "version": "Version :"
   },
   "nav": {
-    "menu-title": "Paramètres"
+    "menu-title": "Paramètres",
+    "pin-sidenav": "Épingler",
+    "update-activated": "MàJ activée",
+    "update-available": "MàJ disponible"
   },
   "share": {
     "copied": "Lien copié",

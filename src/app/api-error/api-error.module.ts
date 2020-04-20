@@ -1,16 +1,16 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {ApiErrorService} from './api-error.service';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     MatSnackBarModule,
   ],
-  exports: [],
-  providers: [],
-  entryComponents: [],
+  providers: [
+    ApiErrorService,
+  ],
 })
 export class ApiErrorModule {
 }

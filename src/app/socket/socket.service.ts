@@ -13,7 +13,10 @@ export class SocketService {
   private socket: SocketIOClient.Socket | null = null;
   private shouldBeConnected$ = new BehaviorSubject<boolean>(false);
 
-  public connectionError$ = combineLatest([this.shouldBeConnected$, this.connected$]).pipe(
+  public connectionError$ = combineLatest([
+    this.shouldBeConnected$,
+    this.connected$.pipe(startWith(false)),
+  ]).pipe(
     map(([s, c]) => s && !c),
     distinctUntilChanged(),
     debounceTime(1000),
@@ -26,7 +29,7 @@ export class SocketService {
 
   constructor() {
     this.shouldBeConnected$
-      .pipe(skip(1), distinctUntilChanged())
+      .pipe(distinctUntilChanged(), skip(1))
       .subscribe(shouldConnect => {
         if (shouldConnect) {
           console.log('Socket should connect');

@@ -3,9 +3,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {ShareButtonComponent} from './share-button.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ShareButtonService {
 
   constructor(private snackBar: MatSnackBar,

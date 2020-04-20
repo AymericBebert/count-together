@@ -5,12 +5,10 @@ import {debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUn
 import {ApiErrorService} from '../api-error/api-error.service';
 import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
-import {StorageService} from './storage.service';
+import {StorageService} from '../storage/storage.service';
 import {SocketService} from '../socket/socket.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GamesService {
 
   public currentGame$ = new BehaviorSubject<Game | null>(null);
@@ -80,7 +78,7 @@ export class GamesService {
 
   public setCurrentGameId(gameId: string | null) {
     const currentGame = this.currentGame$.getValue();
-    if (currentGame && !gameId) {
+    if (!gameId) {
       this.socket.disconnectSocket();
     }
     if (currentGame && currentGame.gameId !== gameId) {
@@ -121,7 +119,12 @@ export class GamesService {
         console.error('Storage value:', gameFromStorage);
       }
     } else {
-      this.currentGame$.next({gameId: 'offline', name: 'New Game', players: [], lowerScoreWins: false});
+      this.currentGame$.next({
+        gameId: 'offline',
+        name: 'New Game',
+        players: [{name: '<P1>', scores: []}],
+        lowerScoreWins: false,
+      });
     }
   }
 

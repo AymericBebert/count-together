@@ -5,6 +5,9 @@ import {take} from 'rxjs/operators';
 @Injectable()
 export class SocketTestingService {
 
+  public connected$ = new Subject<boolean>();
+  public connectionError$ = new Subject<boolean>();
+
   private socket: true | null = null;
 
   constructor() {
@@ -14,12 +17,14 @@ export class SocketTestingService {
     if (this.socket === null) {
       console.log('Connecting fake socket');
       this.socket = true;
+      this.connected$.next(true);
     }
   }
 
   public disconnectSocket() {
     if (this.socket !== null) {
       console.log('Disconnecting fake socket');
+      this.connected$.next(false);
       this.socket = null;
     }
   }

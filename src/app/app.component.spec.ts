@@ -1,4 +1,4 @@
-import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppComponent} from './app.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
@@ -12,6 +12,13 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {ChangeLanguageComponent} from './nav/change-language.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import {NavService} from './service/nav.service';
+import {NavButtonsService} from './service/nav-buttons.service';
+import {SettingsService} from './service/settings.service';
+import {DeviceService} from './service/device.service';
+import {StorageModule} from './storage/storage.module';
+import {UpdaterTestingModule} from './testing/updater-testing.module';
+import {MatBadgeModule} from '@angular/material/badge';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -29,14 +36,23 @@ describe('AppComponent', () => {
         MatListModule,
         MatSlideToggleModule,
         MatIconModule,
+        MatBadgeModule,
         MatMenuModule,
         NoopAnimationsModule,
+        StorageModule,
+        UpdaterTestingModule,
       ],
       declarations: [
         AppComponent,
         NavComponent,
         ChangeLanguageComponent,
       ],
+      providers: [
+        NavService,
+        NavButtonsService,
+        SettingsService,
+        DeviceService,
+      ]
     }).compileComponents();
   }));
 

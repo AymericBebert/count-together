@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {EnrichedPlayer} from '../model/player';
 import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
-import {StorageService} from '../service/storage.service';
+import {StorageService} from '../storage/storage.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EditionDialogComponent} from '../edition-dialog/edition-dialog.component';
 import {NavButtonsService} from '../service/nav-buttons.service';

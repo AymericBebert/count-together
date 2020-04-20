@@ -5,7 +5,7 @@ import {debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUn
 import {ApiErrorService} from '../api-error/api-error.service';
 import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
-import {StorageService} from './storage.service';
+import {StorageService} from '../storage/storage.service';
 import {SocketService} from '../socket/socket.service';
 
 @Injectable()

@@ -33,9 +33,10 @@ import {GamesService} from './service/games.service';
 import {NavService} from './service/nav.service';
 import {NavButtonsService} from './service/nav-buttons.service';
 import {SettingsService} from './service/settings.service';
-import {StorageService} from './service/storage.service';
-import {UpdaterService} from './service/updater.service';
 import {MatBadgeModule} from '@angular/material/badge';
+import {StorageModule} from './storage/storage.module';
+import {UpdaterModule} from './updater/updater.module';
+import {ApiErrorModule} from './api-error/api-error.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -64,6 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    FormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatIconModule,
@@ -75,10 +77,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSlideToggleModule,
     MatDialogModule,
     MatInputModule,
-    FormsModule,
+    MatBadgeModule,
     ShareButtonModule,
     SocketModule,
-    MatBadgeModule,
+    ApiErrorModule,
+    StorageModule,
+    UpdaterModule,
   ],
   providers: [
     {
@@ -91,8 +95,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     NavService,
     NavButtonsService,
     SettingsService,
-    StorageService,
-    UpdaterService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

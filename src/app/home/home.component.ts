@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GamesService} from '../service/games.service';
 import {Router} from '@angular/router';
-import {StorageService} from '../service/storage.service';
+import {StorageService} from '../storage/storage.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {StoredGame} from '../model/game';
 import {map} from 'rxjs/operators';

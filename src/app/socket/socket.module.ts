@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {SocketService} from 'src/app/socket/socket.service';
 
 @NgModule({
@@ -11,4 +11,5 @@ import {SocketService} from 'src/app/socket/socket.service';
     SocketService,
   ]
 })
-export class SocketModule { }
+export class SocketModule {
+}

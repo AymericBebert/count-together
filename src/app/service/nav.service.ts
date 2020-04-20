@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, from} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
-import {StorageService} from './storage.service';
+import {StorageService} from '../storage/storage.service';
 import {NavButtonsService} from './nav-buttons.service';
 import {SettingsService} from './settings.service';
 import {DeviceService} from './device.service';
 import {filter, switchMap, tap} from 'rxjs/operators';
 import {version} from '../../version';
-import {UpdaterService} from './updater.service';
+import {UpdaterService} from '../updater/updater.service';
 
 @Injectable()
 export class NavService {

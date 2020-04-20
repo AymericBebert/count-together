@@ -4,7 +4,6 @@ import {NavButtonsService} from './nav-buttons.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
-import {CookieService} from 'ngx-cookie-service';
 
 describe('NavButtonsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -14,7 +13,7 @@ describe('NavButtonsService', () => {
       RouterTestingModule,
     ],
     providers: [
-      CookieService,
+      NavButtonsService,
     ],
   }));
 

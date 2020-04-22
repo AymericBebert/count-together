@@ -24,39 +24,40 @@
     </button>
   </div>
 
-  <div class="columns-wrapper mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
-    <div *ngFor="let player of players$ | async; let p = index" class="column"
-         fxLayout="column" fxLayoutAlign="start center">
+  <div class="score-box mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
+    <div *ngFor="let player of players$ | async; let p = index" fxFlex="1 1 auto" class="player-column-wrapper">
+      <div class="player-column" fxLayout="column" fxLayoutAlign="start center">
 
-      <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
+        <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
 
-      <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name }}</div>
+        <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name }}</div>
 
-      <div class="total-cell" style="width: 100%">
-        <div class="total">{{ player.total }}</div>
-      </div>
+        <div class="total-cell" style="width: 100%">
+          <div class="total">{{ player.total }}</div>
+        </div>
 
-      <div *ngFor="let score of player.scores; let i = index" class="cell" fxLayout="column" style="width: 100%">
+        <div *ngFor="let score of player.scores; let i = index" class="cell" fxLayout="column" style="width: 100%">
         <span class="add-score" fxLayout="row" fxLayoutAlign="end" (click)="editScoreOpen(p, i)">
           {{ score !== null ? score : '/' }}
         </span>
-        <div fxLayout="row" fxLayoutAlign="center">
-          {{ player.scoresCumSum[i] != null ? player.scoresCumSum[i] : '/' }}
+          <div fxLayout="row" fxLayoutAlign="center">
+            {{ player.scoresCumSum[i] != null ? player.scoresCumSum[i] : '/' }}
+          </div>
         </div>
-      </div>
 
-      <div class="add-score-item">
-        <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
-          <mat-icon>add_circle_outline</mat-icon>
-        </button>
-      </div>
+        <div class="add-score-item">
+          <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
+        </div>
 
-      <div class="add-score-item">
-        <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
-          <mat-icon>remove_circle_outline</mat-icon>
-        </button>
-      </div>
+        <div class="add-score-item">
+          <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
 
+      </div>
     </div>
   </div>
 

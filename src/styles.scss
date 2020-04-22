@@ -151,6 +151,11 @@ $dark-accent: mat-palette($mat-raspberry-dark, A200, A100, A400);
 $dark-warn: mat-palette($mat-deep-orange);
 $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
+// Insert custom background color
+$dark-background: map-get($dark-theme, background);
+$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
+$dark-theme: map_merge($dark-theme, (background: $dark-background));
+
 .myrtille-dark-theme {
   @include angular-material-theme($dark-theme);
   @include custom-components-theme($dark-theme);

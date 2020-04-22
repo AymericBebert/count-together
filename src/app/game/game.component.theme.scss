@@ -5,9 +5,17 @@
   $accent: map-get($theme, accent);
   //$warn: map-get($theme, warn);
   //$foreground: map-get($theme, foreground);
-  //$background: map-get($theme, background);
+  $background: map-get($theme, background);
 
   app-game {
+    .score-box {
+      background-color: mat-color($background, background);
+    }
+
+    .player-column-wrapper:not(:last-child) {
+      border-right: 1px solid mat-color($primary, 300, 0.2);
+    }
+
     .add-score {
       color: mat-color($accent, text);
     }

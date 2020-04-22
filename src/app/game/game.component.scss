@@ -37,8 +37,13 @@
   height: 32px;
 }
 
+.player-column {
+  margin: auto;
+  max-width: 150px;
+}
+
 .player-name {
-  padding: 0 20px 10px 20px;
+  padding-bottom: 10px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -64,14 +69,14 @@
   cursor: pointer;
 }
 
-.columns-wrapper {
+.score-box {
   width: 100%;
   overflow-x: scroll;
   padding: 10px 0;
 }
 
 @media (screen and min-width: 600px) {
-  .columns-wrapper {
+  .score-box {
     width: 600px;
     min-width: 600px;
     margin: auto;

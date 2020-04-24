@@ -6,11 +6,15 @@
 
 <ng-container *ngIf="visitedGames$ | async as visitedGames">
   <div *ngIf="(visitedGames || []).length > 0" fxLayout="column" fxLayoutAlign="start center">
-    <h3>{{ 'home.visited-games' | translate }}</h3>
+    <h3>{{ 'home.visited-games.title' | translate }}</h3>
     <div *ngFor="let game of visitedGames">
-      <button mat-button color="primary" [routerLink]="['..', 'game', game.gameId]">
+      <button mat-button [color]="deletion ? 'warn' : 'primary'" (click)="visitedGameClicked(game.gameId)">
         {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
       </button>
     </div>
+    <button mat-button color="primary" (click)="toggleDeletion()" [ngClass]="{semiTransparent: !deletion}">
+      <ng-container *ngIf="deletion; else notDeletion">{{ 'home.visited-games.delete-stop' | translate }}</ng-container>
+      <ng-template #notDeletion>{{ 'home.visited-games.delete' | translate }}</ng-template>
+    </button>
   </div>
 </ng-container>

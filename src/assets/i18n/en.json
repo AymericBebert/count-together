@@ -19,7 +19,11 @@
   "home": {
     "new-game": "New game",
     "offline": "Offline mode",
-    "visited-games": "Visited games",
+    "visited-games": {
+      "delete": "Delete entries",
+      "delete-stop": "Stop deleting",
+      "title": "Visited games"
+    },
     "welcome": "Count the score for every player of your favorite games!"
   },
   "misc": {

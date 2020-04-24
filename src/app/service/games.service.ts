@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, EMPTY, Observable, Subject} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
 import {ApiErrorService} from '../api-error/api-error.service';
 import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
@@ -36,7 +36,7 @@ export class GamesService {
       .subscribe(game => this.saveOfflineGameToStorage(game));
 
     this.currentGame$
-      .pipe(filter(game => game && game.gameId !== 'offline'), debounceTime(5000))
+      .pipe(filter(game => game && game.gameId !== 'offline'), debounceTime(3000))
       .subscribe(game => this.addToVisitedGames(game));
 
     this.registerGame$
@@ -97,8 +97,24 @@ export class GamesService {
   public postNewGame(game: Game): Observable<Game | null> {
     return this.http.post<{ result: Game | null; error: string; }>(gamesBackendRoutes.postNewGame(), game).pipe(
       tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
+      catchError(error => {
+        console.error('postNewGame', error);
+        this.apiError.displayError(`Could not post new game`);
+        return EMPTY;
+      }),
       map(res => res.result),
     );
+  }
+
+  public getVisitedGames(): StoredGame[] {
+    const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
+    return JSON.parse(visitedGamesFromStorage).map(g => ({...g, date: new Date(g.date)}));
+  }
+
+  public deleteVisitedGame(gameId: string): StoredGame[] {
+    const newStoredGames = this.getVisitedGames().filter(sg => sg.gameId !== gameId);
+    this.storageService.setItem('visitedGames', JSON.stringify(newStoredGames));
+    return newStoredGames;
   }
 
   private getGame(gameId: string): Observable<Game | null> {

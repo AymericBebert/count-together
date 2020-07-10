@@ -1,11 +1,11 @@
-FROM node:12.16.1-buster-slim AS builder
+FROM node:14.5.0-stretch-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
 
 COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
-RUN npm ci && npm install -g @angular/cli@9.1.1
+RUN npm ci && npm install -g @angular/cli@10.0.2
 COPY . .
 
 ARG VERSION=untagged
@@ -17,7 +17,7 @@ RUN ng build --configuration="${BUILD_CONFIGURATION}"
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.17.9-alpine
+FROM nginx:1.19.1-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\

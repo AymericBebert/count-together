@@ -23,7 +23,7 @@ import {GameComponent} from './game/game.component';
 import {EditionDialogComponent} from './edition-dialog/edition-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RankIconComponent} from './rank-icon/rank-icon.component';
 import {ShareButtonModule} from './share-button/share-button.module';
 import {SocketModule} from './socket/socket.module';
@@ -37,6 +37,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {StorageModule} from './storage/storage.module';
 import {UpdaterModule} from './updater/updater.module';
 import {ApiErrorModule} from './api-error/api-error.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -66,6 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatIconModule,
@@ -78,6 +80,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDialogModule,
     MatInputModule,
     MatBadgeModule,
+    MatProgressSpinnerModule,
     ShareButtonModule,
     SocketModule,
     ApiErrorModule,

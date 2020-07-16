@@ -4,4 +4,5 @@ export const environment = {
   websiteUrl: 'https://count-together.kyr.pw',
   debugSocket: false,
   debugHttp: false,
+  tokenLength: 8,
 };

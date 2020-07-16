@@ -1,15 +1,32 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, combineLatest, EMPTY, Observable, Subject} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, filter, map, skip, switchMap, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  map,
+  skip,
+  switchMap,
+  takeUntil,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 import {ApiErrorService} from '../api-error/api-error.service';
 import {Game, StoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
 import {StorageService} from '../storage/storage.service';
 import {SocketService} from '../socket/socket.service';
+import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class GamesService {
+
+  public gameCheckPending$ = new BehaviorSubject<boolean>(false);
+  public gameCheck$ = new Subject<Game | null>();
 
   public currentGame$ = new BehaviorSubject<Game | null>(null);
   private currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
@@ -92,6 +109,29 @@ export class GamesService {
         this.socket.connectSocket();
       }
     }
+  }
+
+  public gameExistsValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (control.value.length < environment.tokenLength) {
+        return of(null);
+      }
+      return this.gameExistsCheck(control.value).pipe(
+        map(res => res ? null : {gameNotFound: true}),
+      );
+    };
+  }
+
+  private gameExistsCheck(token: string): Observable<Game | null> {
+    this.gameCheckPending$.next(true);
+    return this.getGame(token).pipe(
+      catchError(err => {
+        console.error(err);
+        return of(null);
+      }),
+      tap(game => this.gameCheck$.next(game)),
+      finalize(() => this.gameCheckPending$.next(false)),
+    );
   }
 
   public postNewGame(game: Game): Observable<Game | null> {

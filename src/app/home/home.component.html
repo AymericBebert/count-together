@@ -2,6 +2,23 @@
   <span>{{ 'home.welcome' | translate }}</span>
   <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.offline' | translate }}</button>
   <button mat-raised-button color="primary" (click)="newGame()">{{ 'home.new-game' | translate }}</button>
+  <form class="token-form" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div style="width: 24px"></div>
+    <mat-form-field appearance="standard">
+      <mat-label>{{ 'home.form.label' | translate }}</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             maxlength="8"
+             [formControl]="gameFormControl"
+             [errorStateMatcher]="matcher"
+             [placeholder]="'home.form.placeholder' | translate">
+      <mat-error *ngIf="gameFormControl.errors?.gameNotFound">{{ 'home.form.game-not-found' | translate }}</mat-error>
+    </mat-form-field>
+    <div style="width: 24px">
+      <mat-spinner diameter="24" *ngIf="gameCheckPending$ | async"></mat-spinner>
+    </div>
+  </form>
 </div>
 
 <ng-container *ngIf="visitedGames$ | async as visitedGames">
@@ -12,7 +29,7 @@
         {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
       </button>
     </div>
-    <button mat-button color="primary" (click)="toggleDeletion()" [ngClass]="{semiTransparent: !deletion}">
+    <button mat-button color="primary" (click)="toggleDeletion()" [ngClass]="{'semi-transparent': !deletion}">
       <ng-container *ngIf="deletion; else notDeletion">{{ 'home.visited-games.delete-stop' | translate }}</ng-container>
       <ng-template #notDeletion>{{ 'home.visited-games.delete' | translate }}</ng-template>
     </button>

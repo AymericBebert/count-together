@@ -17,6 +17,11 @@
     }
   },
   "home": {
+    "form": {
+      "game-not-found": "Game not found",
+      "label": "Game token",
+      "placeholder": "8 characters"
+    },
     "new-game": "New game",
     "offline": "Offline mode",
     "visited-games": {
@@ -29,7 +34,7 @@
   "misc": {
     "connection-error": "Disconnected",
     "dark-mode": "Dark mode",
-    "language": "language",
+    "language": "Language:",
     "version": "Version:"
   },
   "nav": {

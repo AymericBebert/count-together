@@ -179,10 +179,26 @@ body {
   }
 }
 
-.mat-button.mat-primary {
-
-  .myrtille-dark-theme & {
+.myrtille-dark-theme {
+  .mat-button.mat-primary {
     color: mat-color($light-primary, 100);
+  }
+
+  .mat-progress-spinner circle {
+    stroke: mat-color($light-primary, 100);
+  }
+
+  .mat-form-field.mat-focused {
+    .mat-form-field-label {
+      color: mat-color($light-primary, 100);
+    }
+    .mat-form-field-ripple {
+      background-color: mat-color($light-primary, 100);
+    }
+  }
+
+  .mat-input-element {
+    caret-color: mat-color($light-primary, 100);
   }
 }
 
@@ -209,5 +225,5 @@ body {
 }
 
 .edit-score div.mat-form-field-infix {
-    width: 140px;
+  width: 140px;
 }

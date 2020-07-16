@@ -4,4 +4,5 @@ export const environment = {
   websiteUrl: 'http://localhost:9876',
   debugSocket: true,
   debugHttp: true,
+  tokenLength: 8,
 };

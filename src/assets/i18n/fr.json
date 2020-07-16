@@ -17,6 +17,11 @@
     }
   },
   "home": {
+    "form": {
+      "game-not-found": "Partie non trouvée",
+      "label": "Code de partie",
+      "placeholder": "8 caractères"
+    },
     "new-game": "Nouveau jeu",
     "offline": "Hors-ligne",
     "visited-games": {
@@ -29,7 +34,7 @@
   "misc": {
     "connection-error": "Déconnecté",
     "dark-mode": "Thème sombre",
-    "language": "langue",
+    "language": "Langue :",
     "version": "Version :"
   },
   "nav": {

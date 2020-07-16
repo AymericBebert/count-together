@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
       <mat-icon style="margin-right: 8px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
       <span>
           {{'misc.language' | translate}}
-          &ensp;·&ensp;
+          &ensp;
           <span class="lang-flag">{{langToFlag(translateService.currentLang)}}</span>{{translateService.currentLang}}
       </span>
       <mat-menu #menu="matMenu">

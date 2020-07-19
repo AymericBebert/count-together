@@ -13,7 +13,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "extract": "ngx-translate-extract --input ./src --output ./src/assets/i18n/{en,fr}.json --clean --sort --format namespaced-json --format-indentation '  ' --string-as-default-value 'MISSING TRANSLATION'"
+    "extract": "ngx-translate-extract --input './src/**/!(*.spec).{html,ts}' --output ./src/assets/i18n/{en,fr}.json --clean --sort --format namespaced-json --format-indentation '  ' --string-as-default-value 'MISSING TRANSLATION'"
   },
   "author": "Aymeric BERNARD",
   "license": "MIT",

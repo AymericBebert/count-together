@@ -12,6 +12,7 @@ import {SocketService} from '../socket/socket.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GamesService} from '../service/games.service';
 import {environment} from '../../environments/environment';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-game',
@@ -102,6 +103,46 @@ export class GameComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  public toggleWin() {
+    const currentGame = this.game$.getValue();
+    this.gamesService.editGame({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
+  }
+
+  public addPlayer() {
+    const currentGame = this.game$.getValue();
+    this.gamesService.editGame({
+      ...currentGame,
+      players: [...currentGame.players, {name: `P${currentGame.players.length + 1}`, scores: []}],
+    });
+  }
+
+  public removePlayer() {
+    const currentGame = this.game$.getValue();
+    if (currentGame.players.length === 0) {
+      return;
+    }
+    const lastPlayer = currentGame.players[currentGame.players.length - 1];
+    if (lastPlayer.scores.filter(s => s !== null).length > 0) {
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: this.translateService.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
+          message: this.translateService.instant('game.remove-player-dialog.message'),
+          confirm: this.translateService.instant('game.remove-player-dialog.confirm'),
+          dismiss: this.translateService.instant('game.remove-player-dialog.dismiss'),
+        }
+      })
+        .afterClosed()
+        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .subscribe(() => {
+          currentGame.players.pop();
+          this.gamesService.editGame(currentGame);
+        });
+    } else {
+      currentGame.players.pop();
+      this.gamesService.editGame(currentGame);
+    }
+  }
+
   public addScore(p: number) {
     const currentGame = this.game$.getValue();
     this.editScoreOpen(p, currentGame.players[p].scores.length);
@@ -123,7 +164,7 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editScore(p: number, i: number, s: number) {
+  private editScore(p: number, i: number, s: number) {
     const currentGame = this.game$.getValue();
     if (i === currentGame.players[p].scores.length) {
       currentGame.players[p].scores.push(s);
@@ -143,23 +184,9 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editPlayerName(p: number, newName: string) {
+  private editPlayerName(p: number, newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.players[p].name = newName;
-    this.gamesService.editGame(currentGame);
-  }
-
-  public addPlayer() {
-    const currentGame = this.game$.getValue();
-    this.gamesService.editGame({
-      ...currentGame,
-      players: [...currentGame.players, {name: `P${currentGame.players.length + 1}`, scores: []}],
-    });
-  }
-
-  public removePlayer() {
-    const currentGame = this.game$.getValue();
-    currentGame.players.pop();
     this.gamesService.editGame(currentGame);
   }
 
@@ -173,14 +200,9 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editGame(newName: string) {
+  private editGame(newName: string) {
     const currentGame = this.game$.getValue();
     currentGame.name = newName;
     this.gamesService.editGame(currentGame);
-  }
-
-  public toggleWin() {
-    const currentGame = this.game$.getValue();
-    this.gamesService.editGame({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
   }
 }

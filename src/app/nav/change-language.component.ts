@@ -4,10 +4,8 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-change-language',
   template: `<div (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
-      <mat-icon style="margin-right: 8px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
-      <span>
-          {{'misc.language' | translate}}
-          &ensp;
+      <mat-icon style="margin-right: 5px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
+      <span>{{'misc.language' | translate}}&ensp;
           <span class="lang-flag">{{langToFlag(translateService.currentLang)}}</span>{{translateService.currentLang}}
       </span>
       <mat-menu #menu="matMenu">

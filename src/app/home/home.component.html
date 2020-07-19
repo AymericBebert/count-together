@@ -13,7 +13,9 @@
              [formControl]="gameFormControl"
              [errorStateMatcher]="matcher"
              [placeholder]="'home.form.placeholder' | translate">
-      <mat-error *ngIf="gameFormControl.errors?.gameNotFound">{{ 'home.form.game-not-found' | translate }}</mat-error>
+      <mat-error *ngIf="gameFormControl.errors?.gameNotFound">
+        {{ 'home.form.game-not-found' | translate }}
+      </mat-error>
     </mat-form-field>
     <div style="width: 24px">
       <mat-spinner diameter="24" *ngIf="gameCheckPending$ | async"></mat-spinner>

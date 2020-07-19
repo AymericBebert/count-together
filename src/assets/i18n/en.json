@@ -11,6 +11,12 @@
   "game": {
     "add-player": "Add player",
     "remove-player": "Remove player",
+    "remove-player-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "The scores for this player will be lost.",
+      "title": "Remove player {{player}}?"
+    },
     "share": {
       "text": "Join my game on Count Together",
       "title": "Count Together"

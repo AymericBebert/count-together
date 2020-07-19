@@ -38,6 +38,7 @@ import {StorageModule} from './storage/storage.module';
 import {UpdaterModule} from './updater/updater.module';
 import {ApiErrorModule} from './api-error/api-error.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -52,6 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     GameComponent,
     EditionDialogComponent,
+    ConfirmDialogComponent,
     RankIconComponent,
   ],
   imports: [
@@ -102,6 +104,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   bootstrap: [AppComponent],
   entryComponents: [
     EditionDialogComponent,
+    ConfirmDialogComponent,
   ],
 })
 export class AppModule {

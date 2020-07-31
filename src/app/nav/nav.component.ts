@@ -39,13 +39,14 @@ export class NavComponent {
       .subscribe(data => {
         this.navService.showBackButton$.next(data.hasBack || !!data.backRouterNavigate);
         this.navService.navButtons$.next(data.navButtons || []);
+        this.navService.navTools$.next(data.navTools || []);
         // this.navService.mainTitle$.next(data.mainTitle || '');
         this.navService.setBackRouterLink(data.backRouterNavigate);
       });
   }
 
   public closeDrawer(): void {
-    if (this.deviceService.isHandset$.getValue()) {
+    if (!this.navService.pinSideNav$.getValue()) {
       this.navDrawer.close().catch(err => console.error('Could not close drawer?', err));
     }
   }

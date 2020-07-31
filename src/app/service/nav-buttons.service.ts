@@ -1,3 +1,4 @@
+import {Location} from '@angular/common';
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Router} from '@angular/router';
@@ -8,18 +9,18 @@ import {filter} from 'rxjs/operators';
 export class NavButtonsService {
   public backRouterNavigate = '';
 
-  private privateBackButtonClicked$ = new Subject<void>();
   private privateNavButtonClicked$ = new Subject<string>();
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private location: Location,
+  ) {
   }
 
-  public backButtonClicked$(): Observable<void> {
-    return this.privateBackButtonClicked$;
-  }
-
-  public navButtonClicked$(buttonId: string): Observable<string> {
-    return this.privateNavButtonClicked$.pipe(filter(btn => btn === buttonId));
+  public navButtonClicked$(buttonId?: string): Observable<string> {
+    if (buttonId) {
+      return this.privateNavButtonClicked$.pipe(filter(btn => btn === buttonId));
+    }
+    return this.privateNavButtonClicked$.asObservable();
   }
 
   public setBackRouterLink(backRouterNavigate: string) {
@@ -29,6 +30,8 @@ export class NavButtonsService {
   public backClicked() {
     if (this.backRouterNavigate && this.backRouterNavigate.startsWith('/')) {
       this.router.navigate([this.backRouterNavigate]).catch(e => console.error('Navigation error:', e));
+    } else if (this.backRouterNavigate === '[back]') {
+      this.location.back();
     } else if (this.backRouterNavigate) {
       try {
         const current = this.router.parseUrl(this.router.routerState.snapshot.url).root.children.primary.segments.map(s => s.path);
@@ -38,7 +41,6 @@ export class NavButtonsService {
         console.error(`Error trying to navigate to ${this.backRouterNavigate}: ${err}`);
       }
     }
-    this.privateBackButtonClicked$.next();
   }
 
   public navButtonClicked(buttonId: string) {

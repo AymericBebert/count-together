@@ -1,0 +1,36 @@
+<div style="padding: 0 20px; text-align: center">
+  <h2>{{ 'wheel.title' | translate }}</h2>
+</div>
+
+<div style="padding: 0 20px; text-align: center">
+  <mat-slider
+    style="width: 100%; max-width: 400px"
+    class="number-slider"
+    (input)="onNumberSliderChange($event)"
+    [value]="setSliderValue$ | async"
+    [max]="10"
+    [min]="2"
+    [step]="1"
+    [thumbLabel]="true"
+    [tickInterval]="1">
+  </mat-slider>
+</div>
+
+<div style="width: 100%; max-width: 400px; margin: auto">
+  <app-wheel
+    [names]="names$ | async"
+    [nb]="nb$ | async"
+    [dark]="settings.darkMode$ | async"
+  ></app-wheel>
+</div>
+
+<!--<div style="padding: 0 20px; text-align: center">-->
+<!--  <app-pie-chart-->
+<!--  ></app-pie-chart>-->
+<!--</div>-->
+
+<!--<div style="width: 100%; max-width: 400px; margin: auto">-->
+<!--  <app-radar-->
+<!--    [radarGraph]="radarGraph"-->
+<!--  ></app-radar>-->
+<!--</div>-->

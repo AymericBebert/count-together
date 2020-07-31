@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {GamesService} from '../service/games.service';
 import {environment} from '../../environments/environment';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {Game} from '../model/game';
 
 @Component({
   selector: 'app-game',
@@ -68,24 +69,22 @@ export class GameComponent implements OnInit, OnDestroy {
               private socket: SocketService,
               private dialog: MatDialog,
   ) {
-    this.navButtonsService.navButtonClicked$('share')
+    this.navButtonsService.navButtonClicked$()
       .pipe(
-        withLatestFrom(this.game$, this.translateService.get('game.share.title'), this.translateService.get('game.share.text')),
+        withLatestFrom(this.game$),
         takeUntil(this.destroy$),
       )
-      .subscribe(([, game, title, text]) => {
-        if (game === null) {
-          console.error('Trying to share but game is null?');
-        } else if (game.gameId === 'offline') {
-          this.gamesService.postNewGame(game)
-            .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
-            .subscribe(newGameId => {
-              this.router.navigate(['game', newGameId]).then(() => {
-                this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${newGameId}`);
-              });
-            });
-        } else {
-          this.shareButtonService.shareOrCopy(title, text, environment.websiteUrl + `/game/${game.gameId}`);
+      .subscribe(([btn, game]) => {
+        switch (btn) {
+          case 'share':
+            this.shareGame(game);
+            break;
+          case 'nav-tool.wheel':
+            this.router.navigate(['wheel'], {
+              relativeTo: this.route,
+              queryParams: {names: game.players.map(p => p.name).join(',')},
+            }).catch(err => console.error('Navigation error', err));
+            break;
         }
       });
   }
@@ -204,5 +203,23 @@ export class GameComponent implements OnInit, OnDestroy {
     const currentGame = this.game$.getValue();
     currentGame.name = newName;
     this.gamesService.editGame(currentGame);
+  }
+
+  private shareGame(game: Game | null) {
+    const shareTitle = this.translateService.instant('game.share.title');
+    const shareText = this.translateService.instant('game.share.text');
+    if (game === null) {
+      console.error('Trying to share but game is null?');
+    } else if (game.gameId === 'offline') {
+      this.gamesService.postNewGame(game)
+        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
+        .subscribe(newGameId => {
+          this.router.navigate(['game', newGameId]).then(() => {
+            this.shareButtonService.shareOrCopy(shareTitle, shareText, environment.websiteUrl + `/game/${newGameId}`);
+          });
+        });
+    } else {
+      this.shareButtonService.shareOrCopy(shareTitle, shareText, environment.websiteUrl + `/game/${game.gameId}`);
+    }
   }
 }

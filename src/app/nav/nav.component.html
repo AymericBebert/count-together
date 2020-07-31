@@ -10,6 +10,18 @@
     <mat-toolbar>{{ 'nav.menu-title' | translate }}</mat-toolbar>
     <mat-nav-list>
 
+      <ng-container *ngIf="navService.navTools$ | async as navTools">
+        <ng-container *ngIf="navTools.length > 0">
+          <h3 matSubheader>{{ 'nav.tools' | translate }}</h3>
+          <mat-list-item *ngFor="let tool of navTools" (click)="navService.navToolClicked(tool.name); closeDrawer()">
+            <mat-icon style="margin-right: 5px">{{ tool.icon }}</mat-icon>
+            <span>{{ tool.name | translate }}</span>
+          </mat-list-item>
+        </ng-container>
+      </ng-container>
+
+      <h3 matSubheader>{{ 'nav.settings' | translate }}</h3>
+
       <mat-list-item>
         <mat-slide-toggle color="accent" [checked]="settingsService.darkMode$ | async"
                           (change)="navService.setDarkMode($event.checked)">
@@ -43,7 +55,7 @@
       </mat-list-item>
 
       <mat-list-item (click)="navService.checkForUpdates()">
-        <span class="very-light-text">
+        <span class="very-light-text mat-small">
           {{ 'misc.version' | translate }} {{ appVersion }}
         </span>
       </mat-list-item>

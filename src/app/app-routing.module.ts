@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {GameComponent} from './game/game.component';
 
@@ -7,20 +7,31 @@ import {GameComponent} from './game/game.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: '/home',
-  },
-  {
-    path: 'home',
     component: HomeComponent,
+    data: {
+      navTools: [{name: 'nav-tool.wheel', icon: 'near_me'}],
+    },
   },
   {
     path: 'game/:gameId',
     component: GameComponent,
     data: {
-      backRouterNavigate: '/home',
+      backRouterNavigate: '/',
       navButtons: ['share'],
+      navTools: [{name: 'nav-tool.wheel', icon: 'near_me'}],
     },
+  },
+  {
+    path: 'game/:gameId/wheel',
+    loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
+  },
+  {
+    path: 'wheel',
+    loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
 

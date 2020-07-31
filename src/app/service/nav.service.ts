@@ -14,6 +14,7 @@ export class NavService {
   public pinSideNav$ = new BehaviorSubject<boolean>(false);
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);
+  public navTools$ = new BehaviorSubject<{name: string, icon: string}[]>([]);
   public notificationBadge$ = new BehaviorSubject<string>('');
   public displayUpdatesAvailable$ = new BehaviorSubject<boolean>(false);
   public displayUpdatesActivated$ = new BehaviorSubject<boolean>(false);
@@ -50,6 +51,10 @@ export class NavService {
 
   public navButtonClicked(buttonId: string) {
     this.navButtonsService.navButtonClicked(buttonId);
+  }
+
+  public navToolClicked(toolId: string) {
+    this.navButtonsService.navButtonClicked(toolId);
   }
 
   public setLanguage(lang: string) {

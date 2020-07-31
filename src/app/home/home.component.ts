@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GamesService} from '../service/games.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {StoredGame} from '../model/game';
 import {filter, map, takeUntil} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
+import {NavButtonsService} from '../service/nav-buttons.service';
 
 @Component({
   selector: 'app-home',
@@ -28,14 +29,22 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private router: Router,
+  constructor(private route: ActivatedRoute,
+              private router: Router,
               private gamesService: GamesService,
+              private navButtonsService: NavButtonsService,
   ) {
     this.getVisitedGames();
     this.gameFormControl = new FormControl('', {
       asyncValidators: [this.gamesService.gameExistsValidator()],
     });
     this.matcher = new ImmediateErrorStateMatcher();
+
+    this.navButtonsService.navButtonClicked$('nav-tool.wheel')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.router.navigate(['wheel'], {relativeTo: this.route}).catch(err => console.error('Navigation error', err));
+      });
   }
 
   ngOnInit(): void {

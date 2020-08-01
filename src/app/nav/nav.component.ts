@@ -40,7 +40,7 @@ export class NavComponent {
         this.navService.showBackButton$.next(data.hasBack || !!data.backRouterNavigate);
         this.navService.navButtons$.next(data.navButtons || []);
         this.navService.navTools$.next(data.navTools || []);
-        // this.navService.mainTitle$.next(data.mainTitle || '');
+        this.navService.mainTitle$.next(data.mainTitle || '');
         this.navService.setBackRouterLink(data.backRouterNavigate);
       });
   }

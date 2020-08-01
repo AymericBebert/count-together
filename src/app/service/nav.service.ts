@@ -11,6 +11,7 @@ import {UpdaterService} from '../updater/updater.service';
 
 @Injectable()
 export class NavService {
+  public mainTitle$ = new BehaviorSubject<string>('');
   public pinSideNav$ = new BehaviorSubject<boolean>(false);
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);

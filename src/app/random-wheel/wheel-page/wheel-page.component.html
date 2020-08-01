@@ -1,8 +1,6 @@
-<div style="padding: 0 20px; text-align: center">
-  <h2>{{ 'wheel.title' | translate }}</h2>
-</div>
+<div style="padding: 20px 20px 0 20px; text-align: center">
+  <span>{{ 'wheel.players' | translate:{nb: nb$ | async} }}</span>
 
-<div style="padding: 0 20px; text-align: center">
   <mat-slider
     style="width: 100%; max-width: 400px"
     class="number-slider"

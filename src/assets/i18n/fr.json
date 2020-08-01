@@ -37,6 +37,9 @@
     },
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
+  "main-title": {
+    "wheel": "Roue Aléatoire"
+  },
   "misc": {
     "connection-error": "Déconnecté",
     "dark-mode": "Thème sombre",
@@ -61,6 +64,6 @@
     "share": "Partager"
   },
   "wheel": {
-    "title": "Roue Aléatoire"
+    "players": "{{ nb }} joueurs"
   }
 }

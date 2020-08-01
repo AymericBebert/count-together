@@ -37,6 +37,9 @@
     },
     "welcome": "Count the score for every player of your favorite games!"
   },
+  "main-title": {
+    "wheel": "Random Wheel"
+  },
   "misc": {
     "connection-error": "Disconnected",
     "dark-mode": "Dark mode",
@@ -61,6 +64,6 @@
     "share": "Share"
   },
   "wheel": {
-    "title": "Random Wheel"
+    "players": "{{ nb }} players"
   }
 }

@@ -9,6 +9,7 @@ const routes: Routes = [
     component: WheelPageComponent,
     data: {
       backRouterNavigate: '[back]',
+      mainTitle: 'main-title.wheel',
     },
   },
   {

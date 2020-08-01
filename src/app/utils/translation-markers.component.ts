@@ -13,6 +13,7 @@ export class TranslationMarkersComponent {
 
     translate.get([
       'nav-tool.wheel',
+      'main-title.wheel',
     ]);
   }
 }

@@ -16,6 +16,7 @@ export class WheelPageComponent implements OnInit, OnDestroy {
   public nb$: Observable<number>;
   public setSliderValue$: Observable<number>;
   public sliderNb$ = new Subject<number>();
+  public resetIndex = 0;
 
   private destroy$ = new Subject<void>();
 

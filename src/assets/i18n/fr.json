@@ -64,6 +64,7 @@
     "share": "Partager"
   },
   "wheel": {
-    "players": "{{ nb }} joueurs"
+    "players": "{{ nb }} joueurs",
+    "reset": "Reset"
   }
 }

@@ -19,16 +19,12 @@
     [names]="names$ | async"
     [nb]="nb$ | async"
     [dark]="settings.darkMode$ | async"
+    [reset]="resetIndex"
   ></app-wheel>
 </div>
 
-<!--<div style="padding: 0 20px; text-align: center">-->
-<!--  <app-pie-chart-->
-<!--  ></app-pie-chart>-->
-<!--</div>-->
-
-<!--<div style="width: 100%; max-width: 400px; margin: auto">-->
-<!--  <app-radar-->
-<!--    [radarGraph]="radarGraph"-->
-<!--  ></app-radar>-->
-<!--</div>-->
+<div style="padding: 0 20px; text-align: center">
+  <button mat-raised-button color="primary" (click)="resetIndex = resetIndex + 1">
+    {{ 'wheel.reset' | translate }}
+  </button>
+</div>

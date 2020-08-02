@@ -64,6 +64,7 @@
     "share": "Share"
   },
   "wheel": {
-    "players": "{{ nb }} players"
+    "players": "{{ nb }} players",
+    "reset": "Reset"
   }
 }

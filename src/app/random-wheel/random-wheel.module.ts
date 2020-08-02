@@ -6,6 +6,7 @@ import {WheelComponent} from './wheel/wheel.component';
 import {WheelPageComponent} from './wheel-page/wheel-page.component';
 import {RandomWheelRoutingModule} from './random-wheel-routing.module';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {MatSliderModule} from '@angular/material/slider';
     HttpClientModule,
     TranslateModule.forChild(),
     MatSliderModule,
+    MatButtonModule,
   ],
   declarations: [
     WheelComponent,

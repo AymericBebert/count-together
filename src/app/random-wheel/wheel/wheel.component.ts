@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {interpolateString} from 'd3-interpolate';
 import {select, Selection} from 'd3-selection';
@@ -28,12 +28,13 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   @Input() public names: string[] = [];
   @Input() public nb = 5;
   @Input() private dark = false;
+  @Input() private reset = 0;
 
   private oldAngle = 180;
   private angle = 180;
   private arrowPrepared = false;
+  private spinning = false;
 
-  private spinning$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject<void>();
 
   public readonly fontSize = '14px';
@@ -99,6 +100,9 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
       this.updateSizes();
       this.arrowPrepared = true;
     }
+    if (changes.reset?.currentValue) {
+      this.adjustArrowReset();
+    }
     if (changes.names?.currentValue) {
       this.nb = this.names.length;
       this.adjustZones();
@@ -117,11 +121,13 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   public spin() {
-    if (!this.spinning$.getValue()) {
+    if (!this.spinning) {
       this.angle = this.angle + 360 * 3 + Math.random() * 360;
-      this.adjustArrowRotate();
+      this.spinning = true;
+      this.adjustArrowRotate(this.spinDuration);
       setTimeout(() => {
         this.oldAngle = this.angle;
+        this.spinning = false;
       }, this.spinDuration);
     }
   }
@@ -231,20 +237,38 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   private adjustArrowPosition() {
-    const arrowWrapper = select(this.svgRef.nativeElement).select('.arrow-wrapper');
-
-    arrowWrapper
+    this.arrowWrapper
       .transition()
       .duration(this.redrawDuration)
       .attr('transform', `translate(${this.middle} ${this.middle}) scale(${this.far})`);
   }
 
-  private adjustArrowRotate() {
-    const arrowRotate = select(this.svgRef.nativeElement).select('.arrow-rotate');
-
-    arrowRotate
+  private adjustArrowReset() {
+    this.arrowWrapper
       .transition()
-      .duration(this.spinDuration)
+      .duration(this.redrawDuration / 2)
+      .attr('transform', `translate(${this.middle} ${this.middle}) scale(0)`)
+      .transition()
+      .duration(this.redrawDuration / 2)
+      .attr('transform', `translate(${this.middle} ${this.middle}) scale(${this.far})`);
+
+    setTimeout(
+      () => {
+        this.angle = 180;
+        this.oldAngle = 180;
+        this.arrowRotate
+          .transition()
+          .duration(1)
+          .attr('transform', `rotate(${this.angle})`);
+        this.spinning = false;
+      },
+      this.redrawDuration / 2);
+  }
+
+  private adjustArrowRotate(duration: number) {
+    this.arrowRotate
+      .transition()
+      .duration(duration)
       .attrTween('transform', () => interpolateString(
         `rotate(${this.oldAngle})`,
         `rotate(${this.angle})`,
@@ -252,9 +276,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   private adjustArrowColor() {
-    const arrowInner = select(this.svgRef.nativeElement).select('.arrow-inner');
-
-    arrowInner
+    this.arrowInner
       .transition()
       .duration(this.redrawDuration)
       .attr('fill', this.dark ? '#6648be' : '#2b1963');

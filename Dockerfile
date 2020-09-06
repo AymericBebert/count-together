@@ -5,7 +5,7 @@ WORKDIR /count-together
 
 COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
-RUN npm ci && npm install -g @angular/cli@10.0.3
+RUN npm ci && npm install -g @angular/cli@10.1.0
 COPY . .
 
 ARG VERSION=untagged

@@ -30,6 +30,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   @Input() private dark = false;
   @Input() private reset = 0;
 
+  private oldNb = 5;
   private oldAngle = 180;
   private angle = 180;
   private arrowPrepared = false;
@@ -61,6 +62,15 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     .x(d => d[0])
     .y(d => d[1]);
 
+  private crownSize = 32;
+
+  private onNbChanged(): void {
+    if (this.nb !== this.oldNb) {
+      this.oldNb = this.nb;
+      this.adjustCrownReset();
+    }
+  }
+
   @HostListener('window:resize')
   public onResize() {
     this.onResize$.next();
@@ -78,6 +88,16 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   ngAfterViewInit(): void {
+    if (this.names.length > 0) {
+      this.nb = this.names.length;
+      this.onNbChanged();
+    } else {
+      this.names = new Array(this.nb).fill('').map((_, i) => '' + (i + 1));
+    }
+
+    this.prepareArrow();
+    this.prepareCrown();
+
     this.onResize$
       .pipe(debounceTime(100))
       .subscribe(() => {
@@ -85,14 +105,6 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         this.adjustZones();
         this.adjustArrowPosition();
       });
-
-    if (this.names.length > 0) {
-      this.nb = this.names.length;
-    } else {
-      this.names = new Array(this.nb).fill('').map((_, i) => '' + (i + 1));
-    }
-
-    this.prepareArrow();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,13 +114,16 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     }
     if (changes.reset?.currentValue) {
       this.adjustArrowReset();
+      this.adjustCrownReset();
     }
     if (changes.names?.currentValue) {
       this.nb = this.names.length;
+      this.onNbChanged();
       this.adjustZones();
       return;
     }
     if (changes.nb?.currentValue) {
+      this.onNbChanged();
       this.names = new Array(this.nb).fill('').map((_, i) => '' + (i + 1));
       this.adjustZones();
       return;
@@ -125,9 +140,11 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
       this.angle = this.angle + 360 * 3 + Math.random() * 360;
       this.spinning = true;
       this.adjustArrowRotate(this.spinDuration);
+      this.adjustCrownReset();
       setTimeout(() => {
         this.oldAngle = this.angle;
         this.spinning = false;
+        this.giveCrown(Math.floor((this.angle % 360) * this.nb / 360 + 0.5) % this.nb);
       }, this.spinDuration);
     }
   }
@@ -179,8 +196,8 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
       .attr('opacity', 0.25)
       .attr('stroke-width', 2);
 
-    const labelTextXFn = (d, i) => Math.sin(radianAngleScale(i)) * (radiusScale(0.85) + this.outerRadiusMargin * 0.45);
-    const labelTextYFn = (d, i) => -Math.cos(radianAngleScale(i)) * (radiusScale(0.85) + this.outerRadiusMargin * 0.3);
+    const labelTextXFn = (d, i) => Math.sin((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
+    const labelTextYFn = (d, i) => -Math.cos((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
 
     labelsEnter.append('text')
       .attr('x', labelTextXFn)
@@ -227,11 +244,9 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
       .attr('transform', `translate(${this.middle} ${this.middle}) scale(${this.far})`);
 
     this.arrowRotate
-      .attr('class', 'arrow-rotate')
       .attr('transform', `rotate(${this.angle})`);
 
     this.arrowInner
-      .attr('class', 'arrow-inner')
       .attr('d', this.arrowPathDFn(this.arrowPathData))
       .attr('fill', this.dark ? '#6648be' : '#2b1963');
   }
@@ -280,5 +295,46 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
       .transition()
       .duration(this.redrawDuration)
       .attr('fill', this.dark ? '#6648be' : '#2b1963');
+  }
+
+  private prepareCrown() {
+    const crownWrapper = select(this.svgRef.nativeElement).select('.crown-wrapper');
+    const crown = select(this.svgRef.nativeElement).select('.crown');
+
+    crownWrapper
+      .attr('transform', `translate(${this.middle} ${this.middle})`);
+
+    crown
+      .attr('x', this.middle)
+      .attr('y', this.middle)
+      .style('opacity', 0);
+  }
+
+  private giveCrown(index: number) {
+    const crown = select(this.svgRef.nativeElement).select('.crown');
+
+    const crownXFn = () => -Math.sin((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
+    const crownYFn = () => Math.cos((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
+
+    crown
+      .attr('x', -this.crownSize / 2)
+      .attr('y', -this.crownSize / 2)
+      .style('opacity', 0)
+      .transition()
+      .duration(this.redrawDuration)
+      .attr('x', crownXFn)
+      .attr('y', crownYFn)
+      .style('opacity', 1);
+  }
+
+  private adjustCrownReset() {
+    const crown = select(this.svgRef.nativeElement).select('.crown');
+
+    crown
+      .transition()
+      .duration(this.redrawDuration / 2)
+      .attr('x', -this.crownSize / 2)
+      .attr('y', -this.crownSize / 2)
+      .style('opacity', 0);
   }
 }

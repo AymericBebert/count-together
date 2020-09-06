@@ -1,8 +1,12 @@
-<svg class="wheel" #svgRef (click)="spin()">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     class="wheel" #svgRef (click)="spin()">
   <g class="labels"></g>
   <g class="arrow-wrapper">
     <g class="arrow-rotate">
       <path class="arrow-inner" d=""></path>
     </g>
+  </g>
+  <g class="crown-wrapper">
+    <image class="crown" xlink:href="assets/icons/crown-1-64.png" width="32" height="32" opacity="0"></image>
   </g>
 </svg>

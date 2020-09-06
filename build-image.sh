@@ -67,7 +67,6 @@ echo "Pushing count-together:$version to docker registry..."
 docker push aymericbernard/count-together:$version ||
   {
     echo 'Push failed'
-    delete_new_tag
     exit 1
   }
 

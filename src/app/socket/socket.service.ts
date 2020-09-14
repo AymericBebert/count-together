@@ -1,6 +1,16 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, fromEvent, Observable, of, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, shareReplay, skip, startWith, take, takeUntil, tap} from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  skip,
+  startWith,
+  take,
+  takeUntil,
+  tap
+} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
 import * as io from 'socket.io-client';
@@ -42,6 +52,7 @@ export class SocketService {
           this.socket.disconnect();
           this.socket.close();
           this.socket = null;
+          this.connected$.next(false);
         }
       });
   }
@@ -60,7 +71,10 @@ export class SocketService {
       return of();
     }
     return fromEvent<ReceivedEventTypes[T]>(this.socket, eventName)
-      .pipe(tap(data => environment.debugSocket && console.log(`socket> ${eventName}:`, data)), takeUntil(this.disconnect$));
+      .pipe(
+        tap(data => environment.debugSocket && console.log(`socket> ${eventName}:`, data)),
+        takeUntil(this.disconnect$)
+      );
   }
 
   public once<T extends keyof ReceivedEventTypes>(eventName: T): Observable<ReceivedEventTypes[T]> {

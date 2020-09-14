@@ -10,9 +10,9 @@ export class RankIconComponent implements OnInit {
   @Input() public rank = 1;
   @Input() public isLast = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
-
 }

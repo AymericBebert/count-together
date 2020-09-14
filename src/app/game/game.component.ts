@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {GamesService} from '../service/games.service';
 import {environment} from '../../environments/environment';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {Game} from '../model/game';
+import {IGame} from '../model/game';
 
 @Component({
   selector: 'app-game',
@@ -102,25 +102,63 @@ export class GameComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  public editGameOpen() {
+    const current = this.game$.getValue().name;
+    this.dialog.open(EditionDialogComponent, {data: {editGame: {current}}})
+      .afterClosed()
+      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.editGame(res);
+      });
+  }
+
+  private editGame(newName: string) {
+    const currentGame = this.game$.getValue();
+    currentGame.name = newName;
+    this.gamesService.gameEditName(currentGame.gameId, newName);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
   public toggleWin() {
     const currentGame = this.game$.getValue();
-    this.gamesService.editGame({...currentGame, lowerScoreWins: !currentGame.lowerScoreWins});
+    currentGame.lowerScoreWins = !currentGame.lowerScoreWins;
+    this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
+    this.gamesService.updateSavedGame(currentGame);
   }
 
   public addPlayer() {
     const currentGame = this.game$.getValue();
-    this.gamesService.editGame({
-      ...currentGame,
-      players: [...currentGame.players, {name: `P${currentGame.players.length + 1}`, scores: []}],
-    });
+    const newPlayerIndex = currentGame.players.length;
+    const newPlayerName = `P${newPlayerIndex + 1}`;
+    currentGame.players.push({name: newPlayerName, scores: []});
+    this.gamesService.gameEditPlayer(currentGame.gameId, newPlayerIndex, newPlayerName);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  public editPlayerNameOpen(p: number) {
+    const current = this.game$.getValue().players[p].name;
+    this.dialog.open(EditionDialogComponent, {data: {editPlayerName: {current, p}}})
+      .afterClosed()
+      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.editPlayerName(p, res);
+      });
+  }
+
+  private editPlayerName(p: number, newName: string) {
+    const currentGame = this.game$.getValue();
+    currentGame.players[p].name = newName;
+    this.gamesService.gameEditPlayer(currentGame.gameId, p, newName);
+    this.gamesService.updateSavedGame(currentGame);
   }
 
   public removePlayer() {
     const currentGame = this.game$.getValue();
-    if (currentGame.players.length === 0) {
+    const currentNbPlayers = currentGame.players.length;
+    if (currentNbPlayers === 0) {
       return;
     }
-    const lastPlayer = currentGame.players[currentGame.players.length - 1];
+    const lastPlayer = currentGame.players[currentNbPlayers - 1];
     if (lastPlayer.scores.filter(s => s !== null).length > 0) {
       this.dialog.open(ConfirmDialogComponent, {
         data: {
@@ -134,23 +172,19 @@ export class GameComponent implements OnInit, OnDestroy {
         .pipe(filter(res => !!res), takeUntil(this.destroy$))
         .subscribe(() => {
           currentGame.players.pop();
-          this.gamesService.editGame(currentGame);
+          this.gamesService.gameRemovePlayer(currentGame.gameId, currentNbPlayers - 1);
+          this.gamesService.updateSavedGame(currentGame);
         });
     } else {
       currentGame.players.pop();
-      this.gamesService.editGame(currentGame);
+      this.gamesService.gameRemovePlayer(currentGame.gameId, currentNbPlayers - 1);
+      this.gamesService.updateSavedGame(currentGame);
     }
   }
 
   public addScore(p: number) {
     const currentGame = this.game$.getValue();
     this.editScoreOpen(p, currentGame.players[p].scores.length);
-  }
-
-  public removeScore(p: number) {
-    const currentGame = this.game$.getValue();
-    currentGame.players[p].scores.pop();
-    this.gamesService.editGame(currentGame);
   }
 
   public editScoreOpen(p: number, i: number) {
@@ -170,42 +204,18 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       currentGame.players[p].scores[i] = s;
     }
-    this.gamesService.editGame(currentGame);
+    this.gamesService.gameEditScore(currentGame.gameId, p, i, s);
+    this.gamesService.updateSavedGame(currentGame);
   }
 
-  public editPlayerNameOpen(p: number) {
-    const current = this.game$.getValue().players[p].name;
-    this.dialog.open(EditionDialogComponent, {data: {editPlayerName: {current, p}}})
-      .afterClosed()
-      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
-      .subscribe(res => {
-        this.editPlayerName(p, res);
-      });
-  }
-
-  private editPlayerName(p: number, newName: string) {
+  public removeScore(p: number) {
     const currentGame = this.game$.getValue();
-    currentGame.players[p].name = newName;
-    this.gamesService.editGame(currentGame);
+    currentGame.players[p].scores.pop();
+    this.gamesService.gameRemoveScore(currentGame.gameId, p, currentGame.players[p].scores.length);
+    this.gamesService.updateSavedGame(currentGame);
   }
 
-  public editGameOpen() {
-    const current = this.game$.getValue().name;
-    this.dialog.open(EditionDialogComponent, {data: {editGame: {current}}})
-      .afterClosed()
-      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
-      .subscribe(res => {
-        this.editGame(res);
-      });
-  }
-
-  private editGame(newName: string) {
-    const currentGame = this.game$.getValue();
-    currentGame.name = newName;
-    this.gamesService.editGame(currentGame);
-  }
-
-  private shareGame(game: Game | null) {
+  private shareGame(game: IGame | null) {
     const shareTitle = this.translateService.instant('game.share.title');
     const shareText = this.translateService.instant('game.share.text');
     if (game === null) {

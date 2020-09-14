@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GamesService} from '../service/games.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {StoredGame} from '../model/game';
+import {IStoredGame} from '../model/game';
 import {filter, map, takeUntil} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -16,9 +16,9 @@ import {NavButtonsService} from '../service/nav-buttons.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private rawVisitedGames$ = new BehaviorSubject<StoredGame[]>([]);
+  private rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
 
-  public visitedGames$: Observable<StoredGame[]> = this.rawVisitedGames$
+  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$
     .pipe(map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))));
 
   public gameFormControl: FormControl;
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.gamesService.postNewGame({
       gameId: 'new',
       name: 'New Game',
-      players: [{name: '<P1>', scores: []}],
+      players: [{name: 'P1', scores: []}],
       lowerScoreWins: false,
     })
       .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));

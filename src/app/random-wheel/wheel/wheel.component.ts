@@ -42,11 +42,13 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   private readonly outerRadiusMargin = 40;
   private readonly redrawDuration = 500;
   private readonly spinDuration = 4000;
+  private readonly crownSize = 32;
 
   @ViewChild('svgRef', {static: true}) public svgRef: ElementRef<SVGElement>;
   private width: number;
   private middle: number;
   private far: number;
+  private lastCrown = -1;
 
   private arrowWrapper: Selection<any, unknown, null, undefined>;
   private arrowRotate: Selection<any, unknown, null, undefined>;
@@ -62,7 +64,6 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     .x(d => d[0])
     .y(d => d[1]);
 
-  private crownSize = 32;
 
   private onNbChanged(): void {
     if (this.nb !== this.oldNb) {
@@ -104,6 +105,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         this.updateSizes();
         this.adjustZones();
         this.adjustArrowPosition();
+        this.adjustCrownPosition();
       });
   }
 
@@ -298,39 +300,56 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   }
 
   private prepareCrown() {
-    const crownWrapper = select(this.svgRef.nativeElement).select('.crown-wrapper');
-    const crown = select(this.svgRef.nativeElement).select('.crown');
-
-    crownWrapper
+    select(this.svgRef.nativeElement).select('.crown-wrapper')
       .attr('transform', `translate(${this.middle} ${this.middle})`);
 
-    crown
+    select(this.svgRef.nativeElement).select('.crown')
       .attr('x', this.middle)
       .attr('y', this.middle)
       .style('opacity', 0);
   }
 
+  private crownXFn(index) {
+    return -Math.sin((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
+  }
+
+  private crownYFn(index) {
+    return Math.cos((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
+  }
+
+  private adjustCrownPosition() {
+    select(this.svgRef.nativeElement).select('.crown-wrapper')
+      .transition()
+      .duration(this.redrawDuration)
+      .attr('transform', `translate(${this.middle} ${this.middle})`);
+
+    if (this.lastCrown >= 0) {
+      select(this.svgRef.nativeElement).select('.crown')
+        .transition()
+        .duration(this.redrawDuration)
+        .attr('x', () => this.crownXFn(this.lastCrown))
+        .attr('y', () => this.crownYFn(this.lastCrown))
+    }
+  }
+
   private giveCrown(index: number) {
-    const crown = select(this.svgRef.nativeElement).select('.crown');
+    this.lastCrown = index;
 
-    const crownXFn = () => -Math.sin((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
-    const crownYFn = () => Math.cos((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
-
-    crown
+    select(this.svgRef.nativeElement).select('.crown')
       .attr('x', -this.crownSize / 2)
       .attr('y', -this.crownSize / 2)
       .style('opacity', 0)
       .transition()
       .duration(this.redrawDuration)
-      .attr('x', crownXFn)
-      .attr('y', crownYFn)
+      .attr('x', () => this.crownXFn(index))
+      .attr('y', () => this.crownYFn(index))
       .style('opacity', 1);
   }
 
   private adjustCrownReset() {
-    const crown = select(this.svgRef.nativeElement).select('.crown');
+    this.lastCrown = -1;
 
-    crown
+    select(this.svgRef.nativeElement).select('.crown')
       .transition()
       .duration(this.redrawDuration / 2)
       .attr('x', -this.crownSize / 2)

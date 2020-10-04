@@ -30,6 +30,12 @@
   cursor: pointer;
 }
 
+img.main-icon {
+  cursor: pointer;
+  height: 60%;
+  padding: 0 8px 6px;
+}
+
 @media (max-width: 340px) {
   .main-title {
     font-size: 16px;
@@ -39,5 +45,15 @@
 @media (max-width: 599px) {
   .mat-toolbar-row, .mat-toolbar-single-row {
     padding: 0 12px;
+  }
+}
+
+@media (max-height: 599px) {
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    height: 48px;
+  }
+
+  img.main-icon {
+    padding: 0 8px 4px;
   }
 }

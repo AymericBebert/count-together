@@ -78,9 +78,10 @@
         <mat-icon aria-label="Back arrow icon">arrow_back</mat-icon>
       </button>
 
-      <img routerLink="/" [src]="'assets/icons/crown-white-64.png'" alt="icon"
-           class="hide-focus" style="height: 60%; padding: 0 8px 6px; cursor: pointer"/>
-      <span routerLink="/" class="hide-focus main-title">{{ (navService.mainTitle$ | async | translate) || ('app-name' | translate) }}</span>
+      <img routerLink="/" [src]="'assets/icons/crown-white-64.png'" alt="icon" class="main-icon hide-focus"/>
+      <span routerLink="/" class="main-title hide-focus">
+        {{ (navService.mainTitle$ | async | translate) || ('app-name' | translate) }}
+      </span>
 
       <span class="fill-remaining-space"></span>
 

@@ -1,23 +1,23 @@
-FROM node:14.5.0-stretch-slim AS builder
+FROM node:14.15.1-stretch-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
 
 COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
-RUN npm ci && npm install -g @angular/cli@10.1.0
+RUN npm ci
 COPY . .
 
 ARG VERSION=untagged
 RUN echo "export const version = '$VERSION';\n" > ./src/version.ts
 
 ARG BUILD_CONFIGURATION=production
-RUN ng build --configuration="${BUILD_CONFIGURATION}"
+RUN npm run build -- --configuration="${BUILD_CONFIGURATION}"
 
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.19.1-alpine
+FROM nginx:1.19.5-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\

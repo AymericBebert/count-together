@@ -1,5 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ShareButtonComponent} from './share-button.component';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -10,7 +9,7 @@ describe('ShareButtonComponent', () => {
   let component: ShareButtonComponent;
   let fixture: ComponentFixture<ShareButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         TranslateTestingModule,

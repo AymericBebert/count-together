@@ -1,5 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {WheelPageComponent} from './wheel-page.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {TranslateTestingModule} from '../../testing/translate-testing-module';
@@ -14,7 +13,7 @@ describe('WheelPageComponent', () => {
   let component: WheelPageComponent;
   let fixture: ComponentFixture<WheelPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { RankIconComponent } from './rank-icon.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {RankIconComponent} from './rank-icon.component';
 
 describe('RankIconComponent', () => {
   let component: RankIconComponent;
   let fixture: ComponentFixture<RankIconComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RankIconComponent ]
+      declarations: [RankIconComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

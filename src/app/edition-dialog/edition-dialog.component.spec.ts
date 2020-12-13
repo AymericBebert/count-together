@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { EditionDialogComponent } from './edition-dialog.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {EditionDialogComponent} from './edition-dialog.component';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
@@ -13,7 +12,7 @@ describe('EditionDialogComponent', () => {
   let component: EditionDialogComponent;
   let fixture: ComponentFixture<EditionDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -37,7 +36,7 @@ describe('EditionDialogComponent', () => {
         },
       ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {
   catchError,
@@ -20,7 +21,6 @@ import {StorageService} from '../storage/storage.service';
 import {SocketService} from '../socket/socket.service';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {environment} from '../../environments/environment';
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable()
 export class GamesService {
@@ -105,42 +105,42 @@ export class GamesService {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game edit name', {gameId, name})
+    this.socket.emit('game edit name', {gameId, name});
   }
 
   public gameEditWin(gameId: string, lowerScoreWins: boolean) {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game edit win', {gameId, lowerScoreWins})
+    this.socket.emit('game edit win', {gameId, lowerScoreWins});
   }
 
   public gameEditPlayer(gameId: string, playerId: number, playerName: string) {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game edit player', {gameId, playerId, playerName})
+    this.socket.emit('game edit player', {gameId, playerId, playerName});
   }
 
   public gameRemovePlayer(gameId: string, playerId: number) {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game remove player', {gameId, playerId})
+    this.socket.emit('game remove player', {gameId, playerId});
   }
 
   public gameEditScore(gameId: string, playerId: number, scoreId: number, score: number) {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game edit score', {gameId, playerId, scoreId, score})
+    this.socket.emit('game edit score', {gameId, playerId, scoreId, score});
   }
 
   public gameRemoveScore(gameId: string, playerId: number, scoreId: number) {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game remove score', {gameId, playerId, scoreId})
+    this.socket.emit('game remove score', {gameId, playerId, scoreId});
   }
 
   public setCurrentGameId(gameId: string | null) {

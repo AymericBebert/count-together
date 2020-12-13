@@ -1,5 +1,4 @@
 import {TestBed} from '@angular/core/testing';
-
 import {UpdaterService} from './updater.service';
 import {ServiceWorkerModule} from '@angular/service-worker';
 

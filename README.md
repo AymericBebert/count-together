@@ -27,3 +27,16 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Run as static website
+```bash
+npm run build -- --prod
+python3 -m http.server --directory dist/count-together 4500
+```
+
+## Analyze build
+To analyze the build you can do :
+```bash
+npm run build -- --prod --stats-json
+npx webpack-bundle-analyzer dist/count-together/stats.json
+```

@@ -1,5 +1,4 @@
 import {TestBed} from '@angular/core/testing';
-
 import {SocketService} from './socket.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SocketTestingModule} from '../testing/socket-testing.module';

@@ -13,14 +13,14 @@ import {
 } from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
-import * as io from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
 
 @Injectable()
 export class SocketService {
 
   public connected$ = new Subject<boolean>();
 
-  private socket: SocketIOClient.Socket | null = null;
+  private socket: Socket | null = null;
   private shouldBeConnected$ = new BehaviorSubject<boolean>(false);
 
   public connectionError$ = combineLatest([

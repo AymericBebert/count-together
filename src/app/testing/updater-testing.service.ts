@@ -5,7 +5,10 @@ import {Subject} from 'rxjs';
 @Injectable()
 export class UpdaterTestingService {
 
+  // noinspection JSUnusedGlobalSymbols
   public updatesAvailable$ = new Subject<UpdateAvailableEvent>();
+
+  // noinspection JSUnusedGlobalSymbols
   public updatesActivated$ = new Subject<UpdateActivatedEvent>();
 
   constructor() {

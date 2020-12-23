@@ -328,7 +328,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         .transition()
         .duration(this.redrawDuration)
         .attr('x', () => this.crownXFn(this.lastCrown))
-        .attr('y', () => this.crownYFn(this.lastCrown))
+        .attr('y', () => this.crownYFn(this.lastCrown));
     }
   }
 

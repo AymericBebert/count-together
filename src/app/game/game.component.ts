@@ -13,7 +13,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {GamesService} from '../service/games.service';
 import {environment} from '../../environments/environment';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {IGame} from '../model/game';
+import {GameType, IGame} from '../model/game';
+import {GameSettingsService} from '../service/game-settings.service';
 
 @Component({
   selector: 'app-game',
@@ -63,12 +64,16 @@ export class GameComponent implements OnInit, OnDestroy {
               private router: Router,
               private storageService: StorageService,
               private navButtonsService: NavButtonsService,
+              private gameSettingsService: GameSettingsService,
               private shareButtonService: ShareButtonService,
               private translateService: TranslateService,
               private gamesService: GamesService,
               private socket: SocketService,
               private dialog: MatDialog,
   ) {
+  }
+
+  ngOnInit(): void {
     this.navButtonsService.navButtonClicked$()
       .pipe(
         withLatestFrom(this.game$),
@@ -87,12 +92,18 @@ export class GameComponent implements OnInit, OnDestroy {
             break;
         }
       });
-  }
 
-  ngOnInit(): void {
     this.route.paramMap
       .pipe(map(params => params.get('gameId')), takeUntil(this.destroy$))
       .subscribe(gameId => this.gamesService.setCurrentGameId(gameId));
+
+    this.gameSettingsService.lowerScoreWins$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(lowerScoreWins => this.setLowerScoreWins(lowerScoreWins));
+
+    this.gameSettingsService.gameType$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(gameType => this.setGameTypeOpen(gameType));
   }
 
   ngOnDestroy(): void {
@@ -119,10 +130,35 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  public toggleWin() {
+  private setLowerScoreWins(lowerScoreWins: boolean) {
     const currentGame = this.game$.getValue();
-    currentGame.lowerScoreWins = !currentGame.lowerScoreWins;
+    currentGame.lowerScoreWins = lowerScoreWins;
     this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  private setGameTypeOpen(gameType: GameType) {
+    if (gameType === 'free') {
+      this.editGameType(gameType);
+    } else {
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: this.translateService.instant('game.change-game-type-dialog.title'),
+          message: this.translateService.instant('game.change-game-type-dialog.message'),
+          confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
+          dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
+        }
+      })
+        .afterClosed()
+        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .subscribe(() => this.editGameType(gameType));
+    }
+  }
+
+  private editGameType(gameType: GameType) {
+    const currentGame = this.game$.getValue();
+    currentGame.gameType = gameType;
+    this.gamesService.gameEditGameType(currentGame.gameId, gameType);
     this.gamesService.updateSavedGame(currentGame);
   }
 
@@ -197,7 +233,7 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  private editScore(p: number, i: number, s: number) {
+  public editScore(p: number, i: number, s: number) {
     const currentGame = this.game$.getValue();
     if (i === currentGame.players[p].scores.length) {
       currentGame.players[p].scores.push(s);
@@ -213,6 +249,42 @@ export class GameComponent implements OnInit, OnDestroy {
     currentGame.players[p].scores.pop();
     this.gamesService.gameRemoveScore(currentGame.gameId, p, currentGame.players[p].scores.length);
     this.gamesService.updateSavedGame(currentGame);
+  }
+
+  public addScoreLine() {
+    const currentGame = this.game$.getValue();
+    this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, 0);
+    currentGame.players.forEach(p => p.scores.push(0));
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  public removeScoreLine() {
+    const currentGame = this.game$.getValue();
+    if (currentGame.players.length === 0) {
+      return;
+    }
+    const maxScoreLength = Math.max(...currentGame.players.map(p => p.scores.length));
+    if (currentGame.players.filter(p => p.scores[maxScoreLength - 1] !== 0).length > 0) {
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: this.translateService.instant('game.remove-score-line-dialog.title'),
+          message: this.translateService.instant('game.remove-score-line-dialog.message'),
+          confirm: this.translateService.instant('game.remove-score-line-dialog.confirm'),
+          dismiss: this.translateService.instant('game.remove-score-line-dialog.dismiss'),
+        }
+      })
+        .afterClosed()
+        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .subscribe(() => {
+          currentGame.players.forEach(p => p.scores.pop());
+          this.gamesService.gameRemoveScore(currentGame.gameId, -1, currentGame.players[0].scores.length);
+          this.gamesService.updateSavedGame(currentGame);
+        });
+    } else {
+      currentGame.players.forEach(p => p.scores.pop());
+      this.gamesService.gameRemoveScore(currentGame.gameId, -1, currentGame.players[0].scores.length);
+      this.gamesService.updateSavedGame(currentGame);
+    }
   }
 
   private shareGame(game: IGame | null) {

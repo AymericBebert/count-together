@@ -15,7 +15,7 @@ import {
   tap
 } from 'rxjs/operators';
 import {ApiErrorService} from '../api-error/api-error.service';
-import {IGame, IStoredGame} from '../model/game';
+import {GameType, IGame, IStoredGame} from '../model/game';
 import {gamesBackendRoutes} from '../games-backend.routes';
 import {StorageService} from '../storage/storage.service';
 import {SocketService} from '../socket/socket.service';
@@ -113,6 +113,13 @@ export class GamesService {
       return;
     }
     this.socket.emit('game edit win', {gameId, lowerScoreWins});
+  }
+
+  public gameEditGameType(gameId: string, gameType: GameType) {
+    if (gameId === 'offline') {
+      return;
+    }
+    this.socket.emit('game edit type', {gameId, gameType});
   }
 
   public gameEditPlayer(gameId: string, playerId: number, playerName: string) {
@@ -229,6 +236,7 @@ export class GamesService {
         gameId: 'offline',
         name: 'New Game',
         players: [{name: 'P1', scores: []}],
+        gameType: 'free',
         lowerScoreWins: false,
       });
     }

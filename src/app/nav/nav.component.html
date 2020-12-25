@@ -10,6 +10,37 @@
     <mat-toolbar>{{ 'nav.menu-title' | translate }}</mat-toolbar>
     <mat-nav-list>
 
+      <ng-container *ngIf="gameSettingsService.gameSettings$ | async as gameSettings">
+        <h3 matSubheader>{{ 'nav.game-settings.title' | translate }}</h3>
+
+        <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
+                       [ngClass]="{selectable: true, selected: gameSettings.lowerScoreWins === false}">
+          <div class="crown-icon-bw icon-64" style="height: 24px; width: 24px; margin-right: -4px"></div>
+          <mat-icon>arrow_drop_up</mat-icon>
+          <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
+        </mat-list-item>
+        <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
+                       [ngClass]="{selectable: true, selected: gameSettings.lowerScoreWins === true}">
+          <div class="crown-icon-bw icon-64" style="height: 24px; width: 24px; margin-right: -4px"></div>
+          <mat-icon>arrow_drop_down</mat-icon>
+          <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
+        </mat-list-item>
+
+        <div style="height: 10px"></div>
+
+        <mat-list-item (click)="gameSettingsService.setGameType('free')"
+                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'free'}">
+          <mat-icon style="margin-right: 5px">exposure</mat-icon>
+          <span>{{ 'nav.game-settings.free' | translate }}</span>
+        </mat-list-item>
+        <mat-list-item (click)="gameSettingsService.setGameType('winOrLose')"
+                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'winOrLose'}">
+          <mat-icon style="margin-right: 5px">tonality</mat-icon>
+          <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
+        </mat-list-item>
+
+      </ng-container>
+
       <ng-container *ngIf="navService.navTools$ | async as navTools">
         <ng-container *ngIf="navTools.length > 0">
           <h3 matSubheader>{{ 'nav.tools' | translate }}</h3>

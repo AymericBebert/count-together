@@ -39,6 +39,7 @@ import {UpdaterModule} from './updater/updater.module';
 import {ApiErrorModule} from './api-error/api-error.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {GameSettingsService} from './service/game-settings.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -97,6 +98,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     DeviceService,
     GamesService,
+    GameSettingsService,
     NavService,
     NavButtonsService,
     SettingsService,

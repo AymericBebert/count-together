@@ -1,11 +1,12 @@
 import {Component, ViewChild} from '@angular/core';
-import {filter, map, mergeMap} from 'rxjs/operators';
+import {MatSidenav} from '@angular/material/sidenav';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {filter, map, mergeMap} from 'rxjs/operators';
+import {version} from '../../version';
+import {DeviceService} from '../service/device.service';
+import {GameSettingsService} from '../service/game-settings.service';
 import {NavService} from '../service/nav.service';
 import {SettingsService} from '../service/settings.service';
-import {DeviceService} from '../service/device.service';
-import {MatSidenav} from '@angular/material/sidenav';
-import {version} from '../../version';
 
 @Component({
   selector: 'app-nav',
@@ -19,6 +20,7 @@ export class NavComponent {
 
   constructor(public navService: NavService,
               public settingsService: SettingsService,
+              public gameSettingsService: GameSettingsService,
               public deviceService: DeviceService,
               private route: ActivatedRoute,
               private router: Router,

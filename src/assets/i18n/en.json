@@ -10,12 +10,26 @@
   },
   "game": {
     "add-player": "Add player",
+    "add-row": "Add row",
+    "change-game-type-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "Player scores can be altered",
+      "title": "Change game type?"
+    },
     "remove-player": "Remove player",
     "remove-player-dialog": {
       "confirm": "Yes",
       "dismiss": "Cancel",
       "message": "The scores for this player will be lost.",
       "title": "Remove player {{player}}?"
+    },
+    "remove-row": "Remove row",
+    "remove-score-line-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "Last scores will be lost",
+      "title": "Remove last score line ?"
     },
     "share": {
       "text": "Join my game on Count Together",
@@ -50,6 +64,13 @@
     "wheel": "Random Wheel"
   },
   "nav": {
+    "game-settings": {
+      "free": "Free points",
+      "max-wins": "Max score wins",
+      "min-wins": "Min score wins",
+      "title": "Game settings",
+      "win-or-lose": "Win or Lose"
+    },
     "menu-title": "Menu",
     "pin-sidenav": "Pin Sidenav",
     "settings": "Settings",

@@ -10,12 +10,26 @@
   },
   "game": {
     "add-player": "Joueur",
+    "add-row": "Ligne",
+    "change-game-type-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "Les scores des joueurs peuvent en être affectés",
+      "title": "Changer le type de partie ?"
+    },
     "remove-player": "Joueur",
     "remove-player-dialog": {
       "confirm": "Oui",
       "dismiss": "Annuler",
       "message": "Les scores de ce joueur seront perdus.",
       "title": "Supprimer le joueur {{player}} ?"
+    },
+    "remove-row": "Ligne",
+    "remove-score-line-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "Les derniers scores seront perdus",
+      "title": "Supprimer la dernière ligne ?"
     },
     "share": {
       "text": "Joins ma partie sur Count Together !",
@@ -50,6 +64,13 @@
     "wheel": "Roue Aléatoire"
   },
   "nav": {
+    "game-settings": {
+      "free": "Points libres",
+      "max-wins": "Max gagne",
+      "min-wins": "Min gagne",
+      "title": "Options de partie",
+      "win-or-lose": "Gagne ou Perd"
+    },
     "menu-title": "Menu",
     "pin-sidenav": "Épingler",
     "settings": "Paramètres",

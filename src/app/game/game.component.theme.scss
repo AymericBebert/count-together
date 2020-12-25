@@ -16,6 +16,10 @@
       border-right: 1px solid mat-color($primary, 300, 0.2);
     }
 
+    .win-or-lose.win {
+      background-color: mat-color($primary, 0.6);
+    }
+
     .add-score {
       color: mat-color($accent, text);
     }

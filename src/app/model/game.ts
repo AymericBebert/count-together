@@ -1,10 +1,19 @@
 import {Player} from './player';
 
+export type GameType = 'free' | 'winOrLose';
+export const gameTypes = ['free', 'winOrLose'];
+
 export interface IGame {
   gameId: string;
   name: string;
+  gameType: GameType;
   lowerScoreWins: boolean;
   players: Player[];
+}
+
+export interface IGameSettings {
+  gameType: GameType;
+  lowerScoreWins: boolean;
 }
 
 export interface IStoredGame {
@@ -21,6 +30,11 @@ export interface IGameEditName {
 export interface IGameEditWin {
   gameId: string;
   lowerScoreWins: boolean;
+}
+
+export interface IGameEditGameType {
+  gameId: string;
+  gameType: GameType;
 }
 
 export interface IGameEditPlayer {

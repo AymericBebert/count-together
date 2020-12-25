@@ -76,6 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       gameId: 'new',
       name: 'New Game',
       players: [{name: 'P1', scores: []}],
+      gameType: 'free',
       lowerScoreWins: false,
     })
       .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));

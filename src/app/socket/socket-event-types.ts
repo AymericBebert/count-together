@@ -1,5 +1,6 @@
 import {
   IGame,
+  IGameEditGameType,
   IGameEditName,
   IGameEditPlayer,
   IGameEditScore,
@@ -25,6 +26,7 @@ export interface EmittedEventTypes {
   'game delete': string;
   'game edit name': IGameEditName;
   'game edit win': IGameEditWin;
+  'game edit type': IGameEditGameType;
   'game edit player': IGameEditPlayer;
   'game remove player': IGameRemovePlayer;
   'game edit score': IGameEditScore;

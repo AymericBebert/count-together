@@ -159,6 +159,7 @@ $dark-theme: map_merge($dark-theme, (background: $dark-background));
 .myrtille-dark-theme {
   @include angular-material-theme($dark-theme);
   @include custom-components-theme($dark-theme);
+  @include custom-components-dark-theme($dark-theme);
 }
 
 // CSS
@@ -180,7 +181,7 @@ body {
 }
 
 .myrtille-dark-theme {
-  .mat-button.mat-primary {
+  .mat-button.mat-primary, .mat-icon-button.mat-primary {
     color: mat-color($light-primary, 100);
   }
 

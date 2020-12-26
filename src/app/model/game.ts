@@ -1,7 +1,6 @@
 import {Player} from './player';
 
-export type GameType = 'free' | 'winOrLose';
-export const gameTypes = ['free', 'winOrLose'];
+export type GameType = 'free' | 'smallScores' | 'winOrLose';
 
 export interface IGame {
   gameId: string;

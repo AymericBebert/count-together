@@ -1,0 +1,20 @@
+<div mat-dialog-title style="min-width: 200px">
+  <span class="dialog-header">{{ 'edit.header' | translate }}</span>
+</div>
+
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{ 'edit.edit-game' | translate }}</mat-label>
+    <input matInput #gameNameInput [formControl]="name">
+    <mat-error *ngIf="name.invalid">{{ 'edit.edit-game-invalid' | translate }}</mat-error>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+  <button mat-button color="primary" [mat-dialog-close]="undefined">
+    {{ 'edit.cancel' | translate }}
+  </button>
+  <button mat-button color="primary" [mat-dialog-close]="name.value" [disabled]="name.invalid">
+    {{ 'edit.confirm' | translate }}
+  </button>
+</div>

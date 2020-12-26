@@ -4,7 +4,9 @@
     "cancel": "Cancel",
     "confirm": "Ok",
     "edit-game": "Game name",
+    "edit-game-invalid": "This game name is invalid",
     "edit-player-name": "Player name",
+    "edit-player-name-invalid": "This player name is invalid",
     "edit-score": "Score",
     "header": "Edition"
   },
@@ -68,6 +70,7 @@
       "free": "Free points",
       "max-wins": "Max score wins",
       "min-wins": "Min score wins",
+      "smallScores": "Small scores",
       "title": "Game settings",
       "win-or-lose": "Win or Lose"
     },

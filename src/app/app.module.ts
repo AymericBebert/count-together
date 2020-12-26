@@ -20,7 +20,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {HomeComponent} from './home/home.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {GameComponent} from './game/game.component';
-import {EditionDialogComponent} from './edition-dialog/edition-dialog.component';
+import {GameNameDialogComponent} from './dialogs/game-name-dialog/game-name-dialog.component';
+import {PlayerNameDialogComponent} from './dialogs/player-name-dialog/player-name-dialog.component';
+import {ScoreDialogComponent} from './dialogs/score-dialog/score-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -38,7 +40,7 @@ import {StorageModule} from './storage/storage.module';
 import {UpdaterModule} from './updater/updater.module';
 import {ApiErrorModule} from './api-error/api-error.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogComponent} from './dialogs/confirm-dialog/confirm-dialog.component';
 import {GameSettingsService} from './service/game-settings.service';
 
 // AoT requires an exported function for factories
@@ -53,7 +55,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChangeLanguageComponent,
     HomeComponent,
     GameComponent,
-    EditionDialogComponent,
+    GameNameDialogComponent,
+    PlayerNameDialogComponent,
+    ScoreDialogComponent,
     ConfirmDialogComponent,
     RankIconComponent,
   ],
@@ -105,7 +109,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    EditionDialogComponent,
+    GameNameDialogComponent,
+    PlayerNameDialogComponent,
+    ScoreDialogComponent,
     ConfirmDialogComponent,
   ],
 })

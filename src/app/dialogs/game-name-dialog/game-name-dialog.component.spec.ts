@@ -1,16 +1,16 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {EditionDialogComponent} from './edition-dialog.component';
+import {GameNameDialogComponent} from './game-name-dialog.component';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {TranslateTestingModule} from '../../testing/translate-testing-module';
 import {MatListModule} from '@angular/material/list';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-describe('EditionDialogComponent', () => {
-  let component: EditionDialogComponent;
-  let fixture: ComponentFixture<EditionDialogComponent>;
+describe('GameNameDialogComponent', () => {
+  let component: GameNameDialogComponent;
+  let fixture: ComponentFixture<GameNameDialogComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -25,7 +25,7 @@ describe('EditionDialogComponent', () => {
         NoopAnimationsModule,
       ],
       declarations: [
-        EditionDialogComponent,
+        GameNameDialogComponent,
       ],
       providers: [
         {
@@ -40,7 +40,7 @@ describe('EditionDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditionDialogComponent);
+    fixture = TestBed.createComponent(GameNameDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

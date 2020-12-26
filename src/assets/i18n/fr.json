@@ -4,7 +4,9 @@
     "cancel": "Annuler",
     "confirm": "Ok",
     "edit-game": "Nom de la partie",
+    "edit-game-invalid": "Nom de partie invalide",
     "edit-player-name": "Nom du joueur",
+    "edit-player-name-invalid": "Nom de joueur invalide",
     "edit-score": "Score",
     "header": "Édition"
   },
@@ -15,24 +17,24 @@
       "confirm": "Oui",
       "dismiss": "Annuler",
       "message": "Les scores des joueurs peuvent en être affectés",
-      "title": "Changer le type de partie ?"
+      "title": "Changer le type de partie ?"
     },
     "remove-player": "Joueur",
     "remove-player-dialog": {
       "confirm": "Oui",
       "dismiss": "Annuler",
       "message": "Les scores de ce joueur seront perdus.",
-      "title": "Supprimer le joueur {{player}} ?"
+      "title": "Supprimer le joueur {{player}} ?"
     },
     "remove-row": "Ligne",
     "remove-score-line-dialog": {
       "confirm": "Oui",
       "dismiss": "Annuler",
       "message": "Les derniers scores seront perdus",
-      "title": "Supprimer la dernière ligne ?"
+      "title": "Supprimer la dernière ligne ?"
     },
     "share": {
-      "text": "Joins ma partie sur Count Together !",
+      "text": "Rejoins ma partie sur Count Together !",
       "title": "Count Together"
     }
   },
@@ -68,6 +70,7 @@
       "free": "Points libres",
       "max-wins": "Max gagne",
       "min-wins": "Min gagne",
+      "smallScores": "Petit scores",
       "title": "Options de partie",
       "win-or-lose": "Gagne ou Perd"
     },

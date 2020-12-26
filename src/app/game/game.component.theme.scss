@@ -30,6 +30,28 @@
 
     .cell {
       border-bottom: 1px solid mat-color($primary, 300, 0.2);
+
+      &.free {
+      }
+
+      &.small-scores {
+      }
+
+      &.win-or-lose {
+        border-bottom: 1px solid mat-color($primary, 100, 0.6);
+      }
+    }
+  }
+}
+
+@mixin game-component-dark-theme($theme) {
+  $primary: map-get($theme, primary);
+
+  app-game {
+    .cell {
+      &.win-or-lose {
+        border-bottom: 1px solid mat-color($primary, 300, 0.6);
+      }
     }
   }
 }

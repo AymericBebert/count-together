@@ -61,7 +61,7 @@
   font-display: swap;
   src: local('Material Icons'),
   local('MaterialIcons-Regular'),
-  url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2'),
+  url(https://fonts.gstatic.com/s/materialicons/v70/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2'),
   url('assets/fonts/MaterialIcons/MaterialIcons-Regular.woff2') format('woff2'),
   url('assets/fonts/MaterialIcons/MaterialIcons-Regular.woff') format('woff'),
   url('assets/fonts/MaterialIcons/MaterialIcons-Regular.ttf') format('truetype');
@@ -81,6 +81,8 @@
   word-wrap: normal;
   direction: ltr;
   text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

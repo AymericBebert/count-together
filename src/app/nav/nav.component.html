@@ -30,12 +30,17 @@
 
         <mat-list-item (click)="gameSettingsService.setGameType('free')"
                        [ngClass]="{selectable: true, selected: gameSettings.gameType === 'free'}">
-          <mat-icon style="margin-right: 5px">exposure</mat-icon>
+          <mat-icon style="margin-right: 5px">leaderboard</mat-icon>
           <span>{{ 'nav.game-settings.free' | translate }}</span>
+        </mat-list-item>
+        <mat-list-item (click)="gameSettingsService.setGameType('smallScores')"
+                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'smallScores'}">
+          <mat-icon style="margin-right: 5px">exposure</mat-icon>
+          <span>{{ 'nav.game-settings.smallScores' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('winOrLose')"
                        [ngClass]="{selectable: true, selected: gameSettings.gameType === 'winOrLose'}">
-          <mat-icon style="margin-right: 5px">tonality</mat-icon>
+          <mat-icon style="margin-right: 5px">flaky</mat-icon>
           <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
         </mat-list-item>
 

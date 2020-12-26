@@ -7,3 +7,7 @@
   @include game-component-theme($theme);
   @include rank-icon-component-theme($theme);
 }
+
+@mixin custom-components-dark-theme($theme) {
+  @include game-component-dark-theme($theme);
+}

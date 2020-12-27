@@ -76,6 +76,10 @@
         margin-top: 4px;
         margin-bottom: 4px;
         cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
     }
 

@@ -18,8 +18,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
 
-  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$
-    .pipe(map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))));
+  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$.pipe(
+    map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))),
+  );
 
   public gameFormControl: FormControl;
   public matcher: ErrorStateMatcher;

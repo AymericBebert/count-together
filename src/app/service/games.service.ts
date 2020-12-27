@@ -56,9 +56,10 @@ export class GamesService {
     this.currentGame$
       .pipe(
         filter(game => game && game.gameId !== 'offline'),
-        debounceTime(3000),
+        map(game => ({gameId: game.gameId, name: game.name})),
+        debounceTime(500),
       )
-      .subscribe(game => this.addToVisitedGames(game));
+      .subscribe(({gameId, name}) => this.addToVisitedGames(gameId, name));
 
     combineLatest([
       this.currentGameId$,
@@ -247,14 +248,14 @@ export class GamesService {
     this.storageService.setItem('offlineGame', JSON.stringify(game));
   }
 
-  private addToVisitedGames(game: IGame) {
+  private addToVisitedGames(gameId: string, name: string) {
     const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
     const visitedGames: IStoredGame[] = JSON.parse(visitedGamesFromStorage);
-    const foundAtIndex = visitedGames.map(sg => sg.gameId).indexOf(game.gameId);
+    const foundAtIndex = visitedGames.map(sg => sg.gameId).indexOf(gameId);
     if (foundAtIndex >= 0) {
-      visitedGames[foundAtIndex] = {gameId: game.gameId, name: game.name, date: new Date()};
+      visitedGames[foundAtIndex] = {gameId, name, date: new Date()};
     } else {
-      visitedGames.push({gameId: game.gameId, name: game.name, date: new Date()});
+      visitedGames.push({gameId, name, date: new Date()});
     }
     this.storageService.setItem('visitedGames', JSON.stringify(visitedGames));
   }

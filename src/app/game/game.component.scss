@@ -72,7 +72,11 @@
     padding-bottom: 2px;
 
     & .buttons {
-      opacity: 0.6;
+      & mat-icon {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
     }
 
     & .overlay-score {
@@ -82,7 +86,7 @@
       right: 0;
       left: 0;
       text-align: center;
-      margin-top: 12px;
+      margin-top: 7px;
     }
   }
 

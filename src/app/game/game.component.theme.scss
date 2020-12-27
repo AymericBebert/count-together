@@ -34,7 +34,14 @@
       &.free {
       }
 
-      &.small-scores {
+      &.small-scores .buttons mat-icon {
+        &.plus {
+          color: mat-color($primary, 0.1);
+        }
+
+        &.minus {
+          color: mat-color($accent, 0.1);
+        }
       }
 
       &.win-or-lose {
@@ -49,6 +56,10 @@
 
   app-game {
     .cell {
+      &.small-scores .buttons mat-icon.plus {
+        color: mat-color($primary, 400, 0.2);
+      }
+
       &.win-or-lose {
         border-bottom: 1px solid mat-color($primary, 300, 0.6);
       }

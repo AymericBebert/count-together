@@ -21,7 +21,8 @@
   </div>
 
   <div class="score-box mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
-    <div *ngFor="let player of players$ | async; let p = index" fxFlex="1 1 auto" class="player-column-wrapper">
+    <div *ngFor="let player of players$ | async; index as p; trackBy: playerTrackByFn"
+         fxFlex="1 1 auto" class="player-column-wrapper">
       <div class="player-column" fxLayout="column" fxLayoutAlign="start center">
 
         <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
@@ -33,7 +34,7 @@
         </div>
 
         <ng-container *ngIf="!game.gameType || game.gameType === 'free'">
-          <div *ngFor="let score of player.scores; let i = index" class="cell free" fxLayout="column">
+          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn" class="cell free" fxLayout="column">
           <span class="add-score" fxLayout="row" fxLayoutAlign="end" (click)="editScoreOpen(p, i)">
             {{ score !== null ? score : '/' }}
           </span>
@@ -44,20 +45,11 @@
         </ng-container>
 
         <ng-container *ngIf="game.gameType === 'smallScores'">
-          <div *ngFor="let score of player.scores; let i = index"
+          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
                class="cell small-scores" style="position: relative">
             <div fxLayout="row" fxLayoutAlign="space-around center" class="buttons">
-              <button mat-icon-button color="accent" aria-label="Score decrease"
-                      (click)="editScore(p, i, score - 1)"
-                      style="margin-right: -8px">
-                <mat-icon>remove_circle_outline</mat-icon>
-              </button>
-              <div style="width: 12px"></div>
-              <button mat-icon-button color="primary" aria-label="Score increase"
-                      (click)="editScore(p, i, score + 1)"
-                      style="margin-left: -8px">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
+              <mat-icon (click)="editScore(p, i, score - 1)" class="minus">remove_circle</mat-icon>
+              <mat-icon (click)="editScore(p, i, score + 1)" class="plus">add_circle</mat-icon>
             </div>
             <span class="overlay-score" style="position: absolute">
               {{ score !== null ? score : '/' }}
@@ -66,7 +58,7 @@
         </ng-container>
 
         <ng-container *ngIf="game.gameType === 'winOrLose'">
-          <div *ngFor="let score of player.scores; let i = index"
+          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
                [ngClass]="{'cell': true, 'win-or-lose': true, win: !!score}"
                (click)="editScore(p, i, score ? 0 : 1)">
           </div>

@@ -1,12 +1,14 @@
 <div mat-dialog-title style="min-width: 200px">
-  <span class="dialog-header">{{ 'edit.header' | translate }}</span>
+  <span class="dialog-header">
+    {{ 'edit.game-name.header' | translate }}
+  </span>
 </div>
 
 <div mat-dialog-content>
   <mat-form-field>
-    <mat-label>{{ 'edit.edit-game' | translate }}</mat-label>
-    <input matInput #gameNameInput [formControl]="name">
-    <mat-error *ngIf="name.invalid">{{ 'edit.edit-game-invalid' | translate }}</mat-error>
+    <mat-label>{{ 'edit.game-name.label' | translate }}</mat-label>
+    <input matInput #gameNameInput name="game" [formControl]="name" [autofocus]="true">
+    <mat-error *ngIf="name.invalid">{{ 'edit.game-name.invalid' | translate }}</mat-error>
   </mat-form-field>
 </div>
 

@@ -34,11 +34,12 @@
         </div>
 
         <ng-container *ngIf="!game.gameType || game.gameType === 'free'">
-          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn" class="cell free" fxLayout="column">
-          <span class="add-score" fxLayout="row" fxLayoutAlign="end" (click)="editScoreOpen(p, i)">
-            {{ score !== null ? score : '/' }}
-          </span>
-            <div fxLayout="row" fxLayoutAlign="center">
+          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
+               class="cell free">
+            <div class="add-score" (click)="editScoreOpen(p, i)">
+              {{ score !== null ? score : '/' }}
+            </div>
+            <div class="cum-score">
               {{ player.scoresCumSum[i] != null ? player.scoresCumSum[i] : '/' }}
             </div>
           </div>
@@ -81,11 +82,11 @@
   </div>
 
   <div class="actions-bottom" fxLayout="row wrap" *ngIf="game.gameType !== 'free'">
-    <button mat-button color="primary" (click)="removeScoreLine()">
+    <button mat-button color="accent" (click)="removeScoreLine()">
       <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
       <span>{{ 'game.remove-row' | translate }}</span>
     </button>
-    <button mat-button color="primary" (click)="addScoreLine()">
+    <button mat-button color="accent" (click)="addScoreLine()">
       <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
       <span>{{ 'game.add-row' | translate }}</span>
     </button>

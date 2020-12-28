@@ -4,6 +4,7 @@ import {FormControl, Validators} from '@angular/forms';
 
 export interface PlayerNameDialogData {
   name: string;
+  isNew: boolean;
 }
 
 @Component({
@@ -14,14 +15,16 @@ export interface PlayerNameDialogData {
 export class PlayerNameDialogComponent implements AfterViewInit {
 
   public name: FormControl;
+  public isNew: boolean;
 
   @ViewChild('playerNameInput') playerNameInput: ElementRef;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlayerNameDialogData) {
     this.name = new FormControl(data.name, [Validators.required]);
+    this.isNew = data.isNew;
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
+    // setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
   }
 }

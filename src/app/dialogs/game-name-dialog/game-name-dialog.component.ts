@@ -22,6 +22,6 @@ export class GameNameDialogComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
+    // setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
   }
 }

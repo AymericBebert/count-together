@@ -174,10 +174,11 @@ export class GameComponent implements OnInit, OnDestroy {
     }
     this.gamesService.gameEditPlayer(currentGame.gameId, newPlayerIndex, newPlayerName);
     this.gamesService.updateSavedGame(currentGame);
+    this.editPlayerNameOpen(currentGame.players.length - 1, true);
   }
 
-  public editPlayerNameOpen(p: number) {
-    const data: PlayerNameDialogData = {name: this.game$.getValue().players[p].name};
+  public editPlayerNameOpen(p: number, isNew: boolean = false) {
+    const data: PlayerNameDialogData = {name: this.game$.getValue().players[p].name, isNew};
     this.dialog.open(PlayerNameDialogComponent, {data})
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
@@ -224,11 +225,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public addScore(p: number) {
     const currentGame = this.game$.getValue();
-    this.editScoreOpen(p, currentGame.players[p].scores.length);
+    this.editScoreOpen(p, currentGame.players[p].scores.length, true);
   }
 
-  public editScoreOpen(p: number, i: number) {
-    const data: EditScoreDialogData = {score: this.game$.getValue().players[p].scores[i] ?? null};
+  public editScoreOpen(p: number, i: number, isNew: boolean = false) {
+    const data: EditScoreDialogData = {score: this.game$.getValue().players[p].scores[i] ?? null, isNew};
     this.dialog.open(ScoreDialogComponent, {data})
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))

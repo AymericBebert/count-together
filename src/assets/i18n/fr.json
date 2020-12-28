@@ -3,12 +3,22 @@
   "edit": {
     "cancel": "Annuler",
     "confirm": "Ok",
-    "edit-game": "Nom de la partie",
-    "edit-game-invalid": "Nom de partie invalide",
-    "edit-player-name": "Nom du joueur",
-    "edit-player-name-invalid": "Nom de joueur invalide",
-    "edit-score": "Score",
-    "header": "Édition"
+    "game-name": {
+      "header": "Nom de la partie",
+      "invalid": "Nom de partie invalide",
+      "label": "Nom de la partie"
+    },
+    "player-name": {
+      "header": "Nom du joueur",
+      "header-new": "Nouveau joueur",
+      "invalid": "Nom de joueur invalide",
+      "label": "Nom du joueur"
+    },
+    "score": {
+      "header": "Édition score",
+      "header-new": "Nouveau score",
+      "label": "Score"
+    }
   },
   "game": {
     "add-player": "Joueur",

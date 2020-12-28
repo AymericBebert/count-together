@@ -1,11 +1,13 @@
 <div mat-dialog-title style="min-width: 200px">
-  <span class="dialog-header">{{ 'edit.header' | translate }}</span>
+  <span class="dialog-header">
+    {{ isNew ? ('edit.score.header-new' | translate) : ('edit.score.header' | translate) }}
+  </span>
 </div>
 
 <div mat-dialog-content>
   <mat-form-field class="edit-score">
-    <mat-label>{{ 'edit.edit-score' | translate }}</mat-label>
-    <input matInput #scoreInput type="number" [formControl]="score">
+    <mat-label>{{ 'edit.score.label' | translate }}</mat-label>
+    <input matInput #scoreInput type="number" autocomplete="off" name="score" [formControl]="score" [autofocus]="true">
   </mat-form-field>
   <button mat-icon-button color="primary" aria-label="Add Score" [mat-dialog-close]="null">
     <mat-icon>clear</mat-icon>

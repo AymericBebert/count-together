@@ -65,7 +65,17 @@
   width: 100%;
 
   &.free {
-    padding: 4px 10px 2px 10px;
+    & .add-score {
+      margin-top: 4px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    & .cum-score {
+      font-size: 0.8em;
+      margin: -3px 0 0 2px;
+      opacity: 0.4;
+    }
   }
 
   &.small-scores {
@@ -97,12 +107,6 @@
   &.win-or-lose {
     height: 40px;
   }
-}
-
-.add-score {
-  font-size: 0.9em;
-  margin-bottom: -5px;
-  cursor: pointer;
 }
 
 .score-box {

@@ -16,7 +16,7 @@ RUN npm run build -- --configuration="${BUILD_CONFIGURATION}"
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.19.5-alpine
+FROM nginx:1.19.6-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\

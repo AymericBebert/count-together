@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, Subject} from 'rxjs';
 import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
-import {EnrichedPlayer, Player} from '../model/player';
+import {EnrichedPlayer} from '../model/player';
 import {StorageService} from '../storage/storage.service';
 import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
 import {GameNameDialogComponent, GameNameDialogData} from '../dialogs/game-name-dialog/game-name-dialog.component';

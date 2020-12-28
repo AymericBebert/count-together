@@ -1,10 +1,9 @@
-FROM node:14.15.1-stretch-slim AS builder
+FROM node:14.15.3-stretch-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
 
-COPY package.json ./package.json
-COPY package-lock.json ./package-lock.json
+COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 

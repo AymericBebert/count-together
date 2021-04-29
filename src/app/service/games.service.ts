@@ -181,6 +181,18 @@ export class GamesService {
     );
   }
 
+  public duplicateGame(gameId: string): Observable<IGame | null> {
+    return this.http.post<{ result: IGame | null; error: string; }>(gamesBackendRoutes.duplicateGame(gameId), null).pipe(
+      tap(res => res.error && this.apiError.displayError(`duplicateGame: ${res.error}`)),
+      catchError(error => {
+        console.error('duplicateGame', error);
+        this.apiError.displayError(`Could not duplicate game`);
+        return EMPTY;
+      }),
+      map(res => res.result),
+    );
+  }
+
   public getVisitedGames(): IStoredGame[] {
     const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
     return JSON.parse(visitedGamesFromStorage).map(g => ({...g, date: new Date(g.date)}));

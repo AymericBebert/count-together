@@ -7,4 +7,5 @@ export const gamesBackendRoutes = {
   getGame: (gameId: string) => `${baseUrl}/games/game/${gameId}`,
   putGame: (gameId: string) => `${baseUrl}/games/game/${gameId}`,
   deleteGame: (gameId: string) => `${baseUrl}/games/game/${gameId}`,
+  duplicateGame: (gameId: string) => `${baseUrl}/games/duplicate/${gameId}`,
 };

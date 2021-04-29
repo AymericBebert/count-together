@@ -73,6 +73,7 @@
     "version": "Version :"
   },
   "nav-tool": {
+    "duplicate": "Dupliquer",
     "wheel": "Roue Aléatoire"
   },
   "nav": {

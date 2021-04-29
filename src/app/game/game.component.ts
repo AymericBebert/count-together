@@ -55,13 +55,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
-    return scores.reduce(
-      (acc, score) => ({scoresCumSum: [...acc.scoresCumSum, acc.total + score], total: acc.total + score}),
-      {total: 0, scoresCumSum: [] as number[]},
-    );
-  }
-
   constructor(private route: ActivatedRoute,
               private router: Router,
               private storageService: StorageService,
@@ -73,6 +66,13 @@ export class GameComponent implements OnInit, OnDestroy {
               private socket: SocketService,
               private dialog: MatDialog,
   ) {
+  }
+
+  private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
+    return scores.reduce(
+      (acc, score) => ({scoresCumSum: [...acc.scoresCumSum, acc.total + score], total: acc.total + score}),
+      {total: 0, scoresCumSum: [] as number[]},
+    );
   }
 
   ngOnInit(): void {
@@ -91,6 +91,9 @@ export class GameComponent implements OnInit, OnDestroy {
               relativeTo: this.route,
               queryParams: {names: game.players.map(p => p.name).join(',')},
             }).catch(err => console.error('Navigation error', err));
+            break;
+          case 'nav-tool.duplicate':
+            this.duplicateGame(game);
             break;
         }
       });
@@ -125,44 +128,6 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  private editGame(newName: string) {
-    const currentGame = this.game$.getValue();
-    currentGame.name = newName;
-    this.gamesService.gameEditName(currentGame.gameId, newName);
-    this.gamesService.updateSavedGame(currentGame);
-  }
-
-  private setLowerScoreWins(lowerScoreWins: boolean) {
-    const currentGame = this.game$.getValue();
-    currentGame.lowerScoreWins = lowerScoreWins;
-    this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
-    this.gamesService.updateSavedGame(currentGame);
-  }
-
-  private setGameTypeOpen(gameType: GameType) {
-    if (gameType === 'winOrLose') {
-      const data: ConfirmDialogData = {
-        title: this.translateService.instant('game.change-game-type-dialog.title'),
-        message: this.translateService.instant('game.change-game-type-dialog.message'),
-        confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
-        dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
-      };
-      this.dialog.open(ConfirmDialogComponent, {data})
-        .afterClosed()
-        .pipe(filter(res => !!res), takeUntil(this.destroy$))
-        .subscribe(() => this.editGameType(gameType));
-    } else {
-      this.editGameType(gameType);
-    }
-  }
-
-  private editGameType(gameType: GameType) {
-    const currentGame = this.game$.getValue();
-    currentGame.gameType = gameType;
-    this.gamesService.gameEditGameType(currentGame.gameId, gameType);
-    this.gamesService.updateSavedGame(currentGame);
-  }
-
   public addPlayer() {
     const currentGame = this.game$.getValue();
     const newPlayerIndex = currentGame.players.length;
@@ -185,13 +150,6 @@ export class GameComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.editPlayerName(p, res);
       });
-  }
-
-  private editPlayerName(p: number, newName: string) {
-    const currentGame = this.game$.getValue();
-    currentGame.players[p].name = newName;
-    this.gamesService.gameEditPlayer(currentGame.gameId, p, newName);
-    this.gamesService.updateSavedGame(currentGame);
   }
 
   public removePlayer() {
@@ -292,6 +250,59 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
+  public playerTrackByFn(index: number, player: EnrichedPlayer): string {
+    return `${player.name}:${player.total}:${player.rank}:${player.last}`;
+  }
+
+  public scoreTrackByFn(index: number, score: number): number {
+    return score;
+  }
+
+  private editGame(newName: string) {
+    const currentGame = this.game$.getValue();
+    currentGame.name = newName;
+    this.gamesService.gameEditName(currentGame.gameId, newName);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  private setLowerScoreWins(lowerScoreWins: boolean) {
+    const currentGame = this.game$.getValue();
+    currentGame.lowerScoreWins = lowerScoreWins;
+    this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  private setGameTypeOpen(gameType: GameType) {
+    if (gameType === 'winOrLose') {
+      const data: ConfirmDialogData = {
+        title: this.translateService.instant('game.change-game-type-dialog.title'),
+        message: this.translateService.instant('game.change-game-type-dialog.message'),
+        confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
+        dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
+      };
+      this.dialog.open(ConfirmDialogComponent, {data})
+        .afterClosed()
+        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .subscribe(() => this.editGameType(gameType));
+    } else {
+      this.editGameType(gameType);
+    }
+  }
+
+  private editGameType(gameType: GameType) {
+    const currentGame = this.game$.getValue();
+    currentGame.gameType = gameType;
+    this.gamesService.gameEditGameType(currentGame.gameId, gameType);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  private editPlayerName(p: number, newName: string) {
+    const currentGame = this.game$.getValue();
+    currentGame.players[p].name = newName;
+    this.gamesService.gameEditPlayer(currentGame.gameId, p, newName);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
   private shareGame(game: IGame | null) {
     const shareTitle = this.translateService.instant('game.share.title');
     const shareText = this.translateService.instant('game.share.text');
@@ -310,11 +321,17 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  public playerTrackByFn(index: number, player: EnrichedPlayer): string {
-    return `${player.name}:${player.total}:${player.rank}:${player.last}`;
-  }
-
-  public scoreTrackByFn(index: number, score: number): number {
-    return score;
+  private duplicateGame(game: IGame | null) {
+    if (game === null) {
+      console.error('Trying to duplicate but game is null?');
+    } else if (game.gameId === 'offline') {
+      console.error('Trying to duplicate but game is offline?');
+    } else {
+      this.gamesService.duplicateGame(game.gameId)
+        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
+        .subscribe(newGameId => {
+          this.router.navigate(['game', newGameId]).catch(err => console.error('Could not navigate after duplication?', err));
+        });
+    }
   }
 }

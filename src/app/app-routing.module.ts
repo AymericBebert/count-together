@@ -18,7 +18,10 @@ const routes: Routes = [
     data: {
       backRouterNavigate: '/',
       navButtons: ['share'],
-      navTools: [{name: 'nav-tool.wheel', icon: 'near_me'}],
+      navTools: [
+        {name: 'nav-tool.wheel', icon: 'near_me'},
+        {name: 'nav-tool.duplicate', icon: 'content_copy'},
+      ],
     },
   },
   {

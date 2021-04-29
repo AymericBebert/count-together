@@ -38,7 +38,7 @@ fi
 function delete_new_tag() {
   if [ -z $tags ]; then
     echo "Removing new git tag $newtag"
-    git tag -d $newtag > /dev/null
+    git tag -d $newtag >/dev/null
   fi
 }
 
@@ -70,5 +70,5 @@ docker push aymericbernard/count-together:$version ||
     exit 1
   }
 
-echo "Pushing git tags..."
-git push --tags
+echo "Pushing git tag..."
+git push origin $version

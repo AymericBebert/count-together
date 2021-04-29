@@ -1,4 +1,4 @@
-FROM node:14.15.3-stretch-slim AS builder
+FROM node:16.0.0-stretch-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
@@ -16,7 +16,7 @@ RUN npm run build -- --configuration="${BUILD_CONFIGURATION}"
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.19.6-alpine
+FROM nginx:1.20.0-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\

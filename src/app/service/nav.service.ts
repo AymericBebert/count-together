@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, from} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
-import {StorageService} from '../storage/storage.service';
-import {NavButtonsService} from './nav-buttons.service';
-import {SettingsService} from './settings.service';
-import {DeviceService} from './device.service';
+import {BehaviorSubject, from} from 'rxjs';
 import {filter, switchMap, tap} from 'rxjs/operators';
 import {version} from '../../version';
+import {StorageService} from '../storage/storage.service';
 import {UpdaterService} from '../updater/updater.service';
+import {DeviceService} from './device.service';
+import {NavButtonsService} from './nav-buttons.service';
+import {SettingsService} from './settings.service';
 
 @Injectable()
 export class NavService {
@@ -15,7 +15,7 @@ export class NavService {
   public pinSideNav$ = new BehaviorSubject<boolean>(false);
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);
-  public navTools$ = new BehaviorSubject<{name: string, icon: string}[]>([]);
+  public navTools$ = new BehaviorSubject<{ name: string, icon: string }[]>([]);
   public notificationBadge$ = new BehaviorSubject<string>('');
   public displayUpdatesAvailable$ = new BehaviorSubject<boolean>(false);
   public displayUpdatesActivated$ = new BehaviorSubject<boolean>(false);

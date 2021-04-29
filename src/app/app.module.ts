@@ -1,47 +1,47 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {ServiceWorkerModule} from '@angular/service-worker';
-import {environment} from '../environments/environment';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {NavComponent} from './nav/nav.component';
-import {ChangeLanguageComponent} from './nav/change-language.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {HomeComponent} from './home/home.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {GameComponent} from './game/game.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {environment} from '../environments/environment';
+import {ApiErrorModule} from './api-error/api-error.module';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {ConfirmDialogComponent} from './dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent} from './dialogs/game-name-dialog/game-name-dialog.component';
 import {PlayerNameDialogComponent} from './dialogs/player-name-dialog/player-name-dialog.component';
 import {ScoreDialogComponent} from './dialogs/score-dialog/score-dialog.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatInputModule} from '@angular/material/input';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {GameComponent} from './game/game.component';
+import {HomeComponent} from './home/home.component';
+import {ChangeLanguageComponent} from './nav/change-language.component';
+import {NavComponent} from './nav/nav.component';
 import {RankIconComponent} from './rank-icon/rank-icon.component';
+import {DeviceService} from './service/device.service';
+import {GameSettingsService} from './service/game-settings.service';
+import {GamesService} from './service/games.service';
+import {NavButtonsService} from './service/nav-buttons.service';
+import {NavService} from './service/nav.service';
+import {SettingsService} from './service/settings.service';
 import {ShareButtonModule} from './share-button/share-button.module';
 import {SocketModule} from './socket/socket.module';
-import {DebugHttpInterceptor} from './utils/debug-http.interceptor';
-import {DeviceService} from './service/device.service';
-import {GamesService} from './service/games.service';
-import {NavService} from './service/nav.service';
-import {NavButtonsService} from './service/nav-buttons.service';
-import {SettingsService} from './service/settings.service';
-import {MatBadgeModule} from '@angular/material/badge';
 import {StorageModule} from './storage/storage.module';
 import {UpdaterModule} from './updater/updater.module';
-import {ApiErrorModule} from './api-error/api-error.module';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {ConfirmDialogComponent} from './dialogs/confirm-dialog/confirm-dialog.component';
-import {GameSettingsService} from './service/game-settings.service';
+import {DebugHttpInterceptor} from './utils/debug-http.interceptor';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -107,7 +107,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     NavButtonsService,
     SettingsService,
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent,
+  ],
   entryComponents: [
     GameNameDialogComponent,
     PlayerNameDialogComponent,

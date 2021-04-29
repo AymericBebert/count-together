@@ -1,26 +1,15 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  finalize,
-  map,
-  skip,
-  switchMap,
-  takeUntil,
-  tap
-} from 'rxjs/operators';
-import {ApiErrorService} from '../api-error/api-error.service';
-import {GameType, IGame, IStoredGame} from '../model/game';
-import {gamesBackendRoutes} from '../games-backend.routes';
-import {StorageService} from '../storage/storage.service';
-import {SocketService} from '../socket/socket.service';
-import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
+import {catchError, debounceTime, distinctUntilChanged, filter, finalize, map, skip, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import {ApiErrorService} from '../api-error/api-error.service';
+import {gamesBackendRoutes} from '../games-backend.routes';
+import {GameType, IGame, IStoredGame} from '../model/game';
+import {SocketService} from '../socket/socket.service';
+import {StorageService} from '../storage/storage.service';
 
 @Injectable()
 export class GamesService {
@@ -180,18 +169,6 @@ export class GamesService {
     };
   }
 
-  private gameExistsCheck(token: string): Observable<IGame | null> {
-    this.gameCheckPending$.next(true);
-    return this.getGame(token).pipe(
-      catchError(err => {
-        console.error(err);
-        return of(null);
-      }),
-      tap(game => this.gameCheck$.next(game)),
-      finalize(() => this.gameCheckPending$.next(false)),
-    );
-  }
-
   public postNewGame(game: IGame): Observable<IGame | null> {
     return this.http.post<{ result: IGame | null; error: string; }>(gamesBackendRoutes.postNewGame(), game).pipe(
       tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
@@ -213,6 +190,18 @@ export class GamesService {
     const newStoredGames = this.getVisitedGames().filter(sg => sg.gameId !== gameId);
     this.storageService.setItem('visitedGames', JSON.stringify(newStoredGames));
     return newStoredGames;
+  }
+
+  private gameExistsCheck(token: string): Observable<IGame | null> {
+    this.gameCheckPending$.next(true);
+    return this.getGame(token).pipe(
+      catchError(err => {
+        console.error(err);
+        return of(null);
+      }),
+      tap(game => this.gameCheck$.next(game)),
+      finalize(() => this.gameCheckPending$.next(false)),
+    );
   }
 
   private getGame(gameId: string): Observable<IGame | null> {

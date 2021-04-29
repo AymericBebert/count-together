@@ -18,5 +18,4 @@ export class AppComponent {
     this.navService.applyStoredDarkMode();
     this.navService.applyPinSideNav();
   }
-
 }

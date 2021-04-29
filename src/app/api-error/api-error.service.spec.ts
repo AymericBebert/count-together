@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
-import {ApiErrorService} from './api-error.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {ApiErrorService} from './api-error.service';
 
 describe('ApiErrorService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -9,7 +9,7 @@ describe('ApiErrorService', () => {
     ],
     providers: [
       ApiErrorService,
-    ]
+    ],
   }));
 
   it('should be created', () => {

@@ -10,10 +10,9 @@
 
     span {
       color: mat-color($foreground, text);
-      text-shadow:
-        0 0 4px mat-color($background, background),
-        0 0 3px mat-color($background, background),
-        0 0 2px mat-color($background, background);
+      text-shadow: 0 0 4px mat-color($background, background),
+      0 0 3px mat-color($background, background),
+      0 0 2px mat-color($background, background);
     }
   }
 }

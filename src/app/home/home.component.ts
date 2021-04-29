@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {GamesService} from '../service/games.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {IStoredGame} from '../model/game';
-import {filter, map, takeUntil} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {filter, map, takeUntil} from 'rxjs/operators';
+import {IStoredGame} from '../model/game';
+import {GamesService} from '../service/games.service';
 import {NavButtonsService} from '../service/nav-buttons.service';
+import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 
 @Component({
   selector: 'app-home',

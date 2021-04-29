@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, Inject, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface PlayerNameDialogData {
   name: string;
@@ -12,7 +12,7 @@ export interface PlayerNameDialogData {
   templateUrl: './player-name-dialog.component.html',
   styleUrls: ['./player-name-dialog.component.scss']
 })
-export class PlayerNameDialogComponent implements AfterViewInit {
+export class PlayerNameDialogComponent {
 
   public name: FormControl;
   public isNew: boolean;
@@ -24,7 +24,7 @@ export class PlayerNameDialogComponent implements AfterViewInit {
     this.isNew = data.isNew;
   }
 
-  ngAfterViewInit(): void {
-    // setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
-  }
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
+  // }
 }

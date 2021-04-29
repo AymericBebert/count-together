@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {GamesService} from './games.service';
+import {Observable, Subject} from 'rxjs';
 import {delay, map} from 'rxjs/operators';
 import {GameType, IGameSettings} from '../model/game';
-import {Observable, Subject} from 'rxjs';
+import {GamesService} from './games.service';
 
 @Injectable()
 export class GameSettingsService {
@@ -13,9 +13,9 @@ export class GameSettingsService {
   );
 
   private lowerScoreWins$$ = new Subject<boolean>();
-  private gameType$$ = new Subject<GameType>();
-
   public lowerScoreWins$ = this.lowerScoreWins$$.asObservable();
+
+  private gameType$$ = new Subject<GameType>();
   public gameType$ = this.gameType$$.asObservable();
 
   constructor(private gamesService: GamesService,

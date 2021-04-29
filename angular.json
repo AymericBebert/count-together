@@ -97,7 +97,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "count-together:build"
+            "browserTarget": "count-together:build",
+            "port": 4500
           },
           "configurations": {
             "production": {

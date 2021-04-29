@@ -1,23 +1,28 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {NavComponent} from './nav.component';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {RouterTestingModule} from '@angular/router/testing';
-import {DeviceService} from '../service/device.service';
-import {ChangeLanguageComponent} from './change-language.component';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatListModule} from '@angular/material/list';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatIconModule} from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
-import {NavService} from '../service/nav.service';
-import {NavButtonsService} from '../service/nav-buttons.service';
-import {SettingsService} from '../service/settings.service';
-import {StorageModule} from '../storage/storage.module';
-import {UpdaterTestingModule} from '../testing/updater-testing.module';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ApiErrorService} from '../api-error/api-error.service';
+import {DeviceService} from '../service/device.service';
+import {GameSettingsService} from '../service/game-settings.service';
+import {GamesService} from '../service/games.service';
+import {NavButtonsService} from '../service/nav-buttons.service';
+import {NavService} from '../service/nav.service';
+import {SettingsService} from '../service/settings.service';
+import {SocketService} from '../socket/socket.service';
+import {StorageModule} from '../storage/storage.module';
+import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {UpdaterTestingModule} from '../testing/updater-testing.module';
+import {ChangeLanguageComponent} from './change-language.component';
+import {NavComponent} from './nav.component';
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -39,6 +44,7 @@ describe('NavComponent', () => {
         MatMenuModule,
         StorageModule,
         UpdaterTestingModule,
+        MatSnackBarModule,
       ],
       declarations: [
         NavComponent,
@@ -49,6 +55,10 @@ describe('NavComponent', () => {
         NavButtonsService,
         SettingsService,
         DeviceService,
+        GameSettingsService,
+        GamesService,
+        ApiErrorService,
+        SocketService,
       ]
     }).compileComponents();
   }));

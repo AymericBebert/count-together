@@ -1,12 +1,12 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {GameNameDialogComponent} from './game-name-dialog.component';
-import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
-import {MatListModule} from '@angular/material/list';
-import {MatInputModule} from '@angular/material/input';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {GameNameDialogComponent} from './game-name-dialog.component';
 
 describe('GameNameDialogComponent', () => {
   let component: GameNameDialogComponent;

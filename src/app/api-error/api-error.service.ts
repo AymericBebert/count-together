@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class ApiErrorService {

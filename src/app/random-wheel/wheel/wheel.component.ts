@@ -1,32 +1,24 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import {interpolateString} from 'd3-interpolate';
-import {select, Selection} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
+import {select, Selection} from 'd3-selection';
 import {curveLinearClosed, line, lineRadial} from 'd3-shape';
 import 'd3-transition';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-wheel',
   templateUrl: './wheel.component.html',
   styleUrls: ['./wheel.component.scss']
 })
-export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 
   @Input() public names: string[] = [];
   @Input() public nb = 5;
+
+  @ViewChild('svgRef', {static: true}) public svgRef: ElementRef<SVGElement>;
+
   @Input() private dark = false;
   @Input() private reset = 0;
 
@@ -36,15 +28,12 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   private arrowPrepared = false;
   private spinning = false;
 
-  private destroy$ = new Subject<void>();
-
-  public readonly fontSize = '14px';
+  private readonly fontSize = '14px';
   private readonly outerRadiusMargin = 40;
   private readonly redrawDuration = 500;
   private readonly spinDuration = 4000;
   private readonly crownSize = 32;
 
-  @ViewChild('svgRef', {static: true}) public svgRef: ElementRef<SVGElement>;
   private width: number;
   private middle: number;
   private far: number;
@@ -55,6 +44,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
   private arrowInner: Selection<any, unknown, null, undefined>;
 
   private onResize$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   private arrowPathData: [number, number][] = [
     [0, -0.2], [-0.3, -0.4], [0, 0.8], [0.3, -0.4],
@@ -64,23 +54,9 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     .x(d => d[0])
     .y(d => d[1]);
 
-
-  private onNbChanged(): void {
-    if (this.nb !== this.oldNb) {
-      this.oldNb = this.nb;
-      this.adjustCrownReset();
-    }
-  }
-
   @HostListener('window:resize')
   public onResize() {
     this.onResize$.next();
-  }
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
@@ -100,7 +76,7 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
     this.prepareCrown();
 
     this.onResize$
-      .pipe(debounceTime(100))
+      .pipe(debounceTime(100), takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSizes();
         this.adjustZones();
@@ -148,6 +124,13 @@ export class WheelComponent implements OnInit, OnDestroy, OnChanges, AfterViewIn
         this.spinning = false;
         this.giveCrown(Math.floor((this.angle % 360) * this.nb / 360 + 0.5) % this.nb);
       }, this.spinDuration);
+    }
+  }
+
+  private onNbChanged(): void {
+    if (this.nb !== this.oldNb) {
+      this.oldNb = this.nb;
+      this.adjustCrownReset();
     }
   }
 

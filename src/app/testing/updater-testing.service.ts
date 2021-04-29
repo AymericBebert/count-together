@@ -11,9 +11,6 @@ export class UpdaterTestingService {
   // noinspection JSUnusedGlobalSymbols
   public updatesActivated$ = new Subject<UpdateActivatedEvent>();
 
-  constructor() {
-  }
-
   public update() {
     console.log('UpdaterTestingService.update() called');
   }

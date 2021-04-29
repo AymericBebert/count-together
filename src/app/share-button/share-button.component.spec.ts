@@ -1,9 +1,9 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {ShareButtonComponent} from './share-button.component';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {ShareButtonComponent} from './share-button.component';
 
 describe('ShareButtonComponent', () => {
   let component: ShareButtonComponent;
@@ -18,7 +18,7 @@ describe('ShareButtonComponent', () => {
         MatButtonModule,
       ],
       declarations: [
-        ShareButtonComponent
+        ShareButtonComponent,
       ],
       providers: [],
     })

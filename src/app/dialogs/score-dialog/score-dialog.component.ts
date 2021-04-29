@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, Inject, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface EditScoreDialogData {
   score: number | null;
@@ -12,7 +12,7 @@ export interface EditScoreDialogData {
   templateUrl: './score-dialog.component.html',
   styleUrls: ['./score-dialog.component.scss']
 })
-export class ScoreDialogComponent implements AfterViewInit {
+export class ScoreDialogComponent {
 
   public score: FormControl;
   public isNew: boolean;
@@ -24,7 +24,7 @@ export class ScoreDialogComponent implements AfterViewInit {
     this.isNew = data.isNew;
   }
 
-  ngAfterViewInit(): void {
-    // setTimeout(() => this.scoreInput.nativeElement.select(), 0);
-  }
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => this.scoreInput.nativeElement.select(), 0);
+  // }
 }

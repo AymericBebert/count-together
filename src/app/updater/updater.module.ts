@@ -7,11 +7,9 @@ import {UpdaterService} from './updater.service';
   imports: [
     CommonModule,
   ],
-  exports: [],
   providers: [
     UpdaterService,
   ],
-  entryComponents: [],
 })
 export class UpdaterModule {
 }

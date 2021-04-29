@@ -1,19 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, fromEvent, Observable, of, Subject} from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  shareReplay,
-  skip,
-  startWith,
-  take,
-  takeUntil,
-  tap
-} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, shareReplay, skip, startWith, take, takeUntil, tap} from 'rxjs/operators';
+import {io, Socket} from 'socket.io-client';
 import {environment} from 'src/environments/environment';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
-import {io, Socket} from 'socket.io-client';
 
 @Injectable()
 export class SocketService {

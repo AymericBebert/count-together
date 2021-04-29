@@ -4,19 +4,19 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, Subject} from 'rxjs';
 import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
-import {EnrichedPlayer} from '../model/player';
-import {StorageService} from '../storage/storage.service';
-import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
+import {environment} from '../../environments/environment';
+import {ConfirmDialogComponent, ConfirmDialogData} from '../dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent, GameNameDialogData} from '../dialogs/game-name-dialog/game-name-dialog.component';
 import {PlayerNameDialogComponent, PlayerNameDialogData} from '../dialogs/player-name-dialog/player-name-dialog.component';
+import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
+import {GameType, IGame} from '../model/game';
+import {EnrichedPlayer} from '../model/player';
+import {GameSettingsService} from '../service/game-settings.service';
+import {GamesService} from '../service/games.service';
 import {NavButtonsService} from '../service/nav-buttons.service';
 import {ShareButtonService} from '../share-button/share-button.service';
 import {SocketService} from '../socket/socket.service';
-import {GamesService} from '../service/games.service';
-import {environment} from '../../environments/environment';
-import {ConfirmDialogComponent, ConfirmDialogData} from '../dialogs/confirm-dialog/confirm-dialog.component';
-import {GameType, IGame} from '../model/game';
-import {GameSettingsService} from '../service/game-settings.service';
+import {StorageService} from '../storage/storage.service';
 
 @Component({
   selector: 'app-game',

@@ -1,10 +1,10 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {WheelComponent} from './wheel.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ActivatedRoute} from '@angular/router';
-import {EMPTY} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
+import {EMPTY} from 'rxjs';
+import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {WheelComponent} from './wheel.component';
 
 describe('WheelComponent', () => {
   let component: WheelComponent;

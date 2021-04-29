@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-share-button',
@@ -14,8 +14,9 @@ export class ShareButtonComponent implements OnInit {
   @Input() public disabled = false;
   @Input() public iconOnly = false;
 
-  private readonly webNavigator: any = null;
   public canShare = false;
+
+  private readonly webNavigator: any = null;
 
   constructor(private snackBar: MatSnackBar,
               private translateService: TranslateService,

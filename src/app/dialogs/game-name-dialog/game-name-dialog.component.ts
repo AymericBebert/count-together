@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, Inject, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface GameNameDialogData {
   name: string;
@@ -11,7 +11,7 @@ export interface GameNameDialogData {
   templateUrl: './game-name-dialog.component.html',
   styleUrls: ['./game-name-dialog.component.scss']
 })
-export class GameNameDialogComponent implements AfterViewInit {
+export class GameNameDialogComponent {
 
   public name: FormControl;
 
@@ -21,7 +21,7 @@ export class GameNameDialogComponent implements AfterViewInit {
     this.name = new FormControl(data.name, [Validators.required]);
   }
 
-  ngAfterViewInit(): void {
-    // setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
-  }
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
+  // }
 }

@@ -81,7 +81,7 @@
       "free": "Free points",
       "max-wins": "Max score wins",
       "min-wins": "Min score wins",
-      "smallScores": "Small scores",
+      "small-scores": "Small scores",
       "title": "Game settings",
       "win-or-lose": "Win or Lose"
     },
@@ -91,6 +91,21 @@
     "tools": "Tools",
     "update-activated": "Update activated",
     "update-available": "Update available"
+  },
+  "new-game": {
+    "dialog": {
+      "game-name": {
+        "invalid": "Invalid game name",
+        "label": "Game name"
+      },
+      "game-type": "Game type",
+      "header": "New game",
+      "lower-score-wins": "Lower score wins",
+      "players": {
+        "others": "Other players",
+        "selected": "Selected players"
+      }
+    }
   },
   "share": {
     "copied": "Copied",

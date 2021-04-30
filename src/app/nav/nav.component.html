@@ -36,7 +36,7 @@
         <mat-list-item (click)="gameSettingsService.setGameType('smallScores')"
                        [ngClass]="{selectable: true, selected: gameSettings.gameType === 'smallScores'}">
           <mat-icon style="margin-right: 5px">exposure</mat-icon>
-          <span>{{ 'nav.game-settings.smallScores' | translate }}</span>
+          <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('winOrLose')"
                        [ngClass]="{selectable: true, selected: gameSettings.gameType === 'winOrLose'}">

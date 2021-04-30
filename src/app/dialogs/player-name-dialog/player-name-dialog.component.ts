@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
@@ -17,7 +17,7 @@ export class PlayerNameDialogComponent {
   public name: FormControl;
   public isNew: boolean;
 
-  @ViewChild('playerNameInput') playerNameInput: ElementRef;
+  // @ViewChild('playerNameInput') playerNameInput: ElementRef;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlayerNameDialogData) {
     this.name = new FormControl(data.name, [Validators.required]);

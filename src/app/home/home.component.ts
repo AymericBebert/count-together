@@ -1,10 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {filter, map, takeUntil} from 'rxjs/operators';
-import {IStoredGame} from '../model/game';
+import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {NewGameDialogComponent, NewGameDialogData} from '../dialogs/new-game-dialog/new-game-dialog.component';
+import {IGame, IStoredGame} from '../model/game';
 import {GamesService} from '../service/games.service';
 import {NavButtonsService} from '../service/nav-buttons.service';
 import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
@@ -16,30 +18,28 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
-
-  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$.pipe(
-    map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))),
-  );
-
   public gameFormControl: FormControl;
-  public matcher: ErrorStateMatcher;
+  public matcher: ErrorStateMatcher = new ImmediateErrorStateMatcher();
   public deletion = false;
 
   public gameCheckPending$ = this.gamesService.gameCheckPending$;
 
+  private rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
+  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$.pipe(
+    map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))),
+  );
   private destroy$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private gamesService: GamesService,
               private navButtonsService: NavButtonsService,
+              private dialog: MatDialog,
   ) {
     this.getVisitedGames();
     this.gameFormControl = new FormControl('', {
       asyncValidators: [this.gamesService.gameExistsValidator()],
     });
-    this.matcher = new ImmediateErrorStateMatcher();
 
     this.navButtonsService.navButtonClicked$('nav-tool.wheel')
       .pipe(takeUntil(this.destroy$))
@@ -72,16 +72,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  public newGame() {
-    this.gamesService.postNewGame({
-      gameId: 'new',
-      name: 'New Game',
-      players: [{name: 'P1', scores: []}],
-      gameType: 'free',
-      lowerScoreWins: false,
-    })
+  public newGameOpen() {
+    const recentPlayers = this.gamesService.getRegisteredPlayers();
+    const data: NewGameDialogData = {recentPlayers};
+    this.dialog.open(NewGameDialogComponent, {data})
+      .afterClosed()
+      .pipe(
+        filter<IGame>(res => res !== undefined),
+        switchMap(res => this.gamesService.postNewGame(res)),
+        takeUntil(this.destroy$),
+      )
       .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));
   }
+
+  // public newGame() {
+  //   this.gamesService.postNewGame({
+  //     gameId: 'new',
+  //     name: this.translate.instant('new-game.name'),
+  //     players: [{name: this.translate.instant('new-game.player-1'), scores: []}],
+  //     gameType: 'free',
+  //     lowerScoreWins: false,
+  //   })
+  //     .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));
+  // }
 
   public getVisitedGames() {
     this.rawVisitedGames$.next(this.gamesService.getVisitedGames());

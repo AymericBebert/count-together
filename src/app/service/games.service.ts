@@ -1,13 +1,12 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, finalize, map, skip, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {ApiErrorService} from '../api-error/api-error.service';
 import {gamesBackendRoutes} from '../games-backend.routes';
-import {GameType, IGame, IStoredGame} from '../model/game';
+import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame} from '../model/game';
 import {SocketService} from '../socket/socket.service';
 import {StorageService} from '../storage/storage.service';
 
@@ -26,7 +25,6 @@ export class GamesService {
               private apiError: ApiErrorService,
               private socket: SocketService,
               private storageService: StorageService,
-              private snackBar: MatSnackBar,
   ) {
     this.currentGame$
       .pipe(
@@ -45,10 +43,13 @@ export class GamesService {
     this.currentGame$
       .pipe(
         filter(game => game && game.gameId !== 'offline'),
-        map(game => ({gameId: game.gameId, name: game.name})),
+        map(game => ({gameId: game.gameId, name: game.name, playerNames: game.players.map(p => p.name)})),
         debounceTime(500),
       )
-      .subscribe(({gameId, name}) => this.addToVisitedGames(gameId, name));
+      .subscribe(({gameId, name, playerNames}) => {
+        this.addToVisitedGames(gameId, name);
+        this.registerPlayers(playerNames);
+      });
 
     combineLatest([
       this.currentGameId$,
@@ -66,10 +67,7 @@ export class GamesService {
         switchMap(() => this.socket.on('display error').pipe(takeUntil(this.gameLeft$))),
       )
       .subscribe(err => {
-        console.error('Received error:', err);
-        this.snackBar.open(err, '', {
-          duration: 3000,
-        });
+        this.apiError.displayError(err);
       });
 
     this.socket.connected$
@@ -204,6 +202,30 @@ export class GamesService {
     return newStoredGames;
   }
 
+  public getRegisteredPlayers(): IRecentPlayer[] {
+    const latestPlayersFromStorage = this.storageService.getItem('latestPlayers') || '[]';
+    const latestPlayers: string[] = JSON.parse(latestPlayersFromStorage);
+
+    const knownPlayersFromStorage = this.storageService.getItem('knownPlayers') || '{}';
+    const knownPlayers: IKnownPlayers = JSON.parse(knownPlayersFromStorage);
+
+    latestPlayers.forEach(playerName => delete knownPlayers[playerName]);
+
+    return [
+      ...latestPlayers.map(name => ({name, wasLatest: true})),
+      ...Object.entries(knownPlayers)
+        .sort((e1, e2) => e1[1] - e2[1])
+        .map(e => ({name: e[0], wasLatest: false})),
+    ];
+  }
+
+  public forgetPlayer(playerName: string) {
+    const knownPlayersFromStorage = this.storageService.getItem('knownPlayers') || '{}';
+    const knownPlayers: IKnownPlayers = JSON.parse(knownPlayersFromStorage);
+    delete knownPlayers[playerName];
+    this.storageService.setItem('knownPlayers', JSON.stringify(knownPlayers));
+  }
+
   private gameExistsCheck(token: string): Observable<IGame | null> {
     this.gameCheckPending$.next(true);
     return this.getGame(token).pipe(
@@ -259,5 +281,16 @@ export class GamesService {
       visitedGames.push({gameId, name, date: new Date()});
     }
     this.storageService.setItem('visitedGames', JSON.stringify(visitedGames));
+  }
+
+  private registerPlayers(playerNames: string[]): void {
+    this.storageService.setItem('latestPlayers', JSON.stringify(playerNames));
+
+    const knownPlayersFromStorage = this.storageService.getItem('knownPlayers') || '{}';
+    const knownPlayers: IKnownPlayers = JSON.parse(knownPlayersFromStorage);
+
+    const now = Date.now();
+    playerNames.forEach(playerName => knownPlayers[playerName] = now);
+    this.storageService.setItem('knownPlayers', JSON.stringify(knownPlayers));
   }
 }

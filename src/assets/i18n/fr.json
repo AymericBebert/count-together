@@ -81,7 +81,7 @@
       "free": "Points libres",
       "max-wins": "Max gagne",
       "min-wins": "Min gagne",
-      "smallScores": "Petit scores",
+      "small-scores": "Petit scores",
       "title": "Options de partie",
       "win-or-lose": "Gagne ou Perd"
     },
@@ -91,6 +91,21 @@
     "tools": "Outils",
     "update-activated": "MàJ activée",
     "update-available": "MàJ disponible"
+  },
+  "new-game": {
+    "dialog": {
+      "game-name": {
+        "invalid": "Nom de partie invalide",
+        "label": "Nom de partie"
+      },
+      "game-type": "Type de partie",
+      "header": "Nouvelle partie",
+      "lower-score-wins": "Plus petit gagne",
+      "players": {
+        "others": "Autres joueurs",
+        "selected": "Joueurs à ajouter"
+      }
+    }
   },
   "share": {
     "copied": "Lien copié",

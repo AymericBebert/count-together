@@ -1,7 +1,7 @@
 <div style="padding: 20px" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
   <span>{{ 'home.welcome' | translate }}</span>
   <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.offline' | translate }}</button>
-  <button mat-raised-button color="primary" (click)="newGame()">{{ 'home.new-game' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="newGameOpen()">{{ 'home.new-game' | translate }}</button>
   <form class="token-form" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div style="width: 24px"></div>
     <mat-form-field appearance="standard">
@@ -24,7 +24,10 @@
 </div>
 
 <ng-container *ngIf="visitedGames$ | async as visitedGames">
-  <div *ngIf="(visitedGames || []).length > 0" fxLayout="column" fxLayoutAlign="start center">
+  <div *ngIf="(visitedGames || []).length > 0"
+       fxLayout="column" fxLayoutAlign="start center"
+       style="padding-bottom: 20px"
+  >
     <h3>{{ 'home.visited-games.title' | translate }}</h3>
     <div *ngFor="let game of visitedGames">
       <button mat-button [color]="deletion ? 'warn' : 'primary'" (click)="visitedGameClicked(game.gameId)">

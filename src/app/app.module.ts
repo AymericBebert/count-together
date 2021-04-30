@@ -1,15 +1,18 @@
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSelectModule} from '@angular/material/select';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -24,6 +27,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ConfirmDialogComponent} from './dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent} from './dialogs/game-name-dialog/game-name-dialog.component';
+import {NewGameDialogComponent} from './dialogs/new-game-dialog/new-game-dialog.component';
 import {PlayerNameDialogComponent} from './dialogs/player-name-dialog/player-name-dialog.component';
 import {ScoreDialogComponent} from './dialogs/score-dialog/score-dialog.component';
 import {GameComponent} from './game/game.component';
@@ -56,6 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     GameComponent,
     GameNameDialogComponent,
+    NewGameDialogComponent,
     PlayerNameDialogComponent,
     ScoreDialogComponent,
     ConfirmDialogComponent,
@@ -86,6 +91,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSlideToggleModule,
     MatDialogModule,
     MatInputModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    DragDropModule,
     MatBadgeModule,
     MatProgressSpinnerModule,
     ShareButtonModule,

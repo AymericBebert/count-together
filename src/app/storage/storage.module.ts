@@ -4,16 +4,13 @@ import {CookieService} from 'ngx-cookie-service';
 import {StorageService} from './storage.service';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
   ],
-  exports: [],
   providers: [
     StorageService,
     CookieService,
   ],
-  entryComponents: [],
 })
 export class StorageModule {
 }

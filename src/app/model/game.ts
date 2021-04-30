@@ -21,6 +21,13 @@ export interface IStoredGame {
   date: Date;
 }
 
+export interface IRecentPlayer {
+  name: string;
+  wasLatest: boolean;
+}
+
+export type IKnownPlayers = { [name: string]: number };
+
 export interface IGameEditName {
   gameId: string;
   name: string;

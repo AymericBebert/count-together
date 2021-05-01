@@ -9,5 +9,6 @@
 }
 
 @mixin custom-components-dark-theme($theme) {
+  @include sidenav-content-component-dark-theme($theme);
   @include game-component-dark-theme($theme);
 }

@@ -214,7 +214,7 @@ export class GamesService {
     return [
       ...latestPlayers.map(name => ({name, wasLatest: true})),
       ...Object.entries(knownPlayers)
-        .sort((e1, e2) => e1[1] - e2[1])
+        .sort((e1, e2) => e2[1] - e1[1])
         .map(e => ({name: e[0], wasLatest: false})),
     ];
   }

@@ -19,6 +19,7 @@ export class NewGameDialogComponent {
   public gameName: FormControl;
   public gameType: FormControl;
   public lowerScoreWins: FormControl;
+  public playerName: FormControl;
 
   public selectedPlayers: string[] = [];
   public otherPlayers: string[] = [];
@@ -29,6 +30,7 @@ export class NewGameDialogComponent {
     this.gameName = new FormControl('', [Validators.required]);
     this.gameType = new FormControl('free');
     this.lowerScoreWins = new FormControl(false);
+    this.playerName = new FormControl('');
 
     data.recentPlayers.forEach(rp => {
       if (rp.wasLatest) {
@@ -55,6 +57,11 @@ export class NewGameDialogComponent {
     } else {
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
+  }
+
+  public addPlayerName() {
+    this.selectedPlayers = [...this.selectedPlayers.filter(n => n !== this.playerName.value), this.playerName.value];
+    this.playerName.setValue('');
   }
 
   public excludePlayer(playerName: string) {

@@ -102,6 +102,8 @@
       "header": "New game",
       "lower-score-wins": "Lower score wins",
       "players": {
+        "invalid": "Invalid player name",
+        "new": "New player",
         "others": "Other players",
         "selected": "Selected players"
       }

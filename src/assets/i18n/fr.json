@@ -100,8 +100,10 @@
       },
       "game-type": "Type de partie",
       "header": "Nouvelle partie",
-      "lower-score-wins": "Plus petit gagne",
+      "lower-score-wins": "Plus petit score gagne",
       "players": {
+        "invalid": "Nom de joueur invalide",
+        "new": "Nouveau joueur",
         "others": "Autres joueurs",
         "selected": "Joueurs à ajouter"
       }

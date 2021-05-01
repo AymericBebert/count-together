@@ -5,6 +5,7 @@
                [attr.role]="(navService.pinSideNav$ | async) ? 'navigation' : 'dialog'"
                [mode]="(navService.pinSideNav$ | async) ? 'side' : 'over'"
                [opened]="navService.pinSideNav$ | async"
+               [autoFocus]="false"
                (click)="closeDrawer()">
 
     <mat-toolbar>{{ 'nav.menu-title' | translate }}</mat-toolbar>
@@ -14,13 +15,15 @@
         <h3 matSubheader>{{ 'nav.game-settings.title' | translate }}</h3>
 
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
-                       [ngClass]="{selectable: true, selected: gameSettings.lowerScoreWins === false}">
+                       class="selectable"
+                       [ngClass]="{selected: gameSettings.lowerScoreWins === false}">
           <div class="crown-icon-bw icon-64" style="height: 24px; width: 24px; margin-right: -4px"></div>
           <mat-icon>arrow_drop_up</mat-icon>
           <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
-                       [ngClass]="{selectable: true, selected: gameSettings.lowerScoreWins === true}">
+                       class="selectable"
+                       [ngClass]="{selected: gameSettings.lowerScoreWins === true}">
           <div class="crown-icon-bw icon-64" style="height: 24px; width: 24px; margin-right: -4px"></div>
           <mat-icon>arrow_drop_down</mat-icon>
           <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
@@ -29,17 +32,20 @@
         <div style="height: 10px"></div>
 
         <mat-list-item (click)="gameSettingsService.setGameType('free')"
-                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'free'}">
+                       class="selectable odd"
+                       [ngClass]="{selected: gameSettings.gameType === 'free'}">
           <mat-icon style="margin-right: 5px">leaderboard</mat-icon>
           <span>{{ 'nav.game-settings.free' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('smallScores')"
-                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'smallScores'}">
+                       class="selectable odd"
+                       [ngClass]="{selected: gameSettings.gameType === 'smallScores'}">
           <mat-icon style="margin-right: 5px">exposure</mat-icon>
           <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('winOrLose')"
-                       [ngClass]="{selectable: true, selected: gameSettings.gameType === 'winOrLose'}">
+                       class="selectable odd"
+                       [ngClass]="{selected: gameSettings.gameType === 'winOrLose'}">
           <mat-icon style="margin-right: 5px">flaky</mat-icon>
           <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
         </mat-list-item>

@@ -1,30 +1,36 @@
-<div mat-dialog-title style="min-width: 200px">
+<div mat-dialog-title>
   <span class="dialog-header">
     {{ 'new-game.dialog.header' | translate }}
   </span>
 </div>
 
-<div mat-dialog-content fxLayout="column" fxLayoutGap="10px">
-  <mat-form-field>
-    <mat-label>{{ 'new-game.dialog.game-name.label' | translate }}</mat-label>
-    <input matInput name="game" [formControl]="gameName" [autofocus]="true">
-    <mat-error *ngIf="gameName.invalid">{{ 'new-game.dialog.game-name.invalid' | translate }}</mat-error>
-  </mat-form-field>
+<div mat-dialog-content>
+  <div style="margin-bottom: 5px">
+    <mat-form-field>
+      <mat-label>{{ 'new-game.dialog.game-name.label' | translate }}</mat-label>
+      <input matInput name="game" [formControl]="gameName" [autofocus]="true">
+      <mat-error *ngIf="gameName.invalid">{{ 'new-game.dialog.game-name.invalid' | translate }}</mat-error>
+    </mat-form-field>
+  </div>
 
-  <mat-checkbox [formControl]="lowerScoreWins">
-    {{ 'new-game.dialog.lower-score-wins' | translate }}
-  </mat-checkbox>
+  <div style="margin-bottom: 20px">
+    <mat-checkbox [formControl]="lowerScoreWins">
+      {{ 'new-game.dialog.lower-score-wins' | translate }}
+    </mat-checkbox>
+  </div>
 
-  <mat-form-field>
-    <mat-label>{{ 'new-game.dialog.game-type' | translate }}</mat-label>
-    <mat-select [formControl]="gameType">
-      <mat-option value="free">{{ 'nav.game-settings.free' | translate }}</mat-option>
-      <mat-option value="smallScores">{{ 'nav.game-settings.small-scores' | translate }}</mat-option>
-      <mat-option value="winOrLose">{{ 'nav.game-settings.win-or-lose' | translate }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div>
+    <mat-form-field>
+      <mat-label>{{ 'new-game.dialog.game-type' | translate }}</mat-label>
+      <mat-select [formControl]="gameType">
+        <mat-option value="free">{{ 'nav.game-settings.free' | translate }}</mat-option>
+        <mat-option value="smallScores">{{ 'nav.game-settings.small-scores' | translate }}</mat-option>
+        <mat-option value="winOrLose">{{ 'nav.game-settings.win-or-lose' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <ng-container *ngIf="data.recentPlayers.length > 0">
+  <div *ngIf="data.recentPlayers.length > 0">
     <div class="player-dnd-container">
       <h4>{{ 'new-game.dialog.players.selected' | translate }}</h4>
       <div
@@ -42,6 +48,22 @@
         </div>
       </div>
     </div>
+
+    <form fxLayout="row" fxLayoutAlign="center start">
+      <mat-form-field floatLabel="never" style="margin: -10px 0 -5px 0; max-width: 140px">
+        <mat-label>{{ 'new-game.dialog.players.new' | translate }}</mat-label>
+        <input matInput name="game" [formControl]="playerName">
+        <mat-error *ngIf="playerName.invalid">{{ 'new-game.dialog.players.invalid' | translate }}</mat-error>
+      </mat-form-field>
+      <button mat-icon-button color="primary" aria-label="Add player"
+              type="submit"
+              [disabled]="playerName.invalid || !playerName.value"
+              (click)="addPlayerName()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+
     <div class="player-dnd-container">
       <h4>{{ 'new-game.dialog.players.others' | translate }}</h4>
       <div
@@ -59,7 +81,7 @@
         </div>
       </div>
     </div>
-  </ng-container>
+  </div>
 </div>
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">

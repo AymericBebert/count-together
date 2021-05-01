@@ -1,3 +1,8 @@
+.mat-dialog-title {
+  min-width: 220px;
+  margin-bottom: 10px;
+}
+
 .dialog-header {
   font-weight: bold;
   font-size: 1.2em;
@@ -11,12 +16,14 @@
 }
 
 .player-dnd-list {
-  border-top: solid 1px #ccc;
-  border-bottom: solid 1px #ccc;
+  border: solid 1px #ccc;
+  border-radius: 4px;
   min-height: 40px;
+  max-width: 160px;
   background: white;
   overflow: hidden;
   display: block;
+  margin: 0 auto 10px;
 }
 
 .player-dnd-box {

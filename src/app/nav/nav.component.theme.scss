@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 
 @mixin sidenav-content-component-theme($theme) {
-  //$primary: map-get($theme, primary);
+  $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   //$warn: map-get($theme, warn);
   $foreground: map-get($theme, foreground);
@@ -16,11 +16,39 @@
     background-color: mat-color($accent, 0.04);
 
     &.selected {
-      background-color: mat-color($accent, 0.1);
+      background-color: mat-color($accent, 0.15);
     }
 
     &:hover {
-      background-color: mat-color($accent, 0.2);
+      background-color: mat-color($accent, 0.25);
+    }
+  }
+
+  .mat-list-item.selectable.odd {
+    background-color: mat-color($primary, 0.04);
+
+    &.selected {
+      background-color: mat-color($primary, 0.15);
+    }
+
+    &:hover {
+      background-color: mat-color($primary, 0.25);
+    }
+  }
+}
+
+@mixin sidenav-content-component-dark-theme($theme) {
+  $primary: map-get($theme, primary);
+
+  .mat-list-item.selectable.odd {
+    background-color: mat-color($primary, 300, 0.06);
+
+    &.selected {
+      background-color: mat-color($primary, 300, 0.3);
+    }
+
+    &:hover {
+      background-color: mat-color($primary, 300, 0.4);
     }
   }
 }

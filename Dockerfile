@@ -43,6 +43,8 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder /count-together/dist/count-together .
 EXPOSE 80
 
-ARG VERSION
+ARG APP_VERSION
+ENV APP_VERSION=$APP_VERSION
 
-CMD ["/docker-entrypoint.sh", "$VERSION"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

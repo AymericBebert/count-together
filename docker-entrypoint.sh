@@ -3,7 +3,7 @@
 set -eu
 
 echo "window['APP_CONFIG'] = {" >/usr/share/nginx/html/assets/config.js
-echo "  \"version\": \"${1:-untagged}\"," >>/usr/share/nginx/html/assets/config.js
+echo "  \"version\": \"${APP_VERSION:-untagged}\"," >>/usr/share/nginx/html/assets/config.js
 
 env | while IFS= read -r line; do
   name=${line%%=*}
@@ -22,4 +22,4 @@ if [ -n "${APP_SHORT_NAME:-}" ]; then
   sed -i "s/\"short_name\": \"CounT\"/\"short_name\": \"$APP_SHORT_NAME\"/" /usr/share/nginx/html/manifest.webmanifest
 fi
 
-nginx -g 'daemon off;'
+exec "$@"

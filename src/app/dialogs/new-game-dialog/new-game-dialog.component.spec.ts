@@ -1,6 +1,7 @@
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
@@ -25,6 +26,7 @@ describe('NewGameDialogComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
         MatSelectModule,
+        MatCheckboxModule,
       ],
       declarations: [
         NewGameDialogComponent,

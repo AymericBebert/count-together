@@ -1,0 +1,15 @@
+@keyframes blinker {
+  50% {
+    opacity: 0
+  }
+}
+
+.record-indicator {
+  color: red;
+  animation: blinker 1.5s infinite;
+}
+
+
+.hidden {
+  display: none;
+}

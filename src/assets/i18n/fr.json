@@ -64,6 +64,8 @@
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
   "main-title": {
+    "sound-share": "Partage sonore",
+    "sound-share-debug": "Debug sonore",
     "wheel": "Roue Aléatoire"
   },
   "misc": {
@@ -113,6 +115,10 @@
     "copied": "Lien copié",
     "copy": "Copier",
     "disabled": "Partage désactivé",
+    "share": "Partager"
+  },
+  "sound-sharing": {
+    "listen": "Écouter",
     "share": "Partager"
   },
   "wheel": {

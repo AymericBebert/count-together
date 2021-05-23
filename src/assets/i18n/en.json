@@ -64,6 +64,8 @@
     "welcome": "Count the score for every player of your favorite games!"
   },
   "main-title": {
+    "sound-share": "Sound share",
+    "sound-share-debug": "Sound share debug",
     "wheel": "Random Wheel"
   },
   "misc": {
@@ -113,6 +115,10 @@
     "copied": "Copied",
     "copy": "Copy",
     "disabled": "Sharing disabled",
+    "share": "Share"
+  },
+  "sound-sharing": {
+    "listen": "Listen",
     "share": "Share"
   },
   "wheel": {

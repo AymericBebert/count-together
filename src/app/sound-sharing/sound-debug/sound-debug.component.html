@@ -1,0 +1,64 @@
+<div style="padding: 20px; text-align: center">
+
+  <app-debug-item [isOk]="micPermission === 'granted'" [label]="'micPermission'">
+    {{ micPermission }}
+  </app-debug-item>
+  <app-debug-item [isOk]="!!mediaDevices" [label]="'mediaDevices'">
+    {{ mediaDevices }}
+  </app-debug-item>
+  <app-debug-item [isOk]="!!userMedia" [label]="'userMedia'">
+    {{ userMedia }}
+  </app-debug-item>
+  <app-debug-item [isOk]="mediaRecorderType !== 'undefined'" [label]="'mediaRecorderType'">
+    {{ mediaRecorderType }}
+  </app-debug-item>
+
+  <div style="margin-bottom: 20px">
+    <audio #replayAudio [ngClass]="{hidden: !replayAvailable || recordService.status === 'recording'}" controls></audio>
+  </div>
+
+  <p *ngIf="recordService.status === 'recording'" class="record-indicator">
+    REC
+    <mat-icon [inline]="true">fiber_manual_record</mat-icon>
+  </p>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'notStarted'"
+      mat-raised-button
+      color="accent"
+      (click)="askUserPermission()"
+    >
+      demander la permission
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'ready' || recordService.status === 'notStarted'"
+      mat-raised-button
+      color="accent"
+      (click)="startRecording()"
+    >
+      démarrer l'enregistrement
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'recording'"
+      mat-raised-button
+      color="accent"
+      (click)="stopRecording()"
+    >
+      stopper l'enregistrement
+    </button>
+  </div>
+
+  <p *ngIf="!recordService.error && recordService.status === 'awaitingAuthorization'">Autorisez l'accès au micro</p>
+  <p *ngIf="recordService.status === 'error'">Une erreur est survenue</p>
+  <p *ngIf="recordService.error === 'NotSupportedError'">Navigateur non supporté !</p>
+  <p *ngIf="recordService.error === 'NotFoundError'">Aucun micro détecté</p>
+  <p *ngIf="recordService.error === 'NotAllowedError'">Autorisez l'accès au micro</p>
+
+</div>

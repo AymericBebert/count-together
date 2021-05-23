@@ -33,6 +33,10 @@ const routes: Routes = [
     loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
   },
   {
+    path: 'sound-share',
+    loadChildren: () => import('./sound-sharing/sound-sharing.module').then(mod => mod.SoundSharingModule),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

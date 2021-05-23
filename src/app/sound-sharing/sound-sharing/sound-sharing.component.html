@@ -1,0 +1,101 @@
+<div style="padding: 20px; text-align: center">
+
+  <div style="margin-bottom: 20px">
+    <button mat-raised-button color="primary" (click)="shareSound()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
+      {{ 'sound-sharing.share' | translate }}
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button mat-raised-button color="primary" (click)="analyse()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
+      {{ 'sound-sharing.listen' | translate }}
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button mat-raised-button color="accent" (click)="stopAnalysing()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
+      Stop
+    </button>
+  </div>
+
+  <h2>Enregistrement Audio</h2>
+
+  <div style="margin-bottom: 20px">
+    <audio #replayAudio [ngClass]="{hidden: !replayAvailable || recordService.status === 'recording'}" controls></audio>
+  </div>
+
+  <div class="record-indicator" *ngIf="recordService.status === 'recording'">
+    <mat-icon [inline]="true">fiber_manual_record</mat-icon>
+    <span>REC</span>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'notStarted'"
+      mat-raised-button
+      color="accent"
+      (click)="askUserPermission()"
+    >
+      demander la permission
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'ready' || recordService.status === 'notStarted'"
+      mat-raised-button
+      color="accent"
+      (click)="startRecording()"
+    >
+      démarrer l'enregistrement
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <button
+      *ngIf="recordService.status === 'recording'"
+      mat-raised-button
+      color="accent"
+      (click)="stopRecording()"
+    >
+      stopper l'enregistrement
+    </button>
+  </div>
+
+  <button
+    *ngIf="replayAvailable"
+    mat-raised-button
+    color="accent"
+    (click)="useRecord()"
+  >
+    utiliser l'enregistrement
+  </button>
+
+  <p *ngIf="!recordService.error && recordService.status === 'awaitingAuthorization'">Autorisez l'accès au micro</p>
+  <p *ngIf="recordService.status === 'error'">Une erreur est survenue</p>
+  <p *ngIf="recordService.error === 'NotSupportedError'">Navigateur non supporté !</p>
+  <p *ngIf="recordService.error === 'NotFoundError'">Aucun micro détecté</p>
+  <p *ngIf="recordService.error === 'NotAllowedError'">Autorisez l'accès au micro</p>
+
+  <div style="margin-bottom: 20px">
+    <button mat-button color="accent" routerLink="debug">
+      debug
+    </button>
+  </div>
+
+  <div *ngIf="soundSharing.dataArray"
+       style="margin-bottom: 20px; width: 300px; background-color: #3b1ea244; overflow: hidden"
+  >
+    <div *ngFor="let i of analyseRange"
+         style="height: 1px; width: 6px; background-color: #3b1ea2"
+         [ngStyle]="{
+           transform: 'scaleX(' + soundSharing.dataArray[i] * 100 / 256 + ')',
+           backgroundColor: i === soundSharing.FFT_INDEX_0 || i === soundSharing.FFT_INDEX_1 ? '#a21e6d' : '#3b1ea2'
+         }"
+    ></div>
+  </div>
+
+</div>

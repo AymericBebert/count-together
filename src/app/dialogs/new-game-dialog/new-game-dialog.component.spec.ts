@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
+import {MatSelectModule} from '@angular/material/select';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateTestingModule} from '../../testing/translate-testing-module';
 import {NewGameDialogComponent} from './new-game-dialog.component';
@@ -23,6 +24,7 @@ describe('NewGameDialogComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        MatSelectModule,
       ],
       declarations: [
         NewGameDialogComponent,
@@ -31,7 +33,7 @@ describe('NewGameDialogComponent', () => {
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            editGame: true,
+            recentPlayers: [],
           },
         },
       ],

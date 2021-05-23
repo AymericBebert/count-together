@@ -1,5 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatIconModule} from '@angular/material/icon';
+import {ActivatedRoute} from '@angular/router';
+import {EMPTY} from 'rxjs';
 import {TranslateTestingModule} from '../../testing/translate-testing-module';
 import {BrowserCompatibilityService} from '../browser-compatibility.service';
 
@@ -20,6 +22,7 @@ describe('SoundSharingComponent', () => {
       ],
       providers: [
         BrowserCompatibilityService,
+        {provide: ActivatedRoute, useValue: {parent: {paramMap: EMPTY}}},
       ],
     })
       .compileComponents();

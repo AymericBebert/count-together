@@ -20,6 +20,7 @@ const routes: Routes = [
       navButtons: ['share'],
       navTools: [
         {name: 'nav-tool.wheel', icon: 'near_me'},
+        {name: 'nav-tool.sound-share', icon: 'volume_up'},
         {name: 'nav-tool.duplicate', icon: 'content_copy'},
       ],
     },
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'wheel',
     loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
+  },
+  {
+    path: 'game/:gameId/sound-share',
+    loadChildren: () => import('./sound-sharing/sound-sharing.module').then(mod => mod.SoundSharingModule),
   },
   {
     path: 'sound-share',

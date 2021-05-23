@@ -13,6 +13,7 @@ export class TranslationMarkersComponent {
 
     translate.get([
       'nav-tool.wheel',
+      'nav-tool.sound-share',
       'nav-tool.duplicate',
       'main-title.wheel',
       'main-title.sound-share',

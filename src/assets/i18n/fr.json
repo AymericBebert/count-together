@@ -56,6 +56,7 @@
     },
     "new-game": "Nouveau jeu",
     "offline": "Hors-ligne",
+    "sound-share": "Recevoir un code",
     "visited-games": {
       "delete": "Supprimer des parties",
       "delete-stop": "Arrêter la suppression",
@@ -76,6 +77,7 @@
   },
   "nav-tool": {
     "duplicate": "Dupliquer",
+    "sound-share": "Partage sonore",
     "wheel": "Roue Aléatoire"
   },
   "nav": {
@@ -118,8 +120,27 @@
     "share": "Partager"
   },
   "sound-sharing": {
+    "debug": {
+      "ask-permission": "Demander la permission",
+      "authorize": "Autorisez l'accès au micro",
+      "error": "Une erreur est survenue",
+      "not-allowed": "Accès au micro non reçu",
+      "not-found": "Aucun micro détecté",
+      "not-supported": "Navigateur non supporté",
+      "start-recording": "Commencer l'enregistrement",
+      "stop-recording": "Arrêter l'enregistrement"
+    },
+    "goto-debug": "Debug",
     "listen": "Écouter",
-    "share": "Partager"
+    "record": {
+      "authorize": "Autorisez l'accès au micro",
+      "error": "Une erreur est survenue",
+      "not-allowed": "Accès au micro non reçu",
+      "not-found": "Aucun micro détecté",
+      "not-supported": "Navigateur non supporté"
+    },
+    "share": "Partager",
+    "share-test": "Test de partage"
   },
   "wheel": {
     "players": "{{ nb }} joueurs",

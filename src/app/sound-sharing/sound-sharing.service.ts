@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 import {RecordService} from './record.service';
 
 @Injectable()
@@ -14,6 +15,9 @@ export class SoundSharingService {
   public readonly FFT_INDEX_0 = Math.round(this.FREQUENCY_0 / 11.72);
   public readonly FFT_INDEX_1 = Math.round(this.FREQUENCY_1 / 11.72);
 
+  public readonly receivedPayload$ = new Subject<string>();
+  public readonly receivedCode$ = new Subject<string>();
+
   public dataArray: Uint8Array;
 
   private readonly TIME_STEP = 160;
@@ -27,32 +31,30 @@ export class SoundSharingService {
   private swapTime = performance.now();
 
   constructor(private readonly recordService: RecordService) {
-    console.log('-hint-');
-    console.log(SoundSharingService.soundDecode(SoundSharingService.soundEncode('aym3ric5').replace(/^0+|0+$/g, '')));
-    console.log('=hint=');
+  }
+
+  public static stringToBinary(payload: string): string {
+    return [...atob(payload)].reduce((acc, cur) => acc + cur.charCodeAt(0).toString(2).padStart(8, '0'), '');
+  }
+
+  public static cutBytes(data: string): string {
+    return [...data].reduce((acc, cur, i) => acc && i % 8 === 0 ? acc + ' ' + cur : acc + cur, '');
   }
 
   private static soundEncode(payload: string): string {
-    return '001' + [...atob(payload)].reduce((acc, cur) => acc + cur.charCodeAt(0).toString(2).padStart(8, '0'), '') + '100';
+    return '001' + SoundSharingService.stringToBinary(payload) + '100';
   }
 
-  private static soundDecode(data: string): string {
-    // console.log('decode', data);
-    const cut = [...data.substring(1, data.length - 1)].reduce(
-      (acc, cur, i) => acc && i % 8 === 0 ? acc + ' ' + cur : acc + cur,
-      '',
-    );
-    console.log('cut', cut);
+  private static soundDecode(data: string): { cut: string; decoded: string } {
+    const cut = SoundSharingService.cutBytes(data.substring(1, data.length - 1));
     const decoded = btoa(cut.split(' ').reduce(
       (acc, cur) => acc + String.fromCharCode(parseInt(cur, 2)),
       '',
     ));
-    console.log('decoded', decoded);
-    return decoded;
+    return {cut, decoded};
   }
 
   public async soundShare(payload: string) {
-    payload = 'aym3ric5';
     console.log('Sound sharing', payload);
 
     // const data = '1001110100101010';
@@ -83,6 +85,7 @@ export class SoundSharingService {
 
   public stopAnalysing() {
     this.analysing = false;
+    this.dataArray = undefined;
   }
 
   public async soundAnalyse() {
@@ -123,12 +126,15 @@ export class SoundSharingService {
       const steps = Math.round(swapDelta / this.TIME_STEP);
       if (steps <= 10) {
         new Array(steps).fill(1).forEach(() => this.hearing += this.swapStatus ? '1' : '0');
+        this.receivedPayload$.next(SoundSharingService.cutBytes(this.hearing.substring(1)));
       }
       console.log(this.swapStatus ? '1' : '0', steps, swapDelta);
     }
 
     if (this.hearing && (performance.now() - this.swapTime > this.TIME_STEP * 10)) {
-      SoundSharingService.soundDecode(this.hearing);
+      const {cut, decoded} = SoundSharingService.soundDecode(this.hearing);
+      this.receivedPayload$.next(cut);
+      this.receivedCode$.next(decoded);
       this.hearing = '';
     }
   }

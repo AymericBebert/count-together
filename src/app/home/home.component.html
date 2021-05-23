@@ -1,7 +1,10 @@
 <div style="padding: 20px" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
   <span>{{ 'home.welcome' | translate }}</span>
+
   <button mat-raised-button color="primary" routerLink="../game/offline">{{ 'home.offline' | translate }}</button>
+
   <button mat-raised-button color="primary" (click)="newGameOpen()">{{ 'home.new-game' | translate }}</button>
+
   <form class="token-form" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div style="width: 24px"></div>
     <mat-form-field appearance="standard">
@@ -21,6 +24,11 @@
       <mat-spinner diameter="24" *ngIf="gameCheckPending$ | async"></mat-spinner>
     </div>
   </form>
+
+  <button mat-button color="primary" [routerLink]="'sound-share'">
+    <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
+    {{ 'home.sound-share' | translate }}
+  </button>
 </div>
 
 <ng-container *ngIf="visitedGames$ | async as visitedGames">

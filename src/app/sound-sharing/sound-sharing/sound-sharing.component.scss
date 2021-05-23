@@ -18,3 +18,16 @@
 .hidden {
   display: none;
 }
+
+.frequency-bars {
+  margin: auto;
+  width: 300px;
+  background-color: #3b1ea244;
+  overflow: hidden;
+}
+
+.binary-payload {
+  margin: 5px 0;
+  color: #888888;
+  font-size: 75%;
+}

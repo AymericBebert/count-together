@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: SoundSharingComponent,
     data: {
-      backRouterNavigate: '/',
+      backRouterNavigate: '[back]',
       mainTitle: 'main-title.sound-share',
     },
   },

@@ -92,6 +92,11 @@ export class GameComponent implements OnInit, OnDestroy {
               queryParams: {names: game.players.map(p => p.name).join(',')},
             }).catch(err => console.error('Navigation error', err));
             break;
+          case 'nav-tool.sound-share':
+            this.router.navigate(['sound-share'], {
+              relativeTo: this.route,
+            }).catch(err => console.error('Navigation error', err));
+            break;
           case 'nav-tool.duplicate':
             this.duplicateGame(game);
             break;

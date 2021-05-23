@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {first, map, takeUntil} from 'rxjs/operators';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
 import {SoundSharingService} from '../sound-sharing.service';
 
@@ -19,15 +20,23 @@ export class SoundSharingComponent implements OnInit, OnDestroy {
   public replayAvailable = false;
   public micPermission: PermissionState | null = null;
 
+  public gameId$ = this.route.parent.paramMap.pipe(
+    map(params => params.get('gameId') || ''),
+  );
+  public gamePayload$ = this.gameId$.pipe(
+    map(gameId => SoundSharingService.cutBytes(SoundSharingService.stringToBinary(gameId))),
+  );
+
   private frequencyDiff = this.soundSharing.FFT_INDEX_1 - this.soundSharing.FFT_INDEX_0;
-  public analyseRange = Array(Math.round(this.frequencyDiff * 1.6)).fill(0)
-    .map((x, i) => i + Math.round(this.soundSharing.FFT_INDEX_0 - this.frequencyDiff / 3));
+  public analyseRange = Array(Math.round(this.frequencyDiff * 3 / 2)).fill(0)
+    .map((x, i) => i + Math.round(this.soundSharing.FFT_INDEX_0 - this.frequencyDiff / 4));
 
   private destroy$ = new Subject<void>();
   private recordBlob: Blob | undefined = undefined;
 
   constructor(public readonly recordService: RecordService,
               public readonly soundSharing: SoundSharingService,
+              private route: ActivatedRoute,
   ) {
   }
 
@@ -51,13 +60,9 @@ export class SoundSharingComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  shareSound() {
-    this.soundSharing.soundShare('test').then(() => console.log('shared')).catch(() => console.log('error'));
+  shareSound(payload: string) {
+    this.soundSharing.soundShare(payload).then(() => console.log('shared')).catch(() => console.log('error'));
   }
-
-  // listenSharedSound() {
-  //   this.soundSharing.soundListen().then(() => console.log('listened')).catch(() => console.log('error'));
-  // }
 
   analyse(): void {
     this.soundSharing.soundAnalyse().then(() => console.log('analysed')).catch(() => console.log('error'));
@@ -65,14 +70,6 @@ export class SoundSharingComponent implements OnInit, OnDestroy {
 
   stopAnalysing(): void {
     this.soundSharing.stopAnalysing();
-  }
-
-  useRecord(): void {
-    // if (this.recordBlob) {
-    //   this.recordUploadService.uploadRecord(this.recordBlob).subscribe();
-    // }
-    console.log(this.recordBlob);
-    this.soundSharing.soundAnalyse().then(() => console.log('analysed')).catch(() => console.log('error'));
   }
 
   askUserPermission(): void {

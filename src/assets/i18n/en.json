@@ -56,6 +56,7 @@
     },
     "new-game": "New game",
     "offline": "Offline mode",
+    "sound-share": "Receive a code",
     "visited-games": {
       "delete": "Delete entries",
       "delete-stop": "Stop deleting",
@@ -76,6 +77,7 @@
   },
   "nav-tool": {
     "duplicate": "Dupliquer",
+    "sound-share": "Sound share",
     "wheel": "Random Wheel"
   },
   "nav": {
@@ -118,8 +120,27 @@
     "share": "Share"
   },
   "sound-sharing": {
+    "debug": {
+      "ask-permission": "Request microphone access",
+      "authorize": "Please authorize microphone access",
+      "error": "An error occurred",
+      "not-allowed": "Microphone access not allowed",
+      "not-found": "No microphone detected",
+      "not-supported": "Browser not supported",
+      "start-recording": "Start recording",
+      "stop-recording": "Stop recording"
+    },
+    "goto-debug": "Debug",
     "listen": "Listen",
-    "share": "Share"
+    "record": {
+      "authorize": "Please authorize microphone access",
+      "error": "An error occurred",
+      "not-allowed": "Microphone access not allowed",
+      "not-found": "No microphone detected",
+      "not-supported": "Browser not supported"
+    },
+    "share": "Share",
+    "share-test": "Share test code"
   },
   "wheel": {
     "players": "{{ nb }} players",

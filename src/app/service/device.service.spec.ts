@@ -5,7 +5,7 @@ describe('DeviceService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       DeviceService,
-    ]
+    ],
   }));
 
   it('should be created', () => {

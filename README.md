@@ -4,6 +4,13 @@ Count together the scores on your card or board games!
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
 
+## Installation
+
+```shell
+cp config.js.dist src/assets/config.js
+npm install
+```
+
 ## Development server
 
 Run `npm run start` for a dev server. Navigate to `http://localhost:4500/`. The app will automatically reload if you change any of the source files.

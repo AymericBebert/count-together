@@ -86,6 +86,7 @@ export class SoundSharingService {
   public stopAnalysing() {
     this.analysing = false;
     this.dataArray = undefined;
+    this.recordService.stopStream();
   }
 
   public async soundAnalyse() {

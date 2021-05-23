@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject, from} from 'rxjs';
 import {filter, switchMap, tap} from 'rxjs/operators';
-import {version} from '../../version';
 import {StorageService} from '../storage/storage.service';
 import {UpdaterService} from '../updater/updater.service';
 import {DeviceService} from './device.service';
@@ -109,7 +108,6 @@ export class NavService {
 
   public checkForUpdates() {
     console.log('checkForUpdates clicked');
-    console.log(`Current version: ${version}`);
     this.clearRefreshPage(false);
   }
 

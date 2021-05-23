@@ -1,11 +1,10 @@
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, finalize, map, skip, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
+import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ApiErrorService} from '../api-error/api-error.service';
-import {gamesBackendRoutes} from '../games-backend.routes';
 import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame} from '../model/game';
 import {SocketService} from '../socket/socket.service';
 import {StorageService} from '../storage/storage.service';
@@ -25,6 +24,7 @@ export class GamesService {
               private apiError: ApiErrorService,
               private socket: SocketService,
               private storageService: StorageService,
+              @Inject(APP_CONFIG) private config: AppConfig,
   ) {
     this.currentGame$
       .pipe(
@@ -158,7 +158,7 @@ export class GamesService {
 
   public gameExistsValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (control.value.length < environment.tokenLength) {
+      if (control.value.length < this.config.tokenLength) {
         return of(null);
       }
       return this.gameExistsCheck(control.value).pipe(
@@ -168,7 +168,7 @@ export class GamesService {
   }
 
   public postNewGame(game: IGame): Observable<IGame | null> {
-    return this.http.post<{ result: IGame | null; error: string; }>(gamesBackendRoutes.postNewGame(), game).pipe(
+    return this.http.post<{ result: IGame | null; error: string; }>(`${this.config.backendUrl}/games/new-game`, game).pipe(
       tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
       catchError(error => {
         console.error('postNewGame', error);
@@ -180,7 +180,7 @@ export class GamesService {
   }
 
   public duplicateGame(gameId: string): Observable<IGame | null> {
-    return this.http.post<{ result: IGame | null; error: string; }>(gamesBackendRoutes.duplicateGame(gameId), null).pipe(
+    return this.http.post<{ result: IGame | null; error: string; }>(`${this.config.backendUrl}/games/duplicate/${gameId}`, null).pipe(
       tap(res => res.error && this.apiError.displayError(`duplicateGame: ${res.error}`)),
       catchError(error => {
         console.error('duplicateGame', error);
@@ -239,7 +239,7 @@ export class GamesService {
   }
 
   private getGame(gameId: string): Observable<IGame | null> {
-    return this.http.get<{ result: IGame | null; error: string }>(gamesBackendRoutes.getGame(gameId)).pipe(
+    return this.http.get<{ result: IGame | null; error: string }>(`${this.config.backendUrl}/games/game/${gameId}`).pipe(
       tap(res => res.error && this.apiError.displayError(`getGame: ${res.error}`)),
       map(res => res.result),
     );

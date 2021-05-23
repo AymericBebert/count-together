@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, Subject} from 'rxjs';
 import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
+import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ConfirmDialogComponent, ConfirmDialogData} from '../dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent, GameNameDialogData} from '../dialogs/game-name-dialog/game-name-dialog.component';
 import {PlayerNameDialogComponent, PlayerNameDialogData} from '../dialogs/player-name-dialog/player-name-dialog.component';
@@ -65,6 +65,7 @@ export class GameComponent implements OnInit, OnDestroy {
               private gamesService: GamesService,
               private socket: SocketService,
               private dialog: MatDialog,
+              @Inject(APP_CONFIG) private config: AppConfig,
   ) {
   }
 
@@ -318,11 +319,11 @@ export class GameComponent implements OnInit, OnDestroy {
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).then(() => {
-            this.shareButtonService.shareOrCopy(shareTitle, shareText, environment.websiteUrl + `/game/${newGameId}`);
+            this.shareButtonService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${newGameId}`);
           });
         });
     } else {
-      this.shareButtonService.shareOrCopy(shareTitle, shareText, environment.websiteUrl + `/game/${game.gameId}`);
+      this.shareButtonService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${game.gameId}`);
     }
   }
 

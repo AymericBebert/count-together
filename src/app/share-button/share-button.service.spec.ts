@@ -11,7 +11,7 @@ describe('ShareButtonService', () => {
     ],
     providers: [
       ShareButtonService,
-    ]
+    ],
   }));
 
   it('should be created', () => {

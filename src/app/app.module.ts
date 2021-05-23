@@ -21,6 +21,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {APP_CONFIG, appConfigFactory} from '../config/app.config';
 import {environment} from '../environments/environment';
 import {ApiErrorModule} from './api-error/api-error.module';
 import {AppRoutingModule} from './app-routing.module';
@@ -103,6 +104,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UpdaterModule,
   ],
   providers: [
+    {provide: APP_CONFIG, useFactory: appConfigFactory},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: DebugHttpInterceptor,

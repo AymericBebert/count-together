@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-BUILD_CONFIGURATION=$1
-
-if [ -z "$BUILD_CONFIGURATION" ]; then
-  read -rp "Enter build configuration [PRODUCTION/testing]: " bc
-  BUILD_CONFIGURATION=${bc:-production}
-fi
-
 tags=$(git describe --contains)
 
 if [ -z "$tags" ]; then
@@ -43,11 +36,8 @@ function delete_new_tag() {
 }
 
 version=$newtag
-if [ "$BUILD_CONFIGURATION" != "production" ]; then
-  version=$newtag-$BUILD_CONFIGURATION
-fi
 
-read -rp "Will build version $version, configuration $BUILD_CONFIGURATION, continue? [y/N]: " c
+read -rp "Will build version $version, continue? [y/N]: " c
 if [[ ! $c =~ ^[Yy]$ ]]; then
   echo "Cancelled"
   delete_new_tag
@@ -56,7 +46,7 @@ fi
 
 echo "-----"
 echo "Building count-together:$version..."
-docker build -t "aymericbernard/count-together:$version" --build-arg BUILD_CONFIGURATION="$BUILD_CONFIGURATION" --build-arg VERSION="$version" . ||
+docker build -t "aymericbernard/count-together:$version" . ||
   {
     echo 'Build failed'
     delete_new_tag

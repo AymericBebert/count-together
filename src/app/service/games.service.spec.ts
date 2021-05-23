@@ -15,7 +15,7 @@ describe('GamesService', () => {
     ],
     providers: [
       GamesService,
-    ]
+    ],
   }));
 
   it('should be created', () => {

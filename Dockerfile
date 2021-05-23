@@ -7,11 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 
-ARG VERSION=untagged
-RUN echo "export const version = '$VERSION';\n" > ./src/version.ts
-
-ARG BUILD_CONFIGURATION=production
-RUN npm run build -- --configuration="${BUILD_CONFIGURATION}"
+RUN npm run build -- --configuration=production
 
 #
 # Go back from a light nginx image
@@ -43,7 +39,12 @@ server {\n\
 }' > /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder /count-together/dist/count-together .
 EXPOSE 80
 
+ARG VERSION=untagged
+ENV NGX_version=$VERSION
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

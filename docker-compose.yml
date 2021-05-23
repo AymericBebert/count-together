@@ -4,15 +4,18 @@ services:
     image: aymericbernard/count-together:latest
     container_name: cn_count_together
     restart: always
-#    networks:
-#      - proxy
+    networks:
+      - proxy
     ports:
       - "4200:80"
-#    environment:
-#      - VIRTUAL_HOST=count-together.kyr.pw
-#      - LETSENCRYPT_HOST=count-together.kyr.pw
-#      - LETSENCRYPT_EMAIL=nope@exxample.com
-#networks:
-#  proxy:
-#    external:
-#      name: nginx-proxy
+    environment:
+      - VIRTUAL_HOST=count-together.example.com
+      - LETSENCRYPT_HOST=count-together.example.com
+      - LETSENCRYPT_EMAIL=contact@example.com
+      - APP_SHORT_NAME=CounT
+      - NGX_backendUrl="https://count-together-backend.example.com"
+      - NGX_websiteUrl="https://count-together.example.com"
+networks:
+  proxy:
+    external:
+      name: nginx-proxy

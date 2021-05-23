@@ -59,7 +59,7 @@ describe('NavComponent', () => {
         GamesService,
         ApiErrorService,
         SocketService,
-      ]
+      ],
     }).compileComponents();
   }));
 

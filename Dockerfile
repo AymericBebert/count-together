@@ -43,8 +43,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder /count-together/dist/count-together .
 EXPOSE 80
 
-ARG VERSION=untagged
-ENV NGX_version="\"$VERSION\""
+ARG VERSION
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh", "$VERSION"]
 CMD ["nginx", "-g", "daemon off;"]

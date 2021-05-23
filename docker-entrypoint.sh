@@ -3,7 +3,7 @@
 set -eu
 
 echo "window['APP_CONFIG'] = {" >/usr/share/nginx/html/assets/config.js
-echo "  \"version\": \"${APP_VERSION:-untagged}\"," >>/usr/share/nginx/html/assets/config.js
+echo "  \"version\": \"$(cat /version.txt)\"," >>/usr/share/nginx/html/assets/config.js
 
 env | while IFS= read -r line; do
   name=${line%%=*}

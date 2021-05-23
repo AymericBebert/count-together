@@ -44,7 +44,7 @@ COPY --from=builder /count-together/dist/count-together .
 EXPOSE 80
 
 ARG APP_VERSION
-ENV APP_VERSION=$APP_VERSION
+RUN echo $APP_VERSION > /version.txt
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,4 +1,4 @@
-FROM node:16.0.0-stretch-slim AS builder
+FROM node:16.2.0-buster-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together

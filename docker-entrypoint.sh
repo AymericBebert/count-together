@@ -3,6 +3,7 @@
 set -eu
 
 echo "window['APP_CONFIG'] = {" >/usr/share/nginx/html/assets/config.js
+echo "  \"version\": \"$BUILD_VERSION\"," >>/usr/share/nginx/html/assets/config.js
 
 env | while IFS= read -r line; do
   name=${line%%=*}

@@ -3,13 +3,12 @@
 set -eu
 
 echo "window['APP_CONFIG'] = {" >/usr/share/nginx/html/assets/config.js
-echo "  \"version\": \"$BUILD_VERSION\"," >>/usr/share/nginx/html/assets/config.js
 
 env | while IFS= read -r line; do
   name=${line%%=*}
   value=${line#*=}
   case $name in NGX_*)
-    echo "  \"$name\": $value," >>/usr/share/nginx/html/assets/config.js
+    echo "  \"$(echo "$name" | cut -c4-)\": $value," >>/usr/share/nginx/html/assets/config.js
     ;;
   esac
 done

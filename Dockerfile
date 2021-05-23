@@ -44,7 +44,7 @@ COPY --from=builder /count-together/dist/count-together .
 EXPOSE 80
 
 ARG VERSION=untagged
-ENV BUILD_VERSION="$VERSION"
+ENV NGX_version="\"$VERSION\""
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

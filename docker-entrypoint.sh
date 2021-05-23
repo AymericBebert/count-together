@@ -22,4 +22,4 @@ if [ -n "${APP_SHORT_NAME:-}" ]; then
   sed -i "s/\"short_name\": \"CounT\"/\"short_name\": \"$APP_SHORT_NAME\"/" /usr/share/nginx/html/manifest.webmanifest
 fi
 
-nginx -g daemon off
+nginx -g 'daemon off;'

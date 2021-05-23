@@ -45,5 +45,4 @@ EXPOSE 80
 
 ARG VERSION
 
-ENTRYPOINT ["/docker-entrypoint.sh", "$VERSION"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/docker-entrypoint.sh", "$VERSION"]

@@ -43,7 +43,7 @@
     </button>
   </div>
 
-  <div *ngIf="(gameShareData$ | async) === undefined" style="margin: 20px 0">
+  <div *ngIf="(gameShareData$ | async) === null" style="margin: 20px 0">
     <button mat-button color="primary" (click)="shareSound('aym3ric5')">
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share-test' | translate }}

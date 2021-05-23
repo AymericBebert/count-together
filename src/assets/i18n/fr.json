@@ -132,15 +132,9 @@
     },
     "goto-debug": "Debug",
     "listen": "Écouter",
-    "record": {
-      "authorize": "Autorisez l'accès au micro",
-      "error": "Une erreur est survenue",
-      "not-allowed": "Accès au micro non reçu",
-      "not-found": "Aucun micro détecté",
-      "not-supported": "Navigateur non supporté"
-    },
     "share": "Partager",
-    "share-test": "Test de partage"
+    "share-test": "Test de partage",
+    "stop-listening": "Arrêter d'écouter"
   },
   "wheel": {
     "players": "{{ nb }} joueurs",

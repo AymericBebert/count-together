@@ -24,6 +24,11 @@
   width: 300px;
   background-color: #3b1ea244;
   overflow: hidden;
+
+  .frequency-bar {
+    height: 2px;
+    width: 6px;
+  }
 }
 
 .binary-payload {

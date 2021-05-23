@@ -132,15 +132,9 @@
     },
     "goto-debug": "Debug",
     "listen": "Listen",
-    "record": {
-      "authorize": "Please authorize microphone access",
-      "error": "An error occurred",
-      "not-allowed": "Microphone access not allowed",
-      "not-found": "No microphone detected",
-      "not-supported": "Browser not supported"
-    },
     "share": "Share",
-    "share-test": "Share test code"
+    "share-test": "Share test code",
+    "stop-listening": "Stop listening"
   },
   "wheel": {
     "players": "{{ nb }} players",

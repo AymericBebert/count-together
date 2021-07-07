@@ -26,7 +26,6 @@ export class SoundDebugComponent implements OnInit, OnDestroy {
   private recordBlob: Blob | undefined = undefined;
 
   constructor(public readonly recordService: RecordService,
-              private readonly soundSharing: SoundSharingService,
   ) {
   }
 

@@ -1,4 +1,4 @@
-FROM node:16.2.0-buster-slim AS builder
+FROM node:14.17.3-buster-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
@@ -12,7 +12,7 @@ RUN npm run build -- --configuration=production
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.20.0-alpine
+FROM nginx:1.21.1-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\

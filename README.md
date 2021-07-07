@@ -7,7 +7,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Installation
 
 ```shell
-cp config.js.dist src/assets/config.js
 npm install
 ```
 

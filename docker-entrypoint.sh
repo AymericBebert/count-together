@@ -16,14 +16,11 @@ done
 
 echo "};" >>/config.js
 
-sed -i "s/CONFIG_TIMESTAMP/$(date +%s)/" /usr/share/nginx/html/index.html
-
+# Insert config object in index.html
 CONFIG_BLOCK="<!--APP_CONFIG INSERTED-->
 <script>
 $(cat /config.js)
 </script>"
-NGX_GTAG=$(echo "$NGX_GTAG" | sed -e 's/^"//' -e 's/"$//')
-GTAG_BLOCK=$(echo "$GTAG_BLOCK" | sed -e "s/NGX_GTAG/$NGX_GTAG/")
 # shellcheck disable=SC2005
 echo "$(awk -v r="$CONFIG_BLOCK" '{gsub(/<!--APP_CONFIG-->/,r)}1' /usr/share/nginx/html/index.html)" >/usr/share/nginx/html/index.html
 

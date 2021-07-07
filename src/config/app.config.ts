@@ -11,7 +11,7 @@ export interface AppConfig {
 
 export function appConfigFactory(): AppConfig {
   // tslint:disable-next-line:no-string-literal
-  const appConstants: AppConfig = window['APP_CONFIG'];
+  const appConstants: AppConfig = window['APP_CONFIG'] || {};
   return {
     version: appConstants.version || 'untagged',
     backendUrl: appConstants.backendUrl || 'http://localhost:4050',

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
   templateUrl: './share-button.component.html',
   styleUrls: ['./share-button.component.scss']
 })
-export class ShareButtonComponent implements OnInit {
+export class ShareButtonComponent {
   @Input() public title = 'Count Together';
   @Input() public text = 'Game link';
   @Input() public url = '';
@@ -23,9 +23,6 @@ export class ShareButtonComponent implements OnInit {
   ) {
     this.webNavigator = window.navigator;
     this.canShare = this.webNavigator !== null && this.webNavigator.share !== undefined;
-  }
-
-  public ngOnInit() {
   }
 
   public shareClicked() {

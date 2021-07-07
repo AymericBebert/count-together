@@ -172,7 +172,7 @@ export class GamesService {
       tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
       catchError(error => {
         console.error('postNewGame', error);
-        this.apiError.displayError(`Could not post new game`);
+        this.apiError.displayError('Could not post new game');
         return EMPTY;
       }),
       map(res => res.result),
@@ -184,7 +184,7 @@ export class GamesService {
       tap(res => res.error && this.apiError.displayError(`duplicateGame: ${res.error}`)),
       catchError(error => {
         console.error('duplicateGame', error);
-        this.apiError.displayError(`Could not duplicate game`);
+        this.apiError.displayError('Could not duplicate game');
         return EMPTY;
       }),
       map(res => res.result),

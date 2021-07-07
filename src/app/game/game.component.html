@@ -37,10 +37,10 @@
           <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
                class="cell free">
             <div class="add-score" (click)="editScoreOpen(p, i)">
-              {{ score !== null ? score : '/' }}
+              {{ score ?? '/' }}
             </div>
             <div class="cum-score">
-              {{ player.scoresCumSum[i] != null ? player.scoresCumSum[i] : '/' }}
+              {{ player.scoresCumSum[i] ?? '/' }}
             </div>
           </div>
         </ng-container>
@@ -53,7 +53,7 @@
               <mat-icon (click)="editScore(p, i, score + 1)" class="plus">add_circle</mat-icon>
             </div>
             <span class="overlay-score" style="position: absolute">
-              {{ score !== null ? score : '/' }}
+              {{ score ?? '/' }}
             </span>
           </div>
         </ng-container>

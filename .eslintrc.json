@@ -41,6 +41,10 @@
           {
             "avoidEscape": true
           }
+        ],
+        "semi": [
+          2,
+          "always"
         ]
       }
     },

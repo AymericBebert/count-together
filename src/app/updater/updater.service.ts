@@ -9,8 +9,8 @@ export class UpdaterService {
   public updatesAvailable$ = this.updates.available;
   public updatesActivated$ = this.updates.activated;
 
-  constructor(private appRef: ApplicationRef,
-              private updates: SwUpdate,
+  constructor(private updates: SwUpdate,
+              appRef: ApplicationRef,
   ) {
     if (!this.updates.isEnabled) {
       return;
@@ -35,6 +35,8 @@ export class UpdaterService {
       console.log('Old version was', event.previous);
       console.log('New version is', event.current);
     });
+
+    this.updates.unrecoverable.subscribe(() => this.update());
   }
 
   public update() {

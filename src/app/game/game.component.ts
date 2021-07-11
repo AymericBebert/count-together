@@ -101,12 +101,15 @@ export class GameComponent implements OnInit, OnDestroy {
           case 'nav-tool.duplicate':
             this.duplicateGame(game);
             break;
+          case 'nav-tool.save-offline':
+            this.saveOffline(game);
+            break;
         }
       });
 
     this.route.paramMap
       .pipe(map(params => params.get('gameId')), takeUntil(this.destroy$))
-      .subscribe(gameId => this.gamesService.setCurrentGameId(gameId));
+      .subscribe(gameId => this.gamesService.setCurrentGameId(gameId ?? 'offline'));
 
     this.gameSettingsService.lowerScoreWins$
       .pipe(takeUntil(this.destroy$))
@@ -338,6 +341,18 @@ export class GameComponent implements OnInit, OnDestroy {
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).catch(err => console.error('Could not navigate after duplication?', err));
         });
+    }
+  }
+
+  private saveOffline(game: IGame | null) {
+    if (game === null) {
+      console.error('Trying to save offline but game is null?');
+    } else if (game.gameId === 'offline') {
+      console.error('Trying to save offline but game is already offline?');
+    } else {
+      game.gameId = 'offline';
+      this.gamesService.saveOfflineGameToStorage(game);
+      this.router.navigate(['game', 'offline']).catch(err => console.error('Could not navigate after save offline?', err));
     }
   }
 }

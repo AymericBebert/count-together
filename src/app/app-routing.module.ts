@@ -13,6 +13,17 @@ const routes: Routes = [
     },
   },
   {
+    path: 'game/offline',
+    component: GameComponent,
+    data: {
+      backRouterNavigate: '/',
+      navButtons: ['share'],
+      navTools: [
+        {name: 'nav-tool.wheel', icon: 'near_me'},
+      ],
+    },
+  },
+  {
     path: 'game/:gameId',
     component: GameComponent,
     data: {
@@ -22,6 +33,7 @@ const routes: Routes = [
         {name: 'nav-tool.wheel', icon: 'near_me'},
         {name: 'nav-tool.sound-share', icon: 'volume_up'},
         {name: 'nav-tool.duplicate', icon: 'content_copy'},
+        {name: 'nav-tool.save-offline', icon: 'download'},
       ],
     },
   },

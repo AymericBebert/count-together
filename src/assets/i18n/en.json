@@ -76,7 +76,8 @@
     "version": "Version:"
   },
   "nav-tool": {
-    "duplicate": "Dupliquer",
+    "duplicate": "Duplicate",
+    "save-offline": "Save offline",
     "sound-share": "Sound share",
     "wheel": "Random Wheel"
   },

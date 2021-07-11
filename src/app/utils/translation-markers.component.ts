@@ -15,6 +15,7 @@ export class TranslationMarkersComponent {
       'nav-tool.wheel',
       'nav-tool.sound-share',
       'nav-tool.duplicate',
+      'nav-tool.save-offline',
       'main-title.wheel',
       'main-title.sound-share',
       'main-title.sound-share-debug',

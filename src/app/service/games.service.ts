@@ -89,6 +89,11 @@ export class GamesService {
     }
   }
 
+  public saveOfflineGameToStorage(game: IGame) {
+    console.log('Saving game to storage');
+    this.storageService.setItem('offlineGame', JSON.stringify(game));
+  }
+
   public gameEditName(gameId: string, name: string) {
     if (gameId === 'offline') {
       return;
@@ -264,11 +269,6 @@ export class GamesService {
         lowerScoreWins: false,
       });
     }
-  }
-
-  private saveOfflineGameToStorage(game: IGame) {
-    console.log('Saving game to storage');
-    this.storageService.setItem('offlineGame', JSON.stringify(game));
   }
 
   private addToVisitedGames(gameId: string, name: string) {

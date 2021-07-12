@@ -1,4 +1,4 @@
-FROM node:14.17.2-buster-slim AS builder
+FROM node:14.17.3-buster-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 
-RUN npm run build -- --configuration=production
+RUN npm run build:prod
 
 #
 # Go back from a light nginx image

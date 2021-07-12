@@ -36,13 +36,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Run as static website
 ```bash
-npm run build -- --prod
+npm run build:prod
 python3 -m http.server --directory dist/count-together 4500
 ```
 
 ## Analyze build
 To analyze the build you can do :
 ```bash
-npm run build -- --prod --stats-json
+npm run build:stats
 npx webpack-bundle-analyzer dist/count-together/stats.json
 ```

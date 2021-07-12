@@ -4,8 +4,8 @@ import {scaleLinear} from 'd3-scale';
 import {select, Selection} from 'd3-selection';
 import {curveLinearClosed, line, lineRadial} from 'd3-shape';
 import 'd3-transition';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {of, Subject} from 'rxjs';
+import {debounceTime, delay, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-wheel',
@@ -43,7 +43,8 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
   private arrowRotate: Selection<any, unknown, null, undefined>;
   private arrowInner: Selection<any, unknown, null, undefined>;
 
-  private onResize$ = new Subject<void>();
+  private reset$ = new Subject<void>();
+  private resize$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
   private arrowPathData: [number, number][] = [
@@ -56,7 +57,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 
   @HostListener('window:resize')
   public onResize() {
-    this.onResize$.next();
+    this.resize$.next();
   }
 
   ngOnDestroy(): void {
@@ -75,7 +76,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
     this.prepareArrow();
     this.prepareCrown();
 
-    this.onResize$
+    this.resize$
       .pipe(debounceTime(100), takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSizes();
@@ -91,6 +92,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       this.arrowPrepared = true;
     }
     if (changes.reset?.currentValue) {
+      this.reset$.next();
       this.adjustArrowReset();
       this.adjustCrownReset();
     }
@@ -114,17 +116,22 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
   }
 
   public spin() {
-    if (!this.spinning) {
-      this.angle = this.angle + 360 * 3 + Math.random() * 360;
-      this.spinning = true;
-      this.adjustArrowRotate(this.spinDuration);
-      this.adjustCrownReset();
-      setTimeout(() => {
-        this.oldAngle = this.angle;
-        this.spinning = false;
-        this.giveCrown(Math.floor((this.angle % 360) * this.nb / 360 + 0.5) % this.nb);
-      }, this.spinDuration);
+    if (this.spinning) {
+      return;
     }
+    this.angle = this.angle + 360 * 3 + Math.random() * 360;
+    this.spinning = true;
+    this.adjustArrowRotate(this.spinDuration);
+    this.adjustCrownReset();
+    of({nb: this.nb, angle: this.angle}).pipe(
+      delay(this.spinDuration),
+      takeUntil(this.reset$),
+      takeUntil(this.destroy$),
+    ).subscribe(data => {
+      this.oldAngle = this.angle;
+      this.spinning = false;
+      this.giveCrown(Math.floor((data.angle % 360) * this.nb / 360 + 0.5) % data.nb);
+    });
   }
 
   private onNbChanged(): void {

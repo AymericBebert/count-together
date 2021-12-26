@@ -1,13 +1,10 @@
 version: "3"
+
 services:
-  code:
+  count_together:
     image: aymericbernard/count-together:latest
-    container_name: cn_count_together
+    container_name: count_together
     restart: always
-    networks:
-      - proxy
-    ports:
-      - "4200:80"
     environment:
       - VIRTUAL_HOST=count-together.example.com
       - LETSENCRYPT_HOST=count-together.example.com
@@ -15,6 +12,9 @@ services:
       - APP_SHORT_NAME=CounT
       - NGX_backendUrl="https://count-together-backend.example.com"
       - NGX_websiteUrl="https://count-together.example.com"
+    networks:
+      - proxy
+
 networks:
   proxy:
     external:

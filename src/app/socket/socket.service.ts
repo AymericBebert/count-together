@@ -39,19 +39,21 @@ export class SocketService {
         } else {
           console.log('Socket should disconnect');
           this.disconnect$.next();
-          this.socket.disconnect();
-          this.socket.close();
+          if (this.socket != null) {
+            this.socket.disconnect();
+            this.socket.close();
+          }
           this.socket = null;
           this.connected$.next(false);
         }
       });
   }
 
-  public connectSocket() {
+  public connectSocket(): void {
     this.shouldBeConnected$.next(true);
   }
 
-  public disconnectSocket() {
+  public disconnectSocket(): void {
     this.shouldBeConnected$.next(false);
   }
 
@@ -63,7 +65,7 @@ export class SocketService {
     return fromEvent<ReceivedEventTypes[T]>(this.socket, eventName)
       .pipe(
         tap(data => this.config.debugSocket && console.log(`socket> ${eventName}:`, data)),
-        takeUntil(this.disconnect$)
+        takeUntil(this.disconnect$),
       );
   }
 

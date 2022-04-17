@@ -75,8 +75,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
     FormsModule,
@@ -107,7 +107,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: DebugHttpInterceptor,
-      multi: true
+      multi: true,
     },
     DeviceService,
     UpdaterService,
@@ -119,12 +119,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [
     AppComponent,
-  ],
-  entryComponents: [
-    GameNameDialogComponent,
-    PlayerNameDialogComponent,
-    ScoreDialogComponent,
-    ConfirmDialogComponent,
   ],
 })
 export class AppModule {

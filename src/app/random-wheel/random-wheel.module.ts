@@ -21,12 +21,6 @@ import {WheelComponent} from './wheel/wheel.component';
     WheelComponent,
     WheelPageComponent,
   ],
-  exports: [
-    WheelComponent,
-    WheelPageComponent,
-  ],
-  providers: [],
-  entryComponents: [],
 })
 export class RandomWheelModule {
 }

@@ -6,7 +6,6 @@ import {filter, map} from 'rxjs/operators';
 import {SettingsService} from '../../service/settings.service';
 
 @Component({
-  selector: 'app-wheel-page',
   templateUrl: './wheel-page.component.html',
   styleUrls: ['./wheel-page.component.scss']
 })

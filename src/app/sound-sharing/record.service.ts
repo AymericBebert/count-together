@@ -1,7 +1,6 @@
 /// <reference types="@types/dom-mediacapture-record" />
 import {Inject, Injectable, InjectionToken, NgZone, OnDestroy, Optional} from '@angular/core';
-import {BehaviorSubject, Observable, of, OperatorFunction, Subject} from 'rxjs';
-import {fromPromise} from 'rxjs/internal-compatibility';
+import {BehaviorSubject, from, Observable, of, OperatorFunction, Subject} from 'rxjs';
 import {catchError, filter, first, take, tap, timeout} from 'rxjs/operators';
 import {BrowserCompatibilityService} from './browser-compatibility.service';
 
@@ -117,7 +116,7 @@ export class RecordService implements OnDestroy {
       console.error('No media devices');
       return of(null);
     }
-    return fromPromise(mediaDevices.getUserMedia(options))
+    return from(mediaDevices.getUserMedia(options))
       .pipe(
         filter(stream => this.config.audioOnly ? !!stream.getAudioTracks().length : !!stream.getVideoTracks().length),
         take(1),

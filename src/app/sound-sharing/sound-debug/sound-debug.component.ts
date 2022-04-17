@@ -17,7 +17,7 @@ import {SoundSharingService} from '../sound-sharing.service';
 export class SoundDebugComponent implements OnInit, OnDestroy {
   @ViewChild('replayAudio') replayAudioElement: ElementRef<HTMLAudioElement>;
   public replayAvailable = false;
-  public micPermission: PermissionState | null = null;
+  // public micPermission: PermissionState | null = null;
   public mediaDevices = navigator.mediaDevices;
   public userMedia = navigator.mediaDevices?.getUserMedia({audio: true});
   public mediaRecorderType = typeof MediaRecorder;
@@ -41,7 +41,7 @@ export class SoundDebugComponent implements OnInit, OnDestroy {
       });
 
     // this.askUserPermission();
-    this.checkMicAccessPermission();
+    // this.checkMicAccessPermission();
   }
 
   ngOnDestroy(): void {
@@ -65,11 +65,11 @@ export class SoundDebugComponent implements OnInit, OnDestroy {
     this.recordService.stopStream();
   }
 
-  private checkMicAccessPermission() {
-    navigator.permissions.query({name: 'microphone'}).then(result => {
-      this.micPermission = result.state;
-      console.log('mic permission', result.state);
-      result.onchange = this.checkMicAccessPermission.bind(this);
-    });
-  }
+  // private checkMicAccessPermission() {
+  //   navigator.permissions.query({name: 'microphone'}).then(result => {
+  //     this.micPermission = result.state;
+  //     console.log('mic permission', result.state);
+  //     result.onchange = this.checkMicAccessPermission.bind(this);
+  //   });
+  // }
 }

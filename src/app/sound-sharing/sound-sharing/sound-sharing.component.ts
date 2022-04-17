@@ -39,7 +39,6 @@ export class SoundSharingComponent {
 
   async analyse(): Promise<void> {
     await this.askUserPermission();
-    this.checkMicAccessPermission();
 
     this.soundSharing.soundAnalyse().then(() => console.log('analysed')).catch(() => console.log('error'));
   }
@@ -50,12 +49,5 @@ export class SoundSharingComponent {
 
   private askUserPermission(): Promise<MediaStream | null> {
     return this.recordService.askUserPermission$().pipe(first(null, null)).toPromise();
-  }
-
-  private checkMicAccessPermission() {
-    navigator.permissions.query({name: 'microphone'}).then(result => {
-      console.log('mic permission:', result.state);
-      result.onchange = this.checkMicAccessPermission.bind(this);
-    });
   }
 }

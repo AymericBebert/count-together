@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import {UntypedFormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface PlayerNameDialogData {
@@ -14,13 +14,13 @@ export interface PlayerNameDialogData {
 })
 export class PlayerNameDialogComponent {
 
-  public name: FormControl;
+  public name: UntypedFormControl;
   public isNew: boolean;
 
   // @ViewChild('playerNameInput') playerNameInput: ElementRef;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlayerNameDialogData) {
-    this.name = new FormControl(data.name, [Validators.required]);
+    this.name = new UntypedFormControl(data.name, [Validators.required]);
     this.isNew = data.isNew;
   }
 

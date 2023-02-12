@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface EditScoreDialogData {
@@ -14,13 +14,13 @@ export interface EditScoreDialogData {
 })
 export class ScoreDialogComponent {
 
-  public score: FormControl;
+  public score: UntypedFormControl;
   public isNew: boolean;
 
   // @ViewChild('scoreInput') scoreInput: ElementRef;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: EditScoreDialogData) {
-    this.score = new FormControl(data.score);
+    this.score = new UntypedFormControl(data.score);
     this.isNew = data.isNew;
   }
 

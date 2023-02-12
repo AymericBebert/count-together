@@ -7,6 +7,8 @@ export interface PlayerNameDialogData {
   isNew: boolean;
 }
 
+export type PlayerNameDialogResult = string | null;
+
 @Component({
   selector: 'app-player-name-dialog',
   templateUrl: './player-name-dialog.component.html',
@@ -14,17 +16,9 @@ export interface PlayerNameDialogData {
 })
 export class PlayerNameDialogComponent {
 
-  public name: FormControl;
-  public isNew: boolean;
-
-  // @ViewChild('playerNameInput') playerNameInput: ElementRef;
+  public readonly name = new FormControl<string>(this.data.name, [Validators.required]);
+  public readonly isNew = this.data.isNew;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlayerNameDialogData) {
-    this.name = new FormControl(data.name, [Validators.required]);
-    this.isNew = data.isNew;
   }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
-  // }
 }

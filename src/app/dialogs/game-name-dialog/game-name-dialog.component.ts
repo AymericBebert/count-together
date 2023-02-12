@@ -13,15 +13,8 @@ export interface GameNameDialogData {
 })
 export class GameNameDialogComponent {
 
-  public name: FormControl;
-
-  // @ViewChild('gameNameInput') gameNameInput: ElementRef;
+  public name = new FormControl<string>(this.data.name, [Validators.required]);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: GameNameDialogData) {
-    this.name = new FormControl(data.name, [Validators.required]);
   }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
-  // }
 }

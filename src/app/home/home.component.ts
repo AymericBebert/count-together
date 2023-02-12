@@ -18,7 +18,7 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public gameFormControl: FormControl;
+  public readonly gameFormControl: FormControl<string>;
   public matcher: ErrorStateMatcher = new ImmediateErrorStateMatcher();
   public deletion = false;
 

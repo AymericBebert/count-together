@@ -14,17 +14,9 @@ export interface EditScoreDialogData {
 })
 export class ScoreDialogComponent {
 
-  public score: FormControl;
-  public isNew: boolean;
-
-  // @ViewChild('scoreInput') scoreInput: ElementRef;
+  public readonly score = new FormControl<number | null>(this.data.score);
+  public readonly isNew = this.data.isNew;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: EditScoreDialogData) {
-    this.score = new FormControl(data.score);
-    this.isNew = data.isNew;
   }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => this.scoreInput.nativeElement.select(), 0);
-  // }
 }

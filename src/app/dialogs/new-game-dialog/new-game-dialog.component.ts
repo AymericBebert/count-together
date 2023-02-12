@@ -1,8 +1,8 @@
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, Optional} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {IGame, IRecentPlayer} from '../../model/game';
+import {GameType, IGame, IRecentPlayer} from '../../model/game';
 import {GamesService} from '../../service/games.service';
 
 export interface NewGameDialogData {
@@ -16,10 +16,10 @@ export interface NewGameDialogData {
 })
 export class NewGameDialogComponent {
 
-  public gameName: UntypedFormControl;
-  public gameType: UntypedFormControl;
-  public lowerScoreWins: UntypedFormControl;
-  public playerName: UntypedFormControl;
+  public readonly gameName = new FormControl<string>('', [Validators.required]);
+  public readonly gameType = new FormControl<GameType>('free');
+  public readonly lowerScoreWins = new FormControl<boolean>(false);
+  public readonly playerName = new FormControl<string>('');
 
   public selectedPlayers: string[] = [];
   public otherPlayers: string[] = [];
@@ -27,11 +27,6 @@ export class NewGameDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: NewGameDialogData,
               @Optional() private gamesService: GamesService,
   ) {
-    this.gameName = new UntypedFormControl('', [Validators.required]);
-    this.gameType = new UntypedFormControl('free');
-    this.lowerScoreWins = new UntypedFormControl(false);
-    this.playerName = new UntypedFormControl('');
-
     data.recentPlayers.forEach(rp => {
       if (rp.wasLatest) {
         this.selectedPlayers.push(rp.name);

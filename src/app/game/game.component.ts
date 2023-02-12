@@ -7,7 +7,11 @@ import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ConfirmDialogComponent, ConfirmDialogData} from '../dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent, GameNameDialogData} from '../dialogs/game-name-dialog/game-name-dialog.component';
-import {PlayerNameDialogComponent, PlayerNameDialogData} from '../dialogs/player-name-dialog/player-name-dialog.component';
+import {
+  PlayerNameDialogComponent,
+  PlayerNameDialogData,
+  PlayerNameDialogResult
+} from '../dialogs/player-name-dialog/player-name-dialog.component';
 import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
 import {GameType, IGame} from '../model/game';
 import {EnrichedPlayer} from '../model/player';
@@ -153,9 +157,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public editPlayerNameOpen(p: number, isNew: boolean = false) {
     const data: PlayerNameDialogData = {name: this.game$.getValue().players[p].name, isNew};
-    this.dialog.open(PlayerNameDialogComponent, {data})
+    this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(PlayerNameDialogComponent, {data})
       .afterClosed()
-      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
+      .pipe(filter(res => !!res), takeUntil(this.destroy$))
       .subscribe(res => {
         this.editPlayerName(p, res);
       });

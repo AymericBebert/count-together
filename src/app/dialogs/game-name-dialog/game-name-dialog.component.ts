@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface GameNameDialogData {
@@ -13,15 +13,8 @@ export interface GameNameDialogData {
 })
 export class GameNameDialogComponent {
 
-  public name: UntypedFormControl;
-
-  // @ViewChild('gameNameInput') gameNameInput: ElementRef;
+  public name = new FormControl<string>(this.data.name, [Validators.required]);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: GameNameDialogData) {
-    this.name = new UntypedFormControl(data.name, [Validators.required]);
   }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => this.gameNameInput.nativeElement.select(), 0);
-  // }
 }

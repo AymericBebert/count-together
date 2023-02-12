@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,7 +18,7 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public gameFormControl: UntypedFormControl;
+  public readonly gameFormControl: FormControl<string>;
   public matcher: ErrorStateMatcher = new ImmediateErrorStateMatcher();
   public deletion = false;
 
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
   ) {
     this.getVisitedGames();
-    this.gameFormControl = new UntypedFormControl('', {
+    this.gameFormControl = new FormControl('', {
       asyncValidators: [this.gamesService.gameExistsValidator()],
     });
 

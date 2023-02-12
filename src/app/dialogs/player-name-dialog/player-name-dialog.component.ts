@@ -1,11 +1,13 @@
 import {Component, Inject} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface PlayerNameDialogData {
   name: string;
   isNew: boolean;
 }
+
+export type PlayerNameDialogResult = string | null;
 
 @Component({
   selector: 'app-player-name-dialog',
@@ -14,17 +16,9 @@ export interface PlayerNameDialogData {
 })
 export class PlayerNameDialogComponent {
 
-  public name: UntypedFormControl;
-  public isNew: boolean;
-
-  // @ViewChild('playerNameInput') playerNameInput: ElementRef;
+  public readonly name = new FormControl<string>(this.data.name, [Validators.required]);
+  public readonly isNew = this.data.isNew;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlayerNameDialogData) {
-    this.name = new UntypedFormControl(data.name, [Validators.required]);
-    this.isNew = data.isNew;
   }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => this.playerNameInput.nativeElement.select(), 0);
-  // }
 }

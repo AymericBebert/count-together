@@ -1,9 +1,13 @@
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+
 @import '_fonts.scss';
 
-@include mat-core();
+@include mat.core();
 
 @import './custom-component-themes.scss';
+
+$dark-primary-text: rgba(black, 0.87);
+$light-primary-text: white;
 
 $mat-myrtille: (
   50: #e9e5f6,
@@ -71,12 +75,23 @@ $mat-raspberry: (
   ),
 );
 
-$light-primary: mat-palette($mat-myrtille);
-$light-accent: mat-palette($mat-raspberry, A200, A100, A400);
-$light-warn: mat-palette($mat-red);
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-primary: mat.define-palette($mat-myrtille);
+$light-accent: mat.define-palette($mat-raspberry, A200, A100, A400);
+$light-warn: mat.define-palette(mat.$red-palette);
 
-@include angular-material-theme($light-theme);
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.core-theme($light-theme);
+@include mat.button-theme($light-theme);
+
 @include custom-components-theme($light-theme);
 
 // Defines an alternate dark theme.
@@ -146,18 +161,27 @@ $mat-raspberry-dark: (
   ),
 );
 
-$dark-primary: mat-palette($mat-myrtille-dark);
-$dark-accent: mat-palette($mat-raspberry-dark, A200, A100, A400);
-$dark-warn: mat-palette($mat-deep-orange);
-$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+$dark-primary: mat.define-palette($mat-myrtille-dark);
+$dark-accent: mat.define-palette($mat-raspberry-dark, A200, A100, A400);
+$dark-warn: mat.define-palette(mat.$deep-orange-palette);
 
-// Insert custom background color
-$dark-background: map-get($dark-theme, background);
-$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
-$dark-theme: map_merge($dark-theme, (background: $dark-background));
+$dark-theme: mat.define-light-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn,
+  ),
+));
+
+//// Insert custom background color
+//$dark-background: map-get($dark-theme, background);
+//$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
+//$dark-theme: map_merge($dark-theme, (background: $dark-background));
 
 .myrtille-dark-theme {
-  @include angular-material-theme($dark-theme);
+  @include mat.core-color($dark-theme);
+  @include mat.button-color($dark-theme);
+
   @include custom-components-theme($dark-theme);
   @include custom-components-dark-theme($dark-theme);
 }
@@ -182,25 +206,25 @@ body {
 
 .myrtille-dark-theme {
   .mat-button.mat-primary, .mat-icon-button.mat-primary {
-    color: mat-color($light-primary, 100);
+    color: mat.get-color-from-palette($light-primary, 100);
   }
 
   .mat-progress-spinner circle {
-    stroke: mat-color($light-primary, 100);
+    stroke: mat.get-color-from-palette($light-primary, 100);
   }
 
   .mat-form-field.mat-focused {
     .mat-form-field-label {
-      color: mat-color($light-primary, 100);
+      color: mat.get-color-from-palette($light-primary, 100);
     }
 
     .mat-form-field-ripple {
-      background-color: mat-color($light-primary, 100);
+      background-color: mat.get-color-from-palette($light-primary, 100);
     }
   }
 
   .mat-input-element {
-    caret-color: mat-color($light-primary, 100);
+    caret-color: mat.get-color-from-palette($light-primary, 100);
   }
 }
 

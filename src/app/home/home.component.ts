@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';

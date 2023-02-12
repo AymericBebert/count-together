@@ -1,7 +1,7 @@
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, Optional} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import {GameType, IGame, IRecentPlayer} from '../../model/game';
 import {GamesService} from '../../service/games.service';
 

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {MatSliderChange} from '@angular/material/slider';
+import {MatLegacySliderChange as MatSliderChange} from '@angular/material/legacy-slider';
 import {ActivatedRoute} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';

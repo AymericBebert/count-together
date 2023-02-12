@@ -1,8 +1,8 @@
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSliderModule} from '@angular/material/slider';
+import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
+import {MatLegacySliderModule as MatSliderModule} from '@angular/material/legacy-slider';
 import {TranslateModule} from '@ngx-translate/core';
 import {RandomWheelRoutingModule} from './random-wheel-routing.module';
 import {WheelPageComponent} from './wheel-page/wheel-page.component';

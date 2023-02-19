@@ -20,10 +20,6 @@ const routes: Routes = [
       mainTitle: 'main-title.sound-share-debug',
     },
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
 ];
 
 @NgModule({

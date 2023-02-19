@@ -1,7 +1,6 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonModule} from '@angular/material/button';
@@ -34,7 +33,6 @@ import {ScoreDialogComponent} from './dialogs/score-dialog/score-dialog.componen
 import {GameComponent} from './game/game.component';
 import {HomeComponent} from './home/home.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
-import {NavComponent} from './nav/nav.component';
 import {RankIconComponent} from './rank-icon/rank-icon.component';
 import {DeviceService} from './service/device.service';
 import {GameSettingsService} from './service/game-settings.service';
@@ -56,7 +54,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent,
     ChangeLanguageComponent,
     HomeComponent,
     GameComponent,
@@ -82,7 +79,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,

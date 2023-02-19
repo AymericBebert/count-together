@@ -1,4 +1,4 @@
-.mat-dialog-title {
+.mat-mdc-dialog-title {
   min-width: 220px;
   margin-bottom: 10px;
 }
@@ -19,22 +19,18 @@
   border: solid 1px #ccc;
   border-radius: 4px;
   min-height: 40px;
-  max-width: 160px;
   background: white;
   overflow: hidden;
   display: block;
-  margin: 0 auto 10px;
 }
 
 .player-dnd-box {
   min-height: 40px;
-  padding: 0 4px;
+  padding: 0 8px;
   border-bottom: solid 1px #eee;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
   background: white;

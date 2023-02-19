@@ -1,9 +1,12 @@
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+
 @import '_fonts.scss';
-
-@include mat-core();
-
 @import './custom-component-themes.scss';
+
+@include mat.core();
+
+$dark-primary-text: rgba(black, 0.87);
+$light-primary-text: white;
 
 $mat-myrtille: (
   50: #e9e5f6,
@@ -71,12 +74,22 @@ $mat-raspberry: (
   ),
 );
 
-$light-primary: mat-palette($mat-myrtille);
-$light-accent: mat-palette($mat-raspberry, A200, A100, A400);
-$light-warn: mat-palette($mat-red);
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-primary: mat.define-palette($mat-myrtille);
+$light-accent: mat.define-palette($mat-raspberry, A200, A100, A400);
+$light-warn: mat.define-palette(mat.$red-palette);
 
-@include angular-material-theme($light-theme);
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($light-theme);
+
 @include custom-components-theme($light-theme);
 
 // Defines an alternate dark theme.
@@ -146,10 +159,17 @@ $mat-raspberry-dark: (
   ),
 );
 
-$dark-primary: mat-palette($mat-myrtille-dark);
-$dark-accent: mat-palette($mat-raspberry-dark, A200, A100, A400);
-$dark-warn: mat-palette($mat-deep-orange);
-$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+$dark-primary: mat.define-palette($mat-myrtille-dark);
+$dark-accent: mat.define-palette($mat-raspberry-dark, A200, A100, A400);
+$dark-warn: mat.define-palette(mat.$deep-orange-palette);
+
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn,
+  ),
+));
 
 // Insert custom background color
 $dark-background: map-get($dark-theme, background);
@@ -157,7 +177,8 @@ $dark-background: map_merge($dark-background, (app-bar: #101010, background: #20
 $dark-theme: map_merge($dark-theme, (background: $dark-background));
 
 .myrtille-dark-theme {
-  @include angular-material-theme($dark-theme);
+  @include mat.all-component-colors($dark-theme);
+
   @include custom-components-theme($dark-theme);
   @include custom-components-dark-theme($dark-theme);
 }
@@ -181,51 +202,29 @@ body {
 }
 
 .myrtille-dark-theme {
-  .mat-button.mat-primary, .mat-icon-button.mat-primary {
-    color: mat-color($light-primary, 100);
+  .mat-mdc-button.mat-primary, .mat-mdc-icon-button.mat-primary {
+    color: mat.get-color-from-palette($light-primary, 100);
   }
 
-  .mat-progress-spinner circle {
-    stroke: mat-color($light-primary, 100);
+  .mat-mdc-progress-spinner circle {
+    stroke: mat.get-color-from-palette($light-primary, 100);
   }
 
-  .mat-form-field.mat-focused {
-    .mat-form-field-label {
-      color: mat-color($light-primary, 100);
+  .mat-mdc-form-field.mat-focused {
+    .mat-mdc-floating-label {
+      color: mat.get-color-from-palette($light-primary, 100);
     }
 
-    .mat-form-field-ripple {
-      background-color: mat-color($light-primary, 100);
+    .mdc-line-ripple::after {
+      border-bottom-color: mat.get-color-from-palette($light-primary, 300);
     }
   }
 
-  .mat-input-element {
-    caret-color: mat-color($light-primary, 100);
-  }
-}
-
-.crown-icon-bw {
-  &.icon-64 {
-    background: url('assets/icons/crown-black-64.png');
-    background-size: contain;
-    height: 32px;
-    width: 32px;
-  }
-
-  .myrtille-dark-theme & {
-    &.icon-64 {
-      background: url('assets/icons/crown-white-64.png');
-      background-size: contain;
-      height: 32px;
-      width: 32px;
-    }
+  .mat-mdc-input-element {
+    caret-color: mat.get-color-from-palette($light-primary, 100);
   }
 }
 
 .hide-focus:focus {
   outline: 0 solid transparent;
-}
-
-.edit-score div.mat-form-field-infix {
-  width: 140px;
 }

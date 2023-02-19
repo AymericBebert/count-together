@@ -13,7 +13,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {ApiErrorService} from './api-error/api-error.service';
 import {AppComponent} from './app.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
-import {NavComponent} from './nav/nav.component';
 import {DeviceService} from './service/device.service';
 import {GameSettingsService} from './service/game-settings.service';
 import {GamesService} from './service/games.service';
@@ -50,7 +49,6 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        NavComponent,
         ChangeLanguageComponent,
       ],
       providers: [

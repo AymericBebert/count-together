@@ -6,7 +6,7 @@
   <p>{{ message }}</p>
 </div>
 
-<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+<div mat-dialog-actions style="display: flex; justify-content: space-between">
   <button mat-button color="accent" [mat-dialog-close]="false">{{ dismiss }}</button>
   <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>{{ confirm }}</button>
 </div>

@@ -11,10 +11,6 @@ const routes: Routes = [
       mainTitle: 'main-title.wheel',
     },
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
 ];
 
 @NgModule({

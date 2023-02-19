@@ -1,10 +1,9 @@
 @use '@angular/material' as mat;
 
 @import '_fonts.scss';
+@import './custom-component-themes.scss';
 
 @include mat.core();
-
-@import './custom-component-themes.scss';
 
 $dark-primary-text: rgba(black, 0.87);
 $light-primary-text: white;
@@ -89,8 +88,7 @@ $light-theme: mat.define-light-theme((
   density: 0,
 ));
 
-@include mat.core-theme($light-theme);
-@include mat.button-theme($light-theme);
+@include mat.all-component-themes($light-theme);
 
 @include custom-components-theme($light-theme);
 
@@ -165,7 +163,7 @@ $dark-primary: mat.define-palette($mat-myrtille-dark);
 $dark-accent: mat.define-palette($mat-raspberry-dark, A200, A100, A400);
 $dark-warn: mat.define-palette(mat.$deep-orange-palette);
 
-$dark-theme: mat.define-light-theme((
+$dark-theme: mat.define-dark-theme((
   color: (
     primary: $dark-primary,
     accent: $dark-accent,
@@ -173,14 +171,13 @@ $dark-theme: mat.define-light-theme((
   ),
 ));
 
-//// Insert custom background color
-//$dark-background: map-get($dark-theme, background);
-//$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
-//$dark-theme: map_merge($dark-theme, (background: $dark-background));
+// Insert custom background color
+$dark-background: map-get($dark-theme, background);
+$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
+$dark-theme: map_merge($dark-theme, (background: $dark-background));
 
 .myrtille-dark-theme {
-  @include mat.core-color($dark-theme);
-  @include mat.button-color($dark-theme);
+  @include mat.all-component-colors($dark-theme);
 
   @include custom-components-theme($dark-theme);
   @include custom-components-dark-theme($dark-theme);
@@ -205,51 +202,29 @@ body {
 }
 
 .myrtille-dark-theme {
-  .mat-button.mat-primary, .mat-icon-button.mat-primary {
+  .mat-mdc-button.mat-primary, .mat-mdc-icon-button.mat-primary {
     color: mat.get-color-from-palette($light-primary, 100);
   }
 
-  .mat-progress-spinner circle {
+  .mat-mdc-progress-spinner circle {
     stroke: mat.get-color-from-palette($light-primary, 100);
   }
 
-  .mat-form-field.mat-focused {
-    .mat-form-field-label {
+  .mat-mdc-form-field.mat-focused {
+    .mat-mdc-floating-label {
       color: mat.get-color-from-palette($light-primary, 100);
     }
 
-    .mat-form-field-ripple {
-      background-color: mat.get-color-from-palette($light-primary, 100);
+    .mdc-line-ripple::after {
+      border-bottom-color: mat.get-color-from-palette($light-primary, 300);
     }
   }
 
-  .mat-input-element {
+  .mat-mdc-input-element {
     caret-color: mat.get-color-from-palette($light-primary, 100);
-  }
-}
-
-.crown-icon-bw {
-  &.icon-64 {
-    background: url('assets/icons/crown-black-64.png');
-    background-size: contain;
-    height: 32px;
-    width: 32px;
-  }
-
-  .myrtille-dark-theme & {
-    &.icon-64 {
-      background: url('assets/icons/crown-white-64.png');
-      background-size: contain;
-      height: 32px;
-      width: 32px;
-    }
   }
 }
 
 .hide-focus:focus {
   outline: 0 solid transparent;
-}
-
-.edit-score div.mat-form-field-infix {
-  width: 140px;
 }

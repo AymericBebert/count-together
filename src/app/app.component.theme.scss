@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use 'node_modules/@angular/material/index' as mat;
 
 @mixin sidenav-content-component-theme($theme) {
   $primary: map-get($theme, primary);
@@ -12,7 +12,7 @@
     background-color: mat.get-color-from-palette($background, app-bar);
   }
 
-  .mat-list-item.selectable {
+  .mat-mdc-list-item.selectable {
     background-color: mat.get-color-from-palette($accent, 0.04);
 
     &.selected {
@@ -24,7 +24,7 @@
     }
   }
 
-  .mat-list-item.selectable.odd {
+  .mat-mdc-list-item.selectable.odd {
     background-color: mat.get-color-from-palette($primary, 0.04);
 
     &.selected {
@@ -40,7 +40,7 @@
 @mixin sidenav-content-component-dark-theme($theme) {
   $primary: map-get($theme, primary);
 
-  .mat-list-item.selectable.odd {
+  .mat-mdc-list-item.selectable.odd {
     background-color: mat.get-color-from-palette($primary, 300, 0.06);
 
     &.selected {

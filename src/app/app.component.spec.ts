@@ -2,18 +2,17 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatIconModule} from '@angular/material/icon';
-import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ApiErrorService} from './api-error/api-error.service';
 import {AppComponent} from './app.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
-import {NavComponent} from './nav/nav.component';
 import {DeviceService} from './service/device.service';
 import {GameSettingsService} from './service/game-settings.service';
 import {GamesService} from './service/games.service';
@@ -50,7 +49,6 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        NavComponent,
         ChangeLanguageComponent,
       ],
       providers: [

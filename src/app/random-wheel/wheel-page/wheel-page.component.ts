@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {MatLegacySliderChange as MatSliderChange} from '@angular/material/legacy-slider';
 import {ActivatedRoute} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
@@ -35,7 +34,7 @@ export class WheelPageComponent {
   ) {
   }
 
-  onNumberSliderChange($event: MatSliderChange) {
-    this.sliderNb$.next($event.value);
+  public onNumberSliderChange(value: number): void {
+    this.sliderNb$.next(value);
   }
 }

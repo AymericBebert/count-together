@@ -1,20 +1,19 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatBadgeModule} from '@angular/material/badge';
-import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
-import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
-import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
-import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
-import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSelectModule} from '@angular/material/select';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -34,7 +33,6 @@ import {ScoreDialogComponent} from './dialogs/score-dialog/score-dialog.componen
 import {GameComponent} from './game/game.component';
 import {HomeComponent} from './home/home.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
-import {NavComponent} from './nav/nav.component';
 import {RankIconComponent} from './rank-icon/rank-icon.component';
 import {DeviceService} from './service/device.service';
 import {GameSettingsService} from './service/game-settings.service';
@@ -56,7 +54,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent,
     ChangeLanguageComponent,
     HomeComponent,
     GameComponent,
@@ -82,7 +79,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,

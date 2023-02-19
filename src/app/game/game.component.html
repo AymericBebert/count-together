@@ -5,12 +5,12 @@
   </div>
 </div>
 
-<div *ngIf="game$ | async as game" class="wrapper" fxLayout="column" fxLayoutAlign="center center">
-  <div class="header" fxLayout="row" fxLayoutAlign="start center">
+<div *ngIf="game$ | async as game" class="wrapper">
+  <div class="header">
     <mat-icon inline *ngIf="game.gameId === 'offline'">cloud_off</mat-icon>
     <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
   </div>
-  <div class="actions-top" fxLayout="row wrap">
+  <div class="actions-top">
     <button mat-button color="primary" (click)="removePlayer()">
       <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
       <span>{{ 'game.remove-player' | translate }}</span>
@@ -21,10 +21,10 @@
     </button>
   </div>
 
-  <div class="score-box mat-elevation-z2" fxLayout="row" fxLayoutAlign="start">
+  <div class="score-box mat-elevation-z2">
     <div *ngFor="let player of players$ | async; index as p; trackBy: playerTrackByFn"
-         fxFlex="1 1 auto" class="player-column-wrapper">
-      <div class="player-column" fxLayout="column" fxLayoutAlign="start center">
+         class="player-column-wrapper" style="flex: 1 1 auto">
+      <div class="player-column" style="display: flex; flex-direction: column; align-items: center">
 
         <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
 
@@ -49,7 +49,7 @@
         <ng-container *ngIf="game.gameType === 'smallScores'">
           <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
                class="cell small-scores" style="position: relative">
-            <div fxLayout="row" fxLayoutAlign="space-around center" class="buttons">
+            <div class="buttons" style="display: flex; justify-content: space-around; align-items: center">
               <mat-icon (click)="editScore(p, i, score - 1)" class="minus">remove_circle</mat-icon>
               <mat-icon (click)="editScore(p, i, score + 1)" class="plus">add_circle</mat-icon>
             </div>
@@ -66,29 +66,26 @@
           </div>
         </ng-container>
 
-        <div class="add-score-item" *ngIf="game.gameType === 'free'">
+        <ng-container *ngIf="game.gameType === 'free'">
           <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
             <mat-icon>add_circle_outline</mat-icon>
           </button>
-        </div>
-
-        <div class="add-score-item" *ngIf="game.gameType === 'free'">
           <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
             <mat-icon>remove_circle_outline</mat-icon>
           </button>
-        </div>
+        </ng-container>
 
       </div>
     </div>
   </div>
 
-  <div class="actions-bottom" fxLayout="row wrap" *ngIf="game.gameType !== 'free'">
+  <div *ngIf="game.gameType !== 'free'" class="actions-bottom">
     <button mat-button color="accent" (click)="removeScoreLine()">
-      <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
+      <mat-icon>remove_circle_outline</mat-icon>
       <span>{{ 'game.remove-row' | translate }}</span>
     </button>
     <button mat-button color="accent" (click)="addScoreLine()">
-      <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
+      <mat-icon>add_circle_outline</mat-icon>
       <span>{{ 'game.add-row' | translate }}</span>
     </button>
   </div>

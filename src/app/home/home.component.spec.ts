@@ -1,9 +1,9 @@
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
+import {MatInputModule} from '@angular/material/input';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ApiErrorModule} from '../api-error/api-error.module';

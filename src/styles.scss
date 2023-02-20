@@ -1,9 +1,9 @@
 @use '@angular/material' as mat;
 
+@include mat.core();
+
 @import '_fonts.scss';
 @import './custom-component-themes.scss';
-
-@include mat.core();
 
 $dark-primary-text: rgba(black, 0.87);
 $light-primary-text: white;
@@ -193,12 +193,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.hide-focus:focus {
+  outline: 0 solid transparent;
+}
+
 .very-light-text {
   color: #cccccc;
-
-  .myrtille-dark-theme & {
-    color: #666666;
-  }
 }
 
 .myrtille-dark-theme {
@@ -223,8 +223,8 @@ body {
   .mat-mdc-input-element {
     caret-color: mat.get-color-from-palette($light-primary, 100);
   }
-}
 
-.hide-focus:focus {
-  outline: 0 solid transparent;
+  .very-light-text {
+    color: #666666;
+  }
 }

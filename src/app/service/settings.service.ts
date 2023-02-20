@@ -9,9 +9,9 @@ export class SettingsService {
 
   public set darkMode(isDark: boolean) {
     if (isDark) {
-      document.getElementsByTagName('html').item(0).classList.add('myrtille-dark-theme');
+      document.getElementsByTagName('html').item(0)?.classList.add('myrtille-dark-theme');
     } else {
-      document.getElementsByTagName('html').item(0).classList.remove('myrtille-dark-theme');
+      document.getElementsByTagName('html').item(0)?.classList.remove('myrtille-dark-theme');
     }
     this._darkMode$.next(isDark);
   }

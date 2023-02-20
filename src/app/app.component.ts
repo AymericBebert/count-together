@@ -45,7 +45,7 @@ export class AppComponent {
           return r;
         }),
         filter(r => r.outlet === 'primary'),
-        mergeMap(r => r.data)
+        mergeMap(r => r.data),
       )
       .subscribe(data => {
         this.navService.showBackButton$.next(data.hasBack || !!data.backRouterNavigate);

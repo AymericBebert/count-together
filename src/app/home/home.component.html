@@ -1,6 +1,6 @@
 <p style="margin: 0 0 24px">{{ 'home.welcome' | translate }}</p>
 
-<button mat-raised-button color="primary" routerLink="../game/offline">
+<button mat-raised-button color="primary" [routerLink]="['game', 'offline']">
   {{ 'home.offline' | translate }}
 </button>
 <br>

@@ -9,7 +9,9 @@ import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame} from '../mod
 import {SocketService} from '../socket/socket.service';
 import {StorageService} from '../storage/storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GamesService {
 
   public gameCheckPending$ = new BehaviorSubject<boolean>(false);

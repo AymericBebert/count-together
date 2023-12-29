@@ -8,16 +8,19 @@ import {DeviceService} from './device.service';
 import {NavButtonsService} from './nav-buttons.service';
 import {SettingsService} from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NavService {
   public mainTitle$ = new BehaviorSubject<string>('');
   public pinSideNav$ = new BehaviorSubject<boolean>(false);
   public showBackButton$ = new BehaviorSubject<boolean>(false);
   public navButtons$ = new BehaviorSubject<string[]>([]);
   public navTools$ = new BehaviorSubject<{ name: string, icon: string }[]>([]);
-  public notificationBadge$ = new BehaviorSubject<string>('');
-  public displayUpdatesAvailable$ = new BehaviorSubject<boolean>(false);
-  public displayUpdatesActivated$ = new BehaviorSubject<boolean>(false);
+
+  public notificationBadge = '';
+  public displayUpdatesAvailable = false;
+  public displayUpdatesActivated = false;
 
   public language$ = new BehaviorSubject<string>('');
 
@@ -30,14 +33,14 @@ export class NavService {
   ) {
     this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
 
-    this.updater.updatesAvailable$.subscribe(() => {
-      this.notificationBadge$.next('1');
-      this.displayUpdatesAvailable$.next(true);
+    this.updater.updatesAvailable$.pipe(filter(a => a)).subscribe(() => {
+      this.notificationBadge = '1';
+      this.displayUpdatesAvailable = true;
     });
 
-    this.updater.updatesActivated$.subscribe(() => {
-      this.notificationBadge$.next('1');
-      this.displayUpdatesActivated$.next(true);
+    this.updater.updatesActivated$.pipe(filter(a => a)).subscribe(() => {
+      this.notificationBadge = '1';
+      this.displayUpdatesActivated = true;
     });
   }
 

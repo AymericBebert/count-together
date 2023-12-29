@@ -7,7 +7,9 @@ describe('RankIconComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RankIconComponent]
+      imports: [
+        RankIconComponent,
+      ],
     })
       .compileComponents();
   }));

@@ -1,6 +1,5 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatButtonModule} from '@angular/material/button';
-import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ConfirmDialogComponent} from './confirm-dialog.component';
 
 describe('ConfirmDialogComponent', () => {
@@ -10,10 +9,6 @@ describe('ConfirmDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatDialogModule,
-        MatButtonModule,
-      ],
-      declarations: [
         ConfirmDialogComponent,
       ],
       providers: [

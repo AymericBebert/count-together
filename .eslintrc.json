@@ -43,6 +43,12 @@
         "semi": [
           2,
           "always"
+        ],
+        "max-len": [
+          "error",
+          {
+            "code": 140
+          }
         ]
       }
     },
@@ -53,7 +59,14 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "max-len": [
+          "error",
+          {
+            "code": 140
+          }
+        ]
+      }
     }
   ]
 }

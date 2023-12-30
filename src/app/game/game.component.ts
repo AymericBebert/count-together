@@ -332,7 +332,7 @@ export class GameComponent implements OnInit, OnDestroy {
     if (game === null) {
       console.error('Trying to share but game is null?');
     } else if (game.gameId === 'offline') {
-      this.gamesService.postNewGame(game)
+      this.gamesService.postNewGame$(game)
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).then(() => {
@@ -350,7 +350,7 @@ export class GameComponent implements OnInit, OnDestroy {
     } else if (game.gameId === 'offline') {
       console.error('Trying to duplicate but game is offline?');
     } else {
-      this.gamesService.duplicateGame(game.gameId)
+      this.gamesService.duplicateGame$(game.gameId)
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).catch(err => console.error('Could not navigate after duplication?', err));

@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(
         filter<IGame>(res => res !== undefined),
-        switchMap(res => this.gamesService.postNewGame(res)),
+        switchMap(res => this.gamesService.postNewGame$(res)),
         takeUntil(this.destroy$),
       )
       .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));

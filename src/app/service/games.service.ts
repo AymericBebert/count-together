@@ -85,67 +85,67 @@ export class GamesService {
     this.gameLeft$.subscribe(() => console.log('game left'));
   }
 
-  public updateSavedGame(game: IGame) {
+  public updateSavedGame(game: IGame): void {
     if (game.gameId === 'offline') {
       this.currentGame$.next(game);
     }
   }
 
-  public saveOfflineGameToStorage(game: IGame) {
+  public saveOfflineGameToStorage(game: IGame): void {
     console.log('Saving game to storage');
     this.storageService.setItem('offlineGame', JSON.stringify(game));
   }
 
-  public gameEditName(gameId: string, name: string) {
+  public gameEditName(gameId: string, name: string): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game edit name', {gameId, name});
   }
 
-  public gameEditWin(gameId: string, lowerScoreWins: boolean) {
+  public gameEditWin(gameId: string, lowerScoreWins: boolean): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game edit win', {gameId, lowerScoreWins});
   }
 
-  public gameEditGameType(gameId: string, gameType: GameType) {
+  public gameEditGameType(gameId: string, gameType: GameType): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game edit type', {gameId, gameType});
   }
 
-  public gameEditPlayer(gameId: string, playerId: number, playerName: string) {
+  public gameEditPlayer(gameId: string, playerId: number, playerName: string): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game edit player', {gameId, playerId, playerName});
   }
 
-  public gameRemovePlayer(gameId: string, playerId: number) {
+  public gameRemovePlayer(gameId: string, playerId: number): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game remove player', {gameId, playerId});
   }
 
-  public gameEditScore(gameId: string, playerId: number, scoreId: number, score: number) {
+  public gameEditScore(gameId: string, playerId: number, scoreId: number, score: number): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game edit score', {gameId, playerId, scoreId, score});
   }
 
-  public gameRemoveScore(gameId: string, playerId: number, scoreId: number) {
+  public gameRemoveScore(gameId: string, playerId: number, scoreId: number): void {
     if (gameId === 'offline') {
       return;
     }
     this.socket.emit('game remove score', {gameId, playerId, scoreId});
   }
 
-  public setCurrentGameId(gameId: string | null) {
+  public setCurrentGameId(gameId: string | null): void {
     const currentGame = this.currentGame$.getValue();
     if (!gameId) {
       this.socket.disconnectSocket();
@@ -157,7 +157,7 @@ export class GamesService {
       if (gameId === 'offline') {
         this.loadOfflineGameFromStorage();
       } else {
-        this.getGame(gameId).subscribe(game => this.currentGame$.next(game));
+        this.getGameNotFoundOk$(gameId).subscribe(game => this.currentGame$.next(game));
         this.socket.connectSocket();
       }
     }
@@ -168,33 +168,27 @@ export class GamesService {
       if (control.value.length < this.config.tokenLength) {
         return of(null);
       }
-      return this.gameExistsCheck(control.value).pipe(
+      return this.gameExistsCheck$(control.value).pipe(
         map(res => res ? null : {gameNotFound: true}),
       );
     };
   }
 
-  public postNewGame(game: IGame): Observable<IGame | null> {
-    return this.http.post<{ result: IGame | null; error: string; }>(`${this.config.backendUrl}/games/new-game`, game).pipe(
-      tap(res => res.error && this.apiError.displayError(`postNewGame: ${res.error}`)),
+  public postNewGame$(game: IGame): Observable<IGame> {
+    return this.http.post<IGame>(`${this.config.backendUrl}/games/new-game`, game).pipe(
       catchError(error => {
-        console.error('postNewGame', error);
-        this.apiError.displayError('Could not post new game');
+        this.apiError.displayError('Could not post new game', error);
         return EMPTY;
       }),
-      map(res => res.result),
     );
   }
 
-  public duplicateGame(gameId: string): Observable<IGame | null> {
-    return this.http.post<{ result: IGame | null; error: string; }>(`${this.config.backendUrl}/games/duplicate/${gameId}`, null).pipe(
-      tap(res => res.error && this.apiError.displayError(`duplicateGame: ${res.error}`)),
+  public duplicateGame$(gameId: string): Observable<IGame> {
+    return this.http.post<IGame>(`${this.config.backendUrl}/games/duplicate/${gameId}`, null).pipe(
       catchError(error => {
-        console.error('duplicateGame', error);
-        this.apiError.displayError('Could not duplicate game');
+        this.apiError.displayError('Could not duplicate game', error);
         return EMPTY;
       }),
-      map(res => res.result),
     );
   }
 
@@ -226,16 +220,16 @@ export class GamesService {
     ];
   }
 
-  public forgetPlayer(playerName: string) {
+  public forgetPlayer(playerName: string): void {
     const knownPlayersFromStorage = this.storageService.getItem('knownPlayers') || '{}';
     const knownPlayers: IKnownPlayers = JSON.parse(knownPlayersFromStorage);
     delete knownPlayers[playerName];
     this.storageService.setItem('knownPlayers', JSON.stringify(knownPlayers));
   }
 
-  private gameExistsCheck(token: string): Observable<IGame | null> {
+  private gameExistsCheck$(token: string): Observable<IGame | null> {
     this.gameCheckPending$.next(true);
-    return this.getGame(token).pipe(
+    return this.getGameNotFoundOk$(token).pipe(
       catchError(err => {
         console.error(err);
         return of(null);
@@ -245,14 +239,11 @@ export class GamesService {
     );
   }
 
-  private getGame(gameId: string): Observable<IGame | null> {
-    return this.http.get<{ result: IGame | null; error: string }>(`${this.config.backendUrl}/games/game/${gameId}`).pipe(
-      tap(res => res.error && this.apiError.displayError(`getGame: ${res.error}`)),
-      map(res => res.result),
-    );
+  private getGameNotFoundOk$(gameId: string): Observable<IGame | null> {
+    return this.http.get<IGame>(`${this.config.backendUrl}/games/game/${gameId}?notFoundOk=true`);
   }
 
-  private loadOfflineGameFromStorage() {
+  private loadOfflineGameFromStorage(): void {
     const gameFromStorage = this.storageService.getItem('offlineGame');
     if (gameFromStorage) {
       try {
@@ -273,7 +264,7 @@ export class GamesService {
     }
   }
 
-  private addToVisitedGames(gameId: string, name: string) {
+  private addToVisitedGames(gameId: string, name: string): void {
     const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
     const visitedGames: IStoredGame[] = JSON.parse(visitedGamesFromStorage);
     const foundAtIndex = visitedGames.map(sg => sg.gameId).indexOf(gameId);

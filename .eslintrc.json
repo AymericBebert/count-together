@@ -8,8 +8,7 @@
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.json"
+          "tsconfig.json"
         ],
         "createDefaultProgram": true
       },
@@ -44,6 +43,12 @@
         "semi": [
           2,
           "always"
+        ],
+        "max-len": [
+          "error",
+          {
+            "code": 140
+          }
         ]
       }
     },
@@ -54,7 +59,14 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "max-len": [
+          "error",
+          {
+            "code": 140
+          }
+        ]
+      }
     }
   ]
 }

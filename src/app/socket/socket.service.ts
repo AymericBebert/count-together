@@ -5,7 +5,9 @@ import {io, Socket} from 'socket.io-client';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SocketService {
 
   public connected$ = new Subject<boolean>();

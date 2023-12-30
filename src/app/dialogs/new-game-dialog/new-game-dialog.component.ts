@@ -1,7 +1,14 @@
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CommonModule} from '@angular/common';
 import {Component, Inject, Optional} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {TranslateModule} from '@ngx-translate/core';
 import {GameType, IGame, IRecentPlayer} from '../../model/game';
 import {GamesService} from '../../service/games.service';
 
@@ -12,7 +19,20 @@ export interface NewGameDialogData {
 @Component({
   selector: 'app-new-game-dialog',
   templateUrl: './new-game-dialog.component.html',
-  styleUrls: ['./new-game-dialog.component.scss']
+  styleUrls: ['./new-game-dialog.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    DragDropModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+  ],
 })
 export class NewGameDialogComponent {
 

@@ -4,13 +4,13 @@
   </span>
 </div>
 
-<div mat-dialog-content>
+<form mat-dialog-content (ngSubmit)="ref.close(name.value)">
   <mat-form-field>
     <mat-label>{{ 'edit.player-name.label' | translate }}</mat-label>
-    <input matInput #playerNameInput name="player" [formControl]="name" [autofocus]="true">
+    <input matInput name="player" [formControl]="name" [autofocus]="true">
     <mat-error *ngIf="name.invalid">{{ 'edit.player-name.invalid' | translate }}</mat-error>
   </mat-form-field>
-</div>
+</form>
 
 <div mat-dialog-actions style="display: flex; justify-content: space-between">
   <button mat-button color="primary" [mat-dialog-close]="undefined">

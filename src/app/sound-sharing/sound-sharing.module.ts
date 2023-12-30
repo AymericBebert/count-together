@@ -4,7 +4,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {TranslateModule} from '@ngx-translate/core';
 import {BrowserCompatibilityService} from './browser-compatibility.service';
-import {DebugItemModule} from './debug-item/debug-item.module';
+import {DebugItemComponent} from './debug-item/debug-item.component';
 import {SoundDebugComponent} from './sound-debug/sound-debug.component';
 import {SoundSharingRoutingModule} from './sound-sharing-routing.module';
 import {SoundSharingComponent} from './sound-sharing/sound-sharing.component';
@@ -16,7 +16,7 @@ import {SoundSharingComponent} from './sound-sharing/sound-sharing.component';
   ],
   imports: [
     SoundSharingRoutingModule,
-    DebugItemModule,
+    DebugItemComponent,
     CommonModule,
     TranslateModule.forChild(),
     MatIconModule,

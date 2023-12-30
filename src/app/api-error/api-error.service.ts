@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subject} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ApiErrorService {
 
   private apiError$ = new Subject<string>();

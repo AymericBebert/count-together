@@ -1,8 +1,14 @@
+import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {NewGameDialogComponent, NewGameDialogData} from '../dialogs/new-game-dialog/new-game-dialog.component';
@@ -14,7 +20,18 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    RouterLink,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
 

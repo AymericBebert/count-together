@@ -1,4 +1,4 @@
-FROM node:18.16.0-bullseye-slim AS builder
+FROM node:20.10.0-bookworm-slim AS builder
 
 RUN mkdir /count-together
 WORKDIR /count-together
@@ -7,12 +7,12 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 
-RUN npm run build:prod
+RUN npm run build
 
 #
 # Go back from a light nginx image
 #
-FROM nginx:1.21.1-alpine
+FROM nginx:1.25.3-alpine
 
 # nginx congiguration to redirect every route to /index.html
 RUN echo $'\n\
@@ -40,7 +40,7 @@ server {\n\
 
 WORKDIR /usr/share/nginx/html
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY --from=builder /count-together/dist/count-together .
+COPY --from=builder /count-together/dist/count-together/browser .
 EXPOSE 80
 
 ARG APP_VERSION

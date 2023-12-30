@@ -2,8 +2,6 @@
 
 Count together the scores on your card or board games!
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
-
 ## Installation
 
 ```shell
@@ -25,21 +23,12 @@ git push origin 1.0.0
 
 ## Running unit tests
 
-Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Run as static website
 ```bash
-npm run build:prod
-python3 -m http.server --directory dist/count-together 4500
+npm run test
 ```
 
-## Analyze build
-To analyze the build you can do :
+## Run as static website
+
 ```bash
-npm run build:stats
-npx webpack-bundle-analyzer dist/count-together/stats.json
+npm run build:serve
 ```

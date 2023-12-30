@@ -4,7 +4,9 @@ import {delay, map} from 'rxjs/operators';
 import {GameType, IGameSettings} from '../model/game';
 import {GamesService} from './games.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GameSettingsService {
 
   public gameSettings$: Observable<IGameSettings | null> = this.gamesService.currentGame$.pipe(

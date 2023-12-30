@@ -16,11 +16,10 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 
   @Input() public names: string[] = [];
   @Input() public nb = 5;
+  @Input() public dark = false;
+  @Input() public reset = 0;
 
   @ViewChild('svgRef', {static: true}) public svgRef: ElementRef<SVGElement>;
-
-  @Input() private dark = false;
-  @Input() private reset = 0;
 
   private oldNb = 5;
   private oldAngle = 180;

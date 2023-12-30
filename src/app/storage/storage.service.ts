@@ -1,16 +1,18 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class StorageService {
-  public noStorageError$ = new Subject<void>();
+  public readonly noStorageError$ = new Subject<void>();
 
-  private readonly storage: Storage | null = null;
+  private readonly _storage: Storage | null = null;
 
   constructor() {
     try {
       if (localStorage !== null) {
-        this.storage = localStorage;
+        this._storage = localStorage;
         return;
       }
     } catch (e) {
@@ -19,46 +21,33 @@ export class StorageService {
 
     try {
       if (sessionStorage !== null) {
-        this.storage = sessionStorage;
+        this._storage = sessionStorage;
         return;
       }
     } catch (e) {
       console.warn('Could not access sessionStorage');
     }
 
-    if (!this.checkStorage()) {
-      return;
-    }
+    this.storage;
   }
 
   public setItem(key: string, value: string): void {
-    if (!this.checkStorage()) {
-      return;
-    }
     this.storage.setItem(key, value);
   }
 
   public getItem(key: string): string | null {
-    if (!this.checkStorage()) {
-      return null;
-    }
     return this.storage.getItem(key);
   }
 
   public removeItem(key: string): void {
-    if (!this.checkStorage()) {
-      return;
-    }
     this.storage.removeItem(key);
   }
 
-  private checkStorage(): boolean {
-    if (this.storage !== null) {
-      return true;
-    } else {
-      console.error('No storage option is available.');
-      this.noStorageError$.next();
-      return false;
+  private get storage(): Storage {
+    if (this._storage !== null) {
+      return this._storage;
     }
+    this.noStorageError$.next();
+    throw new Error('No storage option is available.');
   }
 }

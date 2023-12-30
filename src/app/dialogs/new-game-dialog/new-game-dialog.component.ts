@@ -36,10 +36,10 @@ export interface NewGameDialogData {
 })
 export class NewGameDialogComponent {
 
-  public readonly gameName = new FormControl<string>('', [Validators.required]);
-  public readonly gameType = new FormControl<GameType>('free');
-  public readonly lowerScoreWins = new FormControl<boolean>(false);
-  public readonly playerName = new FormControl<string>('');
+  public readonly gameName = new FormControl<string>('', {nonNullable: true, validators: [Validators.required]});
+  public readonly gameType = new FormControl<GameType>('free', {nonNullable: true});
+  public readonly lowerScoreWins = new FormControl<boolean>(false, {nonNullable: true});
+  public readonly playerName = new FormControl<string>('', {nonNullable: true});
 
   public selectedPlayers: string[] = [];
   public otherPlayers: string[] = [];

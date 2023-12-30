@@ -13,8 +13,7 @@ export class WheelPageComponent {
   public resetIndex = 0;
 
   public names$ = this.route.queryParams.pipe(
-    filter(params => !!params.names),
-    map(params => (params.names as string).split(',')),
+    map(params => (params.names as string || '').split(',')),
   );
 
   public setSliderValue$ = merge(

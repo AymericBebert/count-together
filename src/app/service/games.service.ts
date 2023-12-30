@@ -20,7 +20,7 @@ export class GamesService {
   public currentGame$ = new BehaviorSubject<IGame | null>(null);
   private currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
 
-  private gameLeft$ = this.currentGame$.pipe(skip(1), filter(g => !g), map<null, void>(() => void 0));
+  private gameLeft$ = this.currentGame$.pipe(skip(1), filter((g): g is null => !g), map<null, void>(() => void 0));
 
   constructor(private http: HttpClient,
               private apiError: ApiErrorService,
@@ -30,21 +30,21 @@ export class GamesService {
   ) {
     this.currentGame$
       .pipe(
-        filter(game => game && game.gameId === 'offline'),
+        filter((game): game is IGame => !!game && game.gameId === 'offline'),
         distinctUntilChanged((g, h) => g.gameId === h.gameId),
       )
       .subscribe(() => this.loadOfflineGameFromStorage());
 
     this.currentGame$
       .pipe(
-        filter(game => game && game.gameId === 'offline'),
+        filter((game): game is IGame => !!game && game.gameId === 'offline'),
         debounceTime(500),
       )
       .subscribe(game => this.saveOfflineGameToStorage(game));
 
     this.currentGame$
       .pipe(
-        filter(game => game && game.gameId !== 'offline'),
+        filter((game): game is IGame => !!game && game.gameId !== 'offline'),
         map(game => ({gameId: game.gameId, name: game.name, playerNames: game.players.map(p => p.name)})),
         debounceTime(500),
       )
@@ -57,7 +57,7 @@ export class GamesService {
       this.currentGameId$,
       this.socket.connected$,
     ])
-      .pipe(filter(([gid, c]) => c && gid && gid !== 'offline'))
+      .pipe(filter(([gameId, c]) => c && !!gameId && gameId !== 'offline'))
       .subscribe(([gameId]) => {
         this.socket.emit('game exit');
         this.socket.emit('game join', gameId);
@@ -194,7 +194,7 @@ export class GamesService {
 
   public getVisitedGames(): IStoredGame[] {
     const visitedGamesFromStorage = this.storageService.getItem('visitedGames') || '[]';
-    return JSON.parse(visitedGamesFromStorage).map(g => ({...g, date: new Date(g.date)}));
+    return JSON.parse(visitedGamesFromStorage).map((g: IStoredGame) => ({...g, date: new Date(g.date)}));
   }
 
   public deleteVisitedGame(gameId: string): IStoredGame[] {

@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {
     this.getVisitedGames();
     this.gameFormControl = new FormControl('', {
+      nonNullable: true,
       asyncValidators: [this.gamesService.gameExistsValidator()],
     });
 
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.gamesService.gameCheck$
       .pipe(
-        filter(game => !!game),
+        filter((game): game is IGame => !!game),
         takeUntil(this.destroy$),
       )
       .subscribe(game => {

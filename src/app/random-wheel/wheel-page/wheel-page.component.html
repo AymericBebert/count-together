@@ -17,9 +17,9 @@
 
 <div style="width: 100%; max-width: 400px; margin: auto">
   <app-wheel
-    [names]="names$ | async"
-    [nb]="nb$ | async"
-    [dark]="settings.darkMode$ | async"
+    [names]="(names$ | async) || []"
+    [nb]="(nb$ | async) || 0"
+    [dark]="!!(settings.darkMode$ | async)"
     [reset]="resetIndex"
   ></app-wheel>
 </div>

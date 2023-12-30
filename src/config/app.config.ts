@@ -10,7 +10,7 @@ export interface AppConfig {
 }
 
 export function appConfigFactory(): AppConfig {
-  const appConstants: AppConfig = window['APP_CONFIG'] || {};
+  const appConstants: Partial<AppConfig> = (window as unknown as { APP_CONFIG: Partial<AppConfig> }).APP_CONFIG || {};
   return {
     version: appConstants.version || 'untagged',
     backendUrl: appConstants.backendUrl || 'http://localhost:4050',

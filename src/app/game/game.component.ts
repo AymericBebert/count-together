@@ -43,7 +43,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public game$ = this.gamesService.currentGame$;
 
   public players$: Observable<EnrichedPlayer[]> = this.game$.pipe(
-    filter(game => game !== null),
+    filter((game): game is IGame => !!game),
     map(game => {
       const playersNoRank = game.players.map(player => ({
         ...player,
@@ -85,7 +85,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
     return scores.reduce(
-      (acc, score) => ({scoresCumSum: [...acc.scoresCumSum, acc.total + score], total: acc.total + score}),
+      (acc, score) => ({
+        scoresCumSum: [...acc.scoresCumSum, acc.total + (score || 0)],
+        total: acc.total + (score || 0),
+      }),
       {total: 0, scoresCumSum: [] as number[]},
     );
   }
@@ -97,6 +100,9 @@ export class GameComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(([btn, game]) => {
+        if (!game) {
+          throw new Error('Trying to click nav button but game is null?');
+        }
         switch (btn) {
           case 'share':
             this.shareGame(game);
@@ -141,18 +147,18 @@ export class GameComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public editGameOpen() {
-    const data: GameNameDialogData = {name: this.game$.getValue().name};
-    this.dialog.open(GameNameDialogComponent, {data})
+  public editGameOpen(): void {
+    const currentGame = this.gameOrThrow;
+    this.dialog.open<GameNameDialogComponent, GameNameDialogData, string>(GameNameDialogComponent, {data: {name: currentGame.name}})
       .afterClosed()
-      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
+      .pipe(filter((res): res is string => res !== undefined), takeUntil(this.destroy$))
       .subscribe(res => {
         this.editGame(res);
       });
   }
 
-  public addPlayer() {
-    const currentGame = this.game$.getValue();
+  public addPlayer(): void {
+    const currentGame = this.gameOrThrow;
     const newPlayerIndex = currentGame.players.length;
     const newPlayerName = `P${newPlayerIndex + 1}`;
     currentGame.players.push({name: newPlayerName, scores: []});
@@ -165,18 +171,18 @@ export class GameComponent implements OnInit, OnDestroy {
     this.editPlayerNameOpen(currentGame.players.length - 1, true);
   }
 
-  public editPlayerNameOpen(p: number, isNew: boolean = false) {
-    const data: PlayerNameDialogData = {name: this.game$.getValue().players[p].name, isNew};
+  public editPlayerNameOpen(p: number, isNew: boolean = false): void {
+    const data: PlayerNameDialogData = {name: this.gameOrThrow.players[p].name, isNew};
     this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(PlayerNameDialogComponent, {data})
       .afterClosed()
-      .pipe(filter(res => !!res), takeUntil(this.destroy$))
+      .pipe(filter((res): res is string => !!res), takeUntil(this.destroy$))
       .subscribe(res => {
         this.editPlayerName(p, res);
       });
   }
 
-  public removePlayer() {
-    const currentGame = this.game$.getValue();
+  public removePlayer(): void {
+    const currentGame = this.gameOrThrow;
     const currentNbPlayers = currentGame.players.length;
     if (currentNbPlayers === 0) {
       return;
@@ -204,13 +210,13 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addScore(p: number) {
-    const currentGame = this.game$.getValue();
+  public addScore(p: number): void {
+    const currentGame = this.gameOrThrow;
     this.editScoreOpen(p, currentGame.players[p].scores.length, true);
   }
 
-  public editScoreOpen(p: number, i: number, isNew: boolean = false) {
-    const data: EditScoreDialogData = {score: this.game$.getValue().players[p].scores[i] ?? null, isNew};
+  public editScoreOpen(p: number, i: number, isNew: boolean = false): void {
+    const data: EditScoreDialogData = {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew};
     this.dialog.open(ScoreDialogComponent, {data})
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
@@ -219,8 +225,8 @@ export class GameComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editScore(p: number, i: number, s: number) {
-    const currentGame = this.game$.getValue();
+  public editScore(p: number, i: number, s: number): void {
+    const currentGame = this.gameOrThrow;
     if (i === currentGame.players[p].scores.length) {
       currentGame.players[p].scores.push(s);
     } else {
@@ -230,23 +236,23 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  public removeScore(p: number) {
-    const currentGame = this.game$.getValue();
+  public removeScore(p: number): void {
+    const currentGame = this.gameOrThrow;
     currentGame.players[p].scores.pop();
     this.gamesService.gameRemoveScore(currentGame.gameId, p, currentGame.players[p].scores.length);
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  public addScoreLine() {
-    const currentGame = this.game$.getValue();
+  public addScoreLine(): void {
+    const currentGame = this.gameOrThrow;
     this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, 0);
     const increasedScoreLength = Math.max(...currentGame.players.map(p => p.scores.length)) + 1;
     currentGame.players.forEach(p => p.scores.push(...new Array(increasedScoreLength - p.scores.length).fill(0)));
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  public removeScoreLine() {
-    const currentGame = this.game$.getValue();
+  public removeScoreLine(): void {
+    const currentGame = this.gameOrThrow;
     if (currentGame.players.length === 0) {
       return;
     }
@@ -277,25 +283,33 @@ export class GameComponent implements OnInit, OnDestroy {
     return `${player.name}:${player.total}:${player.rank}:${player.last}`;
   }
 
-  public scoreTrackByFn(index: number, score: number): number {
-    return score;
+  public scoreTrackByFn(index: number, score: number | null): number {
+    return index;
   }
 
-  private editGame(newName: string) {
-    const currentGame = this.game$.getValue();
+  private get gameOrThrow(): IGame {
+    const game = this.game$.getValue();
+    if (game) {
+      return game;
+    }
+    throw new Error('Trying to get game but game is null');
+  }
+
+  private editGame(newName: string): void {
+    const currentGame = this.gameOrThrow;
     currentGame.name = newName;
     this.gamesService.gameEditName(currentGame.gameId, newName);
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  private setLowerScoreWins(lowerScoreWins: boolean) {
-    const currentGame = this.game$.getValue();
+  private setLowerScoreWins(lowerScoreWins: boolean): void {
+    const currentGame = this.gameOrThrow;
     currentGame.lowerScoreWins = lowerScoreWins;
     this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  private setGameTypeOpen(gameType: GameType) {
+  private setGameTypeOpen(gameType: GameType): void {
     if (gameType === 'winOrLose') {
       const data: ConfirmDialogData = {
         title: this.translateService.instant('game.change-game-type-dialog.title'),
@@ -312,21 +326,21 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  private editGameType(gameType: GameType) {
-    const currentGame = this.game$.getValue();
+  private editGameType(gameType: GameType): void {
+    const currentGame = this.gameOrThrow;
     currentGame.gameType = gameType;
     this.gamesService.gameEditGameType(currentGame.gameId, gameType);
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  private editPlayerName(p: number, newName: string) {
-    const currentGame = this.game$.getValue();
+  private editPlayerName(p: number, newName: string): void {
+    const currentGame = this.gameOrThrow;
     currentGame.players[p].name = newName;
     this.gamesService.gameEditPlayer(currentGame.gameId, p, newName);
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  private shareGame(game: IGame | null) {
+  private shareGame(game: IGame | null): void {
     const shareTitle = this.translateService.instant('game.share.title');
     const shareText = this.translateService.instant('game.share.text');
     if (game === null) {
@@ -344,7 +358,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  private duplicateGame(game: IGame | null) {
+  private duplicateGame(game: IGame | null): void {
     if (game === null) {
       console.error('Trying to duplicate but game is null?');
     } else if (game.gameId === 'offline') {
@@ -358,7 +372,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  private saveOffline(game: IGame | null) {
+  private saveOffline(game: IGame | null): void {
     if (game === null) {
       console.error('Trying to save offline but game is null?');
     } else if (game.gameId === 'offline') {

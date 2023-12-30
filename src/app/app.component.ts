@@ -39,7 +39,7 @@ import {SettingsService} from './service/settings.service';
 export class AppComponent {
   public readonly appVersion = this.config.version;
 
-  @ViewChild('drawer', {static: true}) public navDrawer: MatSidenav;
+  @ViewChild('drawer', {static: true}) public navDrawer!: MatSidenav;
 
   constructor(public readonly navService: NavService,
               public readonly settingsService: SettingsService,

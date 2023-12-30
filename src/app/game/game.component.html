@@ -41,7 +41,7 @@
               {{ score ?? '/' }}
             </div>
             <div class="cum-score">
-              {{ player.scoresCumSum[i] ?? '/' }}
+              {{ player.scoresCumSum[i] || '/' }}
             </div>
           </div>
         </ng-container>
@@ -50,8 +50,8 @@
           <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
                class="cell small-scores" style="position: relative">
             <div class="buttons" style="display: flex; justify-content: space-around; align-items: center">
-              <mat-icon (click)="editScore(p, i, score - 1)" class="minus">remove_circle</mat-icon>
-              <mat-icon (click)="editScore(p, i, score + 1)" class="plus">add_circle</mat-icon>
+              <mat-icon (click)="editScore(p, i, (score || 0) - 1)" class="minus">remove_circle</mat-icon>
+              <mat-icon (click)="editScore(p, i, (score || 0) + 1)" class="plus">add_circle</mat-icon>
             </div>
             <span class="overlay-score" style="position: absolute">
               {{ score ?? '/' }}

@@ -19,7 +19,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
   @Input() public dark = false;
   @Input() public reset = 0;
 
-  @ViewChild('svgRef', {static: true}) public svgRef: ElementRef<SVGElement>;
+  @ViewChild('svgRef', {static: true}) public svgRef!: ElementRef<SVGElement>;
 
   private oldNb = 5;
   private oldAngle = 180;
@@ -33,14 +33,14 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
   private readonly spinDuration = 4000;
   private readonly crownSize = 32;
 
-  private width: number;
-  private middle: number;
-  private far: number;
+  private width!: number;
+  private middle!: number;
+  private far!: number;
   private lastCrown = -1;
 
-  private arrowWrapper: Selection<any, unknown, null, undefined>;
-  private arrowRotate: Selection<any, unknown, null, undefined>;
-  private arrowInner: Selection<any, unknown, null, undefined>;
+  private arrowWrapper!: Selection<any, unknown, null, undefined>;
+  private arrowRotate!: Selection<any, unknown, null, undefined>;
+  private arrowInner!: Selection<any, unknown, null, undefined>;
 
   private reset$ = new Subject<void>();
   private resize$ = new Subject<void>();
@@ -178,7 +178,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .attr('transform', centerTransformFn)
       .style('opacity', 1);
 
-    const labelPathDFn = (d, i) => radarLine([[0, 0], [1, i + 0.5]]);
+    const labelPathDFn = (_: string, i: number) => radarLine([[0, 0], [1, i + 0.5]]);
     const labelColorFn = this.dark ? '#cccccc' : '#444444';
 
     labelsEnter.append('path')
@@ -187,8 +187,8 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .attr('opacity', 0.25)
       .attr('stroke-width', 2);
 
-    const labelTextXFn = (d, i) => Math.sin((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
-    const labelTextYFn = (d, i) => -Math.cos((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
+    const labelTextXFn = (_: string, i: number) => Math.sin((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
+    const labelTextYFn = (_: string, i: number) => -Math.cos((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
 
     labelsEnter.append('text')
       .attr('x', labelTextXFn)
@@ -298,11 +298,11 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .style('opacity', 0);
   }
 
-  private crownXFn(index) {
+  private crownXFn(index: number): number {
     return -Math.sin((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
   }
 
-  private crownYFn(index) {
+  private crownYFn(index: number): number {
     return Math.cos((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
   }
 

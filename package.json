@@ -10,6 +10,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:stats": "ng build --stats-json",
     "build:serve": "ng build && npx http-server -p 4500 -c-1 dist/count-together/browser",
     "build:dev": "ng build --configuration development",
     "test": "ng test",

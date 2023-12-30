@@ -13,6 +13,6 @@ import {MatIconModule} from '@angular/material/icon';
   ],
 })
 export class DebugItemComponent {
-  @Input() public isOk: boolean;
-  @Input() public label: string;
+  @Input() public isOk!: boolean;
+  @Input() public label!: string;
 }

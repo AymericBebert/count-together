@@ -15,7 +15,7 @@ import {SoundSharingService} from '../sound-sharing.service';
   ],
 })
 export class SoundDebugComponent implements OnInit, OnDestroy {
-  @ViewChild('replayAudio') replayAudioElement: ElementRef<HTMLAudioElement>;
+  @ViewChild('replayAudio', {static: true}) replayAudioElement!: ElementRef<HTMLAudioElement>;
   public replayAvailable = false;
   // public micPermission: PermissionState | null = null;
   public mediaDevices = navigator.mediaDevices;

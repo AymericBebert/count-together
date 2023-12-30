@@ -27,9 +27,9 @@ export interface GameNameDialogData {
 })
 export class GameNameDialogComponent {
 
-  public name = new FormControl<string>(this.data.name, [Validators.required]);
+  public name = new FormControl<string>(this.data.name, {nonNullable: true, validators: [Validators.required]});
 
-  constructor(public readonly ref: MatDialogRef<GameNameDialogComponent>,
+  constructor(public readonly ref: MatDialogRef<GameNameDialogComponent, string>,
               @Inject(MAT_DIALOG_DATA) private readonly data: GameNameDialogData,
   ) {
   }

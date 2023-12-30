@@ -16,14 +16,14 @@
 
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
                        class="selectable"
-                       [ngClass]="{selected: gameSettings.lowerScoreWins === false}">
+                       [ngClass]="{selected: !gameSettings.lowerScoreWins}">
           <span class="crown-icon-bw"></span>
           <mat-icon>arrow_drop_up</mat-icon>
           <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
                        class="selectable"
-                       [ngClass]="{selected: gameSettings.lowerScoreWins === true}">
+                       [ngClass]="{selected: gameSettings.lowerScoreWins}">
           <span class="crown-icon-bw"></span>
           <mat-icon>arrow_drop_down</mat-icon>
           <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
@@ -121,7 +121,12 @@
 
       <img routerLink="/" [src]="'assets/icons/crown-white-64.png'" alt="icon" class="main-icon hide-focus"/>
       <span routerLink="/" class="main-title hide-focus">
-        {{ (navService.mainTitle$ | async | translate) || ('app-name' | translate) }}
+        <ng-container *ngIf="navService.mainTitle$ | async as mainTitle; else defaultTitle">
+          {{ mainTitle | translate }}
+        </ng-container>
+        <ng-template #defaultTitle>
+          {{ 'app-name' | translate }}
+        </ng-template>
       </span>
 
       <span class="fill-remaining-space"></span>

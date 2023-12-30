@@ -18,12 +18,12 @@ export class SoundSharingService {
   public readonly receivedPayload$ = new Subject<string>();
   public readonly receivedCode$ = new Subject<string>();
 
-  public dataArray: Uint8Array;
+  public dataArray: Uint8Array | undefined;
 
   private readonly TIME_STEP = 160;
 
-  private audioCtx: AudioContext;
-  private analyser: AnalyserNode;
+  private audioCtx!: AudioContext;
+  private analyser!: AnalyserNode;
   private hearing = '';
 
   private analysing = false;
@@ -115,9 +115,13 @@ export class SoundSharingService {
       return;
     }
 
-    this.analyser.getByteFrequencyData(this.dataArray);
-    const f0 = this.dataArray[this.FFT_INDEX_0];
-    const f1 = this.dataArray[this.FFT_INDEX_1];
+    const dataArray = this.dataArray;
+    if (!dataArray) {
+      throw new Error('No dataArray');
+    }
+    this.analyser.getByteFrequencyData(dataArray);
+    const f0 = dataArray[this.FFT_INDEX_0];
+    const f1 = dataArray[this.FFT_INDEX_1];
 
     if (f0 > 128 && f1 > 128 && (this.swapStatus && f1 >= f0 || !this.swapStatus && f1 < f0)) {
       this.swapStatus = f1 < f0;

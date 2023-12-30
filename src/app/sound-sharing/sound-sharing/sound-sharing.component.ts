@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import {firstValueFrom, Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
 import {SoundSharingService} from '../sound-sharing.service';
 
@@ -16,12 +16,12 @@ import {SoundSharingService} from '../sound-sharing.service';
   ],
 })
 export class SoundSharingComponent {
-  public gameShareData$: Observable<{ gameId: string; gamePayload: string } | null> = this.route.parent.paramMap.pipe(
-    map(params => {
+  public gameShareData$: Observable<{ gameId: string; gamePayload: string } | null> = this.route.parent
+    ? this.route.parent.paramMap.pipe(map(params => {
       const gameId = params.get('gameId');
       return gameId ? {gameId, gamePayload: SoundSharingService.cutBytes(SoundSharingService.stringToBinary(gameId))} : null;
-    }),
-  );
+    }))
+    : of(null);
 
   private frequencyDiff = this.soundSharing.FFT_INDEX_1 - this.soundSharing.FFT_INDEX_0;
   public analyseRange = Array(Math.round(this.frequencyDiff * 3 / 2)).fill(0)
@@ -48,6 +48,6 @@ export class SoundSharingComponent {
   }
 
   private askUserPermission(): Promise<MediaStream | null> {
-    return this.recordService.askUserPermission$().pipe(first(null, null)).toPromise();
+    return firstValueFrom(this.recordService.askUserPermission$());
   }
 }

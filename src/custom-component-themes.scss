@@ -1,14 +1,14 @@
-@import './app/app.component.theme';
-@import './app/game/game.component.theme';
-@import './app/rank-icon/rank-icon.component.theme';
+@use 'app/app.component.theme' as app;
+@use 'app/game/game.component.theme' as game;
+@use 'app/rank-icon/rank-icon.component.theme' as rank-icon;
 
 @mixin custom-components-theme($theme) {
-  @include sidenav-content-component-theme($theme);
-  @include game-component-theme($theme);
-  @include rank-icon-component-theme($theme);
+  @include app.sidenav-content-component-theme($theme);
+  @include game.game-component-theme($theme);
+  @include rank-icon.rank-icon-component-theme($theme);
 }
 
 @mixin custom-components-dark-theme($theme) {
-  @include sidenav-content-component-dark-theme($theme);
-  @include game-component-dark-theme($theme);
+  @include app.sidenav-content-component-dark-theme($theme);
+  @include game.game-component-dark-theme($theme);
 }

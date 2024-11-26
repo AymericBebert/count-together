@@ -17,7 +17,6 @@ export type PlayerNameDialogResult = string | null;
   selector: 'app-player-name-dialog',
   templateUrl: './player-name-dialog.component.html',
   styleUrls: ['./player-name-dialog.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

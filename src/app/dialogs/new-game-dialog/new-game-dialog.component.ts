@@ -20,7 +20,6 @@ export interface NewGameDialogData {
   selector: 'app-new-game-dialog',
   templateUrl: './new-game-dialog.component.html',
   styleUrls: ['./new-game-dialog.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

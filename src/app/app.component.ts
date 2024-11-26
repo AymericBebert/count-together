@@ -21,7 +21,6 @@ import {SettingsService} from './service/settings.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

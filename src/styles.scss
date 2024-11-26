@@ -1,9 +1,9 @@
 @use '@angular/material' as mat;
+@use 'custom-component-themes.scss' as cct;
+@use 'fonts';
 
-@include mat.core();
-
-@import '_fonts.scss';
-@import './custom-component-themes.scss';
+@include mat.elevation-classes();
+@include mat.app-background();
 
 $dark-primary-text: rgba(black, 0.87);
 $light-primary-text: white;
@@ -90,7 +90,7 @@ $light-theme: mat.m2-define-light-theme((
 
 @include mat.all-component-themes($light-theme);
 
-@include custom-components-theme($light-theme);
+@include cct.custom-components-theme($light-theme);
 
 // Defines an alternate dark theme.
 $mat-myrtille-dark: (
@@ -179,8 +179,8 @@ $dark-theme: map_merge($dark-theme, (background: $dark-background));
 .myrtille-dark-theme {
   @include mat.all-component-colors($dark-theme);
 
-  @include custom-components-theme($dark-theme);
-  @include custom-components-dark-theme($dark-theme);
+  @include cct.custom-components-theme($dark-theme);
+  @include cct.custom-components-dark-theme($dark-theme);
 }
 
 // CSS

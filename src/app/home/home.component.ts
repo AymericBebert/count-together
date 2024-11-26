@@ -21,7 +21,6 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

@@ -14,6 +14,7 @@ import {SoundSharingService} from '../sound-sharing.service';
     RecordService,
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
+  standalone: false,
 })
 export class SoundSharingComponent {
   public gameShareData$: Observable<{ gameId: string; gamePayload: string } | null> = this.route.parent

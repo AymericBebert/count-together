@@ -13,6 +13,7 @@ import {SoundSharingService} from '../sound-sharing.service';
     RecordService,
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
+  standalone: false,
 })
 export class SoundDebugComponent implements OnInit, OnDestroy {
   @ViewChild('replayAudio', {static: true}) replayAudioElement!: ElementRef<HTMLAudioElement>;

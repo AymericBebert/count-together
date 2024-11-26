@@ -7,7 +7,8 @@ import {SettingsService} from '../../service/settings.service';
 @Component({
   selector: 'app-wheel-page',
   templateUrl: './wheel-page.component.html',
-  styleUrls: ['./wheel-page.component.scss']
+  styleUrls: ['./wheel-page.component.scss'],
+  standalone: false,
 })
 export class WheelPageComponent {
   public resetIndex = 0;

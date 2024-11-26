@@ -14,7 +14,6 @@ export interface GameNameDialogData {
   selector: 'app-game-name-dialog',
   templateUrl: './game-name-dialog.component.html',
   styleUrls: ['./game-name-dialog.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

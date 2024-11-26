@@ -29,7 +29,6 @@ import {SocketService} from '../socket/socket.service';
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

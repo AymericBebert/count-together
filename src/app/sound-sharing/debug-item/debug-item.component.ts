@@ -6,7 +6,6 @@ import {MatIconModule} from '@angular/material/icon';
   selector: 'app-debug-item',
   templateUrl: './debug-item.component.html',
   styleUrls: ['./debug-item.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     MatIconModule,

@@ -16,7 +16,6 @@ export interface EditScoreDialogData {
   selector: 'app-score-dialog',
   templateUrl: './score-dialog.component.html',
   styleUrls: ['./score-dialog.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

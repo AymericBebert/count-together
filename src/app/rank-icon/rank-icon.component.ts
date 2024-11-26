@@ -5,7 +5,6 @@ import {Component, Input} from '@angular/core';
   selector: 'app-rank-icon',
   templateUrl: './rank-icon.component.html',
   styleUrls: ['./rank-icon.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
   ],

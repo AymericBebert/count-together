@@ -3,7 +3,7 @@ import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {translateTestingModule} from '../../testing/translate-testing-module';
 import {ScoreDialogComponent} from './score-dialog.component';
 
 describe('ScoreDialogComponent', () => {
@@ -14,7 +14,7 @@ describe('ScoreDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ScoreDialogComponent,
-        TranslateTestingModule,
+        translateTestingModule,
         NoopAnimationsModule,
       ],
       providers: [

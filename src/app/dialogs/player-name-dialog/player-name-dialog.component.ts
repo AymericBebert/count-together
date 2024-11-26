@@ -30,7 +30,10 @@ export type PlayerNameDialogResult = string | null;
 })
 export class PlayerNameDialogComponent {
 
-  public readonly name = new FormControl<string>(this.data.name, {nonNullable: true, validators: [Validators.required]});
+  public readonly name = new FormControl<string>(
+    this.data.name,
+    {nonNullable: true, validators: [Validators.required]},
+  );
   public readonly isNew = this.data.isNew;
 
   constructor(public readonly ref: MatDialogRef<PlayerNameDialogComponent>,

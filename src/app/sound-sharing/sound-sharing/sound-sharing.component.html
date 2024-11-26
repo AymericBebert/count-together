@@ -27,7 +27,7 @@
     <div *ngFor="let i of analyseRange" class="frequency-bar"
          [ngStyle]="{
            transform: 'scaleX(' + soundSharing.dataArray[i] * 100 / 256 + ')',
-           backgroundColor: i === soundSharing.FFT_INDEX_0 || i === soundSharing.FFT_INDEX_1 ? '#a21e6d' : '#3b1ea2'
+           backgroundColor: i === soundSharing.fftIndex0 || i === soundSharing.fftIndex1 ? '#a21e6d' : '#3b1ea2'
          }"
     ></div>
   </div>

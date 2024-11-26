@@ -4,7 +4,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfigTestingModule} from '../../testing/config-testing.module';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {translateTestingModule} from '../../testing/translate-testing-module';
 import {NewGameDialogComponent} from './new-game-dialog.component';
 
 describe('NewGameDialogComponent', () => {
@@ -16,7 +16,7 @@ describe('NewGameDialogComponent', () => {
       declarations: [],
       imports: [
         NewGameDialogComponent,
-        TranslateTestingModule,
+        translateTestingModule,
         ConfigTestingModule,
         NoopAnimationsModule,
       ],

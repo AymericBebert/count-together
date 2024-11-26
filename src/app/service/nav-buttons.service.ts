@@ -36,11 +36,12 @@ export class NavButtonsService {
       this.location.back();
     } else if (this.backRouterNavigate) {
       try {
-        const current = this.router.parseUrl(this.router.routerState.snapshot.url).root.children.primary.segments.map(s => s.path);
+        const current = this.router.parseUrl(this.router.routerState.snapshot.url)
+          .root.children.primary.segments.map(s => s.path);
         const destination = simplifyURL([...current, ...this.backRouterNavigate.split('/')]);
         this.router.navigate(destination).catch(e => console.error('Navigation error:', e));
       } catch (err) {
-        console.error(`Error trying to navigate to ${this.backRouterNavigate}: ${err}`);
+        console.error(`Error trying to navigate to ${this.backRouterNavigate}`, err);
       }
     }
   }

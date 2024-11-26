@@ -31,7 +31,7 @@ export class ChangeLanguageComponent {
 
   @Output() public langSet = new EventEmitter<string>();
 
-  public flagMap: { [lang: string]: string } = {
+  public flagMap: Record<string, string> = {
     fr: '🇫🇷',
     en: '🇬🇧',
     unknown: '🏳️',

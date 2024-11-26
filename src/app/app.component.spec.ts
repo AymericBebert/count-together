@@ -5,7 +5,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from './app.component';
 import {ConfigTestingModule} from './testing/config-testing.module';
-import {TranslateTestingModule} from './testing/translate-testing-module';
+import {translateTestingModule} from './testing/translate-testing-module';
 import {UpdaterTestingModule} from './testing/updater-testing.module';
 
 describe('AppComponent', () => {
@@ -16,7 +16,7 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         AppComponent,
-        TranslateTestingModule,
+        translateTestingModule,
         UpdaterTestingModule,
         ConfigTestingModule,
         NoopAnimationsModule,

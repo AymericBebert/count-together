@@ -114,7 +114,7 @@ export class NavService {
     this.clearRefreshPage(false);
   }
 
-  public clearRefreshPage(alwaysRefresh: boolean = true) {
+  public clearRefreshPage(alwaysRefresh = true) {
     console.log('checkForUpdates clicked');
     from(window.caches.keys())
       .pipe(

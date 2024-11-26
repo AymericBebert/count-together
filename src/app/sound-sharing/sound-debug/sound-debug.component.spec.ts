@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {translateTestingModule} from '../../testing/translate-testing-module';
 import {BrowserCompatibilityService} from '../browser-compatibility.service';
 import {DebugItemComponent} from '../debug-item/debug-item.component';
 
@@ -12,7 +12,7 @@ describe('SoundDebugComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        TranslateTestingModule,
+        translateTestingModule,
         DebugItemComponent,
       ],
       declarations: [

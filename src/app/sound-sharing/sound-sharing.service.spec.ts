@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {translateTestingModule} from '../testing/translate-testing-module';
 import {BrowserCompatibilityService} from './browser-compatibility.service';
 import {RecordService} from './record.service';
 import {SoundSharingService} from './sound-sharing.service';
@@ -7,7 +7,7 @@ import {SoundSharingService} from './sound-sharing.service';
 describe('SoundSharingService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      TranslateTestingModule,
+      translateTestingModule,
     ],
     providers: [
       SoundSharingService,

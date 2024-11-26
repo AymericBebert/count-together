@@ -47,7 +47,7 @@ export class GameComponent implements OnInit, OnDestroy {
     map(game => {
       const playersNoRank = game.players.map(player => ({
         ...player,
-        track: `${player.name}_${player.scores}`,
+        track: `${player.name}_${player.scores.toString()}`,
         ...GameComponent.cumSum(player.scores),
       }));
       const totals = playersNoRank.map(player => player.total).sort((a, b) => (a ?? 0) - (b ?? 0));
@@ -149,7 +149,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public editGameOpen(): void {
     const currentGame = this.gameOrThrow;
-    this.dialog.open<GameNameDialogComponent, GameNameDialogData, string>(GameNameDialogComponent, {data: {name: currentGame.name}})
+    this.dialog.open<GameNameDialogComponent, GameNameDialogData, string>(
+      GameNameDialogComponent,
+      {data: {name: currentGame.name}},
+    )
       .afterClosed()
       .pipe(filter((res): res is string => res !== undefined), takeUntil(this.destroy$))
       .subscribe(res => {
@@ -171,9 +174,11 @@ export class GameComponent implements OnInit, OnDestroy {
     this.editPlayerNameOpen(currentGame.players.length - 1, true);
   }
 
-  public editPlayerNameOpen(p: number, isNew: boolean = false): void {
-    const data: PlayerNameDialogData = {name: this.gameOrThrow.players[p].name, isNew};
-    this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(PlayerNameDialogComponent, {data})
+  public editPlayerNameOpen(p: number, isNew = false): void {
+    this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(
+      PlayerNameDialogComponent,
+      {data: {name: this.gameOrThrow.players[p].name, isNew}},
+    )
       .afterClosed()
       .pipe(filter((res): res is string => !!res), takeUntil(this.destroy$))
       .subscribe(res => {
@@ -215,7 +220,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.editScoreOpen(p, currentGame.players[p].scores.length, true);
   }
 
-  public editScoreOpen(p: number, i: number, isNew: boolean = false): void {
+  public editScoreOpen(p: number, i: number, isNew = false): void {
     const data: EditScoreDialogData = {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew};
     this.dialog.open(ScoreDialogComponent, {data})
       .afterClosed()
@@ -367,7 +372,8 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gamesService.duplicateGame$(game.gameId)
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
         .subscribe(newGameId => {
-          this.router.navigate(['game', newGameId]).catch(err => console.error('Could not navigate after duplication?', err));
+          this.router.navigate(['game', newGameId])
+            .catch(err => console.error('Could not navigate after duplication?', err));
         });
     }
   }
@@ -380,7 +386,8 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       game.gameId = 'offline';
       this.gamesService.saveOfflineGameToStorage(game);
-      this.router.navigate(['game', 'offline']).catch(err => console.error('Could not navigate after save offline?', err));
+      this.router.navigate(['game', 'offline'])
+        .catch(err => console.error('Could not navigate after save offline?', err));
     }
   }
 }

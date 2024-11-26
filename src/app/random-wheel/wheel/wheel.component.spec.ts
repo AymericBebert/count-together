@@ -4,7 +4,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {EMPTY} from 'rxjs';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
+import {translateTestingModule} from '../../testing/translate-testing-module';
 import {WheelComponent} from './wheel.component';
 
 describe('WheelComponent', () => {
@@ -17,7 +17,7 @@ describe('WheelComponent', () => {
         WheelComponent,
       ],
       imports: [
-        TranslateTestingModule,
+        translateTestingModule,
         RouterTestingModule,
       ],
       providers: [

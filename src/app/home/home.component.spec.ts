@@ -5,7 +5,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ConfigTestingModule} from '../testing/config-testing.module';
 import {SocketTestingModule} from '../testing/socket-testing.module';
-import {TranslateTestingModule} from '../testing/translate-testing-module';
+import {translateTestingModule} from '../testing/translate-testing-module';
 import {HomeComponent} from './home.component';
 
 describe('HomeComponent', () => {
@@ -16,7 +16,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HomeComponent,
-        TranslateTestingModule,
+        translateTestingModule,
         SocketTestingModule,
         RouterTestingModule,
         ConfigTestingModule,

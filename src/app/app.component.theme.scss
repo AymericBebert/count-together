@@ -8,31 +8,31 @@
   $background: map-get($theme, background);
 
   .mat-sidenav-content {
-    color: mat.get-color-from-palette($foreground, text);
-    background-color: mat.get-color-from-palette($background, app-bar);
+    color: mat.m2-get-color-from-palette($foreground, text);
+    background-color: mat.m2-get-color-from-palette($background, app-bar);
   }
 
   .mat-mdc-list-item.selectable {
-    background-color: mat.get-color-from-palette($accent, 0.04);
+    background-color: mat.m2-get-color-from-palette($accent, 0.04);
 
     &.selected {
-      background-color: mat.get-color-from-palette($accent, 0.15);
+      background-color: mat.m2-get-color-from-palette($accent, 0.15);
     }
 
     &:hover {
-      background-color: mat.get-color-from-palette($accent, 0.25);
+      background-color: mat.m2-get-color-from-palette($accent, 0.25);
     }
   }
 
   .mat-mdc-list-item.selectable.odd {
-    background-color: mat.get-color-from-palette($primary, 0.04);
+    background-color: mat.m2-get-color-from-palette($primary, 0.04);
 
     &.selected {
-      background-color: mat.get-color-from-palette($primary, 0.15);
+      background-color: mat.m2-get-color-from-palette($primary, 0.15);
     }
 
     &:hover {
-      background-color: mat.get-color-from-palette($primary, 0.25);
+      background-color: mat.m2-get-color-from-palette($primary, 0.25);
     }
   }
 }
@@ -41,14 +41,14 @@
   $primary: map-get($theme, primary);
 
   .mat-mdc-list-item.selectable.odd {
-    background-color: mat.get-color-from-palette($primary, 300, 0.06);
+    background-color: mat.m2-get-color-from-palette($primary, 300, 0.06);
 
     &.selected {
-      background-color: mat.get-color-from-palette($primary, 300, 0.3);
+      background-color: mat.m2-get-color-from-palette($primary, 300, 0.3);
     }
 
     &:hover {
-      background-color: mat.get-color-from-palette($primary, 300, 0.4);
+      background-color: mat.m2-get-color-from-palette($primary, 300, 0.4);
     }
   }
 }

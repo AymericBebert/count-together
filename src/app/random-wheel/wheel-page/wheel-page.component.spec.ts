@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
@@ -15,19 +16,20 @@ describe('WheelPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateTestingModule,
-        RouterTestingModule,
-        MatSliderModule,
-      ],
       declarations: [
         WheelPageComponent,
         WheelComponent,
       ],
+      imports: [
+        TranslateTestingModule,
+        RouterTestingModule,
+        MatSliderModule,
+      ],
       providers: [
         {provide: ActivatedRoute, useValue: {queryParams: EMPTY}},
         SettingsService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     })
       .compileComponents();

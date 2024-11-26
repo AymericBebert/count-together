@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -13,7 +14,6 @@ describe('ScoreDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ScoreDialogComponent,
-        HttpClientTestingModule,
         TranslateTestingModule,
         NoopAnimationsModule,
       ],
@@ -25,6 +25,8 @@ describe('ScoreDialogComponent', () => {
             editGame: true,
           },
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     })
       .compileComponents();

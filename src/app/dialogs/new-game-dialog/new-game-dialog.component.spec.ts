@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -12,14 +13,13 @@ describe('NewGameDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [],
       imports: [
         NewGameDialogComponent,
-        HttpClientTestingModule,
         TranslateTestingModule,
         ConfigTestingModule,
         NoopAnimationsModule,
       ],
-      declarations: [],
       providers: [
         {
           provide: MAT_DIALOG_DATA,
@@ -27,6 +27,8 @@ describe('NewGameDialogComponent', () => {
             recentPlayers: [],
           },
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     })
       .compileComponents();

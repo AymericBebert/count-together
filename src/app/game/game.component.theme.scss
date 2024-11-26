@@ -9,39 +9,39 @@
 
   app-game {
     .score-box {
-      background-color: mat.get-color-from-palette($background, background);
+      background-color: mat.m2-get-color-from-palette($background, background);
     }
 
     .player-column-wrapper:not(:last-child) {
-      border-right: 1px solid mat.get-color-from-palette($primary, 300, 0.2);
+      border-right: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.2);
     }
 
     .win-or-lose.win {
-      background-color: mat.get-color-from-palette($primary, 0.6);
+      background-color: mat.m2-get-color-from-palette($primary, 0.6);
     }
 
     .total-cell {
-      border-bottom: 1px solid mat.get-color-from-palette($primary, 300);
+      border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300);
     }
 
     .cell {
-      border-bottom: 1px solid mat.get-color-from-palette($primary, 300, 0.2);
+      border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.2);
 
       &.free {
       }
 
       &.small-scores .buttons mat-icon {
         &.plus {
-          color: mat.get-color-from-palette($primary, 0.1);
+          color: mat.m2-get-color-from-palette($primary, 0.1);
         }
 
         &.minus {
-          color: mat.get-color-from-palette($accent, 0.1);
+          color: mat.m2-get-color-from-palette($accent, 0.1);
         }
       }
 
       &.win-or-lose {
-        border-bottom: 1px solid mat.get-color-from-palette($primary, 100, 0.6);
+        border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 100, 0.6);
       }
     }
   }
@@ -53,11 +53,11 @@
   app-game {
     .cell {
       &.small-scores .buttons mat-icon.plus {
-        color: mat.get-color-from-palette($primary, 400, 0.2);
+        color: mat.m2-get-color-from-palette($primary, 400, 0.2);
       }
 
       &.win-or-lose {
-        border-bottom: 1px solid mat.get-color-from-palette($primary, 300, 0.6);
+        border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.6);
       }
     }
   }

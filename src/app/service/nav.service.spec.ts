@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateTestingModule} from '../testing/translate-testing-module';
@@ -11,7 +12,6 @@ import {SettingsService} from './settings.service';
 describe('NavService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      HttpClientTestingModule,
       TranslateTestingModule,
       RouterTestingModule,
       UpdaterTestingModule,
@@ -21,6 +21,8 @@ describe('NavService', () => {
       NavButtonsService,
       SettingsService,
       DeviceService,
+      provideHttpClient(withInterceptorsFromDi()),
+      provideHttpClientTesting(),
     ],
   }));
 

@@ -9,10 +9,10 @@
     $background: map-get($theme, background);
 
     span {
-      color: mat.get-color-from-palette($foreground, text);
-      text-shadow: 0 0 4px mat.get-color-from-palette($background, background),
-      0 0 3px mat.get-color-from-palette($background, background),
-      0 0 2px mat.get-color-from-palette($background, background);
+      color: mat.m2-get-color-from-palette($foreground, text);
+      text-shadow: 0 0 4px mat.m2-get-color-from-palette($background, background),
+      0 0 3px mat.m2-get-color-from-palette($background, background),
+      0 0 2px mat.m2-get-color-from-palette($background, background);
     }
   }
 }

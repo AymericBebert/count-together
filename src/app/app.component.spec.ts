@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
@@ -16,13 +17,14 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         TranslateTestingModule,
-        HttpClientTestingModule,
         UpdaterTestingModule,
         ConfigTestingModule,
         NoopAnimationsModule,
       ],
       providers: [
         {provide: ActivatedRoute, useValue: {outlet: 'primary', data: {}}},
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     }).compileComponents();
   }));

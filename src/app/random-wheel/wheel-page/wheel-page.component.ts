@@ -4,7 +4,7 @@ import {MatButton} from '@angular/material/button';
 import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
-import {merge, of, Subject} from 'rxjs';
+import {merge, Observable, of, Subject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {SettingsService} from '../../service/settings.service';
 import {WheelComponent} from '../wheel/wheel.component';
@@ -24,29 +24,32 @@ import {WheelComponent} from '../wheel/wheel.component';
 export class WheelPageComponent {
   public resetIndex = 0;
 
-  public names$ = this.route.queryParams.pipe(
-    map(params => (params.names as string || '').split(',')),
+  private readonly qpNames$ = this.route.queryParams.pipe(
+    map(params => params.names as string || ''),
+    map(names => names ? names.split(',') : null),
   );
 
-  public setSliderValue$ = merge(
+  private readonly sliderNames$ = new Subject<string[] | null>();
+
+  public readonly names$: Observable<string[] | null> = merge(this.qpNames$, this.sliderNames$);
+
+  public readonly qpNb$ = merge(
     of(5),
     this.route.queryParams.pipe(filter(params => !!params.nb), map(params => parseInt(params.nb, 10))),
-    this.names$.pipe(map(names => names.length)),
+    this.qpNames$.pipe(filter(names => !!names), map(names => names.length)),
   );
 
-  public sliderNb$ = new Subject<number>();
+  private readonly sliderNb$ = new Subject<number>();
 
-  public nb$ = merge(
-    this.setSliderValue$,
-    this.sliderNb$,
-  );
+  public readonly nb$: Observable<number> = merge(this.qpNb$, this.sliderNb$);
 
-  constructor(public settings: SettingsService,
-              private route: ActivatedRoute,
+  constructor(public readonly settings: SettingsService,
+              private readonly route: ActivatedRoute,
   ) {
   }
 
   public onNumberSliderChange(value: number): void {
     this.sliderNb$.next(value);
+    this.sliderNames$.next(null);
   }
 }

@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, inject, viewChild} from '@angular/core';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -36,19 +36,21 @@ import {SettingsService} from './service/settings.service';
   ],
 })
 export class AppComponent {
+  readonly gameSettingsService = inject(GameSettingsService);
+  readonly navService = inject(NavService);
+  readonly settingsService = inject(SettingsService);
+  readonly deviceService = inject(DeviceService);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly router = inject(Router);
+
   public readonly appVersion = this.config.version;
 
-  @ViewChild('drawer', {static: true}) public navDrawer!: MatSidenav;
+  readonly navDrawer = viewChild<MatSidenav | null>('drawer');
 
-  constructor(public readonly navService: NavService,
-              public readonly settingsService: SettingsService,
-              public readonly gameSettingsService: GameSettingsService,
-              public readonly deviceService: DeviceService,
-              private readonly router: Router,
-              @Inject(APP_CONFIG) private readonly config: AppConfig,
-              translate: TranslateService,
-              route: ActivatedRoute,
-  ) {
+  constructor() {
+    const translate = inject(TranslateService);
+    const route = inject(ActivatedRoute);
+
     translate.addLangs(['fr', 'en']);
     translate.setDefaultLang('fr');
     this.navService.applyStoredLanguage();
@@ -78,8 +80,9 @@ export class AppComponent {
   }
 
   public closeDrawer(): void {
-    if (!this.navService.pinSideNav$.getValue()) {
-      this.navDrawer.close().catch(err => console.error('Could not close drawer?', err));
+    const navDrawer = this.navDrawer();
+    if (!this.navService.pinSideNav$.getValue() && navDrawer) {
+      navDrawer.close().catch(err => console.error('Could not close drawer?', err));
     }
   }
 }

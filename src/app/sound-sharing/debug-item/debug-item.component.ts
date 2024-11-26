@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 
 @Component({
@@ -12,6 +12,6 @@ import {MatIconModule} from '@angular/material/icon';
   ],
 })
 export class DebugItemComponent {
-  @Input() public isOk!: boolean;
-  @Input() public label!: string;
+  public readonly isOk = input.required<boolean>();
+  public readonly label = input.required<string>();
 }

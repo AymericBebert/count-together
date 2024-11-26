@@ -22,7 +22,7 @@ import {RankIconComponent} from '../rank-icon/rank-icon.component';
 import {GameSettingsService} from '../service/game-settings.service';
 import {GamesService} from '../service/games.service';
 import {NavButtonsService} from '../service/nav-buttons.service';
-import {ShareButtonService} from '../share-button/share-button.service';
+import {ShareService} from '../share/share.service';
 import {SocketService} from '../socket/socket.service';
 
 @Component({
@@ -73,7 +73,7 @@ export class GameComponent implements OnInit, OnDestroy {
               private router: Router,
               private navButtonsService: NavButtonsService,
               private gameSettingsService: GameSettingsService,
-              private shareButtonService: ShareButtonService,
+              private shareService: ShareService,
               private translateService: TranslateService,
               private gamesService: GamesService,
               private socket: SocketService,
@@ -354,11 +354,11 @@ export class GameComponent implements OnInit, OnDestroy {
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).then(() => {
-            this.shareButtonService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${newGameId}`);
+            this.shareService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${newGameId}`);
           });
         });
     } else {
-      this.shareButtonService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${game.gameId}`);
+      this.shareService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${game.gameId}`);
     }
   }
 

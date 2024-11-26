@@ -1,10 +1,10 @@
 <div class="debug-item">
-  <ng-container *ngIf="isOk; else isNotOk">
+  <ng-container *ngIf="isOk(); else isNotOk">
     <mat-icon color="primary" style="margin-right: 4px">check_circle_outline</mat-icon>
   </ng-container>
   <ng-template #isNotOk>
     <mat-icon color="accent" style="margin-right: 4px">highlight_off</mat-icon>
   </ng-template>
-  <span style="font-weight: bold; margin-right: 4px">{{ label }}</span>&nbsp;:
+  <span style="font-weight: bold; margin-right: 4px">{{ label() }}</span>&nbsp;:
   <ng-content></ng-content>
 </div>

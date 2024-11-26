@@ -1,5 +1,5 @@
 import {NgIf} from '@angular/common';
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, viewChild} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslateModule} from '@ngx-translate/core';
@@ -27,7 +27,7 @@ import {SoundSharingService} from '../sound-sharing.service';
   ],
 })
 export class SoundDebugComponent implements OnInit, OnDestroy {
-  @ViewChild('replayAudio', {static: true}) replayAudioElement!: ElementRef<HTMLAudioElement>;
+  readonly replayAudioElement = viewChild.required<ElementRef<HTMLAudioElement>>('replayAudio');
   public replayAvailable = false;
   // public micPermission: PermissionState | null = null;
   public mediaDevices = navigator.mediaDevices;
@@ -48,7 +48,7 @@ export class SoundDebugComponent implements OnInit, OnDestroy {
       )
       .subscribe(recordBlob => {
         this.recordBlob = recordBlob;
-        this.replayAudioElement.nativeElement.src = URL.createObjectURL(recordBlob);
+        this.replayAudioElement().nativeElement.src = URL.createObjectURL(recordBlob);
         this.replayAvailable = true;
       });
 

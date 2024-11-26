@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 
 @Component({
   selector: 'app-rank-icon',
@@ -10,6 +10,6 @@ import {Component, Input} from '@angular/core';
   ],
 })
 export class RankIconComponent {
-  @Input() public rank = 1;
-  @Input() public isLast = false;
+  public readonly rank = input(1);
+  public readonly isLast = input(false);
 }

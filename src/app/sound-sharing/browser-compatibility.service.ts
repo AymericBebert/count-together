@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class BrowserCompatibilityService {
   public isUsingIOS(): boolean {
     return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);

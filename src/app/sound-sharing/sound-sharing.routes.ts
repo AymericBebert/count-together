@@ -1,9 +1,8 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {SoundDebugComponent} from './sound-debug/sound-debug.component';
 import {SoundSharingComponent} from './sound-sharing/sound-sharing.component';
 
-const routes: Routes = [
+export const soundSharingRoutes: Routes = [
   {
     path: '',
     component: SoundSharingComponent,
@@ -21,10 +20,3 @@ const routes: Routes = [
     },
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SoundSharingRoutingModule {
-}

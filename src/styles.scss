@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @use 'custom-component-themes.scss' as cct;
 @use 'fonts';
@@ -172,9 +173,9 @@ $dark-theme: mat.m2-define-dark-theme((
 ));
 
 // Insert custom background color
-$dark-background: map-get($dark-theme, background);
-$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
-$dark-theme: map_merge($dark-theme, (background: $dark-background));
+$dark-background: map.get($dark-theme, background);
+$dark-background: map.merge($dark-background, (app-bar: #101010, background: #202020));
+$dark-theme: map.merge($dark-theme, (background: $dark-background));
 
 .myrtille-dark-theme {
   @include mat.all-component-colors($dark-theme);

@@ -1,14 +1,25 @@
+import {AsyncPipe} from '@angular/common';
 import {Component} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {merge, of, Subject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {SettingsService} from '../../service/settings.service';
+import {WheelComponent} from '../wheel/wheel.component';
 
 @Component({
   selector: 'app-wheel-page',
   templateUrl: './wheel-page.component.html',
   styleUrls: ['./wheel-page.component.scss'],
-  standalone: false,
+  imports: [
+    TranslateModule,
+    AsyncPipe,
+    MatSliderModule,
+    MatButton,
+    WheelComponent,
+  ],
 })
 export class WheelPageComponent {
   public resetIndex = 0;

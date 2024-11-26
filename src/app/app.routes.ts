@@ -37,19 +37,19 @@ export const routes: Routes = [
   },
   {
     path: 'game/:gameId/wheel',
-    loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
+    loadChildren: () => import('./random-wheel/random-wheel.routes').then(mod => mod.randomWheelRoutes),
   },
   {
     path: 'wheel',
-    loadChildren: () => import('./random-wheel/random-wheel.module').then(mod => mod.RandomWheelModule),
+    loadChildren: () => import('./random-wheel/random-wheel.routes').then(mod => mod.randomWheelRoutes),
   },
   {
     path: 'game/:gameId/sound-share',
-    loadChildren: () => import('./sound-sharing/sound-sharing.module').then(mod => mod.SoundSharingModule),
+    loadChildren: () => import('./sound-sharing/sound-sharing.routes').then(mod => mod.soundSharingRoutes),
   },
   {
     path: 'sound-share',
-    loadChildren: () => import('./sound-sharing/sound-sharing.module').then(mod => mod.SoundSharingModule),
+    loadChildren: () => import('./sound-sharing/sound-sharing.routes').then(mod => mod.soundSharingRoutes),
   },
   {
     path: '**',

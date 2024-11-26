@@ -1,12 +1,13 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 
 @mixin rank-icon-component-theme($theme) {
   app-rank-icon {
-    //$primary: map-get($theme, primary);
-    //$accent: map-get($theme, accent);
-    //$warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+    //$primary: map.get($theme, primary);
+    //$accent: map.get($theme, accent);
+    //$warn: map.get($theme, warn);
+    $foreground: map.get($theme, foreground);
+    $background: map.get($theme, background);
 
     span {
       color: mat.m2-get-color-from-palette($foreground, text);

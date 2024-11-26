@@ -21,7 +21,7 @@ import {debounceTime, delay, takeUntil} from 'rxjs/operators';
   selector: 'app-wheel',
   templateUrl: './wheel.component.html',
   styleUrls: ['./wheel.component.scss'],
-  standalone: false,
+  imports: [],
 })
 export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 

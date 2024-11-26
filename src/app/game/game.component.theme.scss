@@ -1,11 +1,12 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 
 @mixin game-component-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  //$warn: map-get($theme, warn);
-  //$foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  //$warn: map.get($theme, warn);
+  //$foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
 
   app-game {
     .score-box {
@@ -48,7 +49,7 @@
 }
 
 @mixin game-component-dark-theme($theme) {
-  $primary: map-get($theme, primary);
+  $primary: map.get($theme, primary);
 
   app-game {
     .cell {

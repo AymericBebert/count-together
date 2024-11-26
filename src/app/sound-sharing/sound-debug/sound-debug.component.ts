@@ -1,6 +1,11 @@
+import {NgIf} from '@angular/common';
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {TranslateModule} from '@ngx-translate/core';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
+import {DebugItemComponent} from '../debug-item/debug-item.component';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
 import {SoundSharingService} from '../sound-sharing.service';
 
@@ -13,7 +18,13 @@ import {SoundSharingService} from '../sound-sharing.service';
     RecordService,
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
-  standalone: false,
+  imports: [
+    NgIf,
+    DebugItemComponent,
+    MatIcon,
+    TranslateModule,
+    MatButton,
+  ],
 })
 export class SoundDebugComponent implements OnInit, OnDestroy {
   @ViewChild('replayAudio', {static: true}) replayAudioElement!: ElementRef<HTMLAudioElement>;

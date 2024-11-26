@@ -1,11 +1,12 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 
 @mixin sidenav-content-component-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  //$warn: map-get($theme, warn);
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  //$warn: map.get($theme, warn);
+  $foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
 
   .mat-sidenav-content {
     color: mat.m2-get-color-from-palette($foreground, text);
@@ -38,7 +39,7 @@
 }
 
 @mixin sidenav-content-component-dark-theme($theme) {
-  $primary: map-get($theme, primary);
+  $primary: map.get($theme, primary);
 
   .mat-mdc-list-item.selectable.odd {
     background-color: mat.m2-get-color-from-palette($primary, 300, 0.06);

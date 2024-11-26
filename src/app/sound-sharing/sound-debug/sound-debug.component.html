@@ -14,7 +14,7 @@
   </app-debug-item>
 
   <div style="margin-bottom: 20px">
-    <audio #replayAudio [ngClass]="{hidden: !replayAvailable || recordService.status === 'recording'}" controls></audio>
+    <audio #replayAudio [class.hidden]="!replayAvailable || recordService.status === 'recording'" controls></audio>
   </div>
 
   <p *ngIf="recordService.status === 'recording'" class="record-indicator">

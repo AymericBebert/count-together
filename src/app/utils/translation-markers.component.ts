@@ -4,7 +4,6 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-translation-markers',
   template: '<p>Nope</p>',
-  standalone: true,
 })
 export class TranslationMarkersComponent {
   constructor(public translate: TranslateService) {

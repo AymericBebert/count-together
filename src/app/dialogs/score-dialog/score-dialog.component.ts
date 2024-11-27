@@ -1,4 +1,3 @@
-import {CommonModule} from '@angular/common';
 import {Component, Inject} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -17,7 +16,6 @@ export interface EditScoreDialogData {
   templateUrl: './score-dialog.component.html',
   styleUrls: ['./score-dialog.component.scss'],
   imports: [
-    CommonModule,
     TranslateModule,
     FormsModule,
     MatButtonModule,

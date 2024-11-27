@@ -5,7 +5,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class ApiErrorService {
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private readonly snackBar: MatSnackBar) {
   }
 
   public displayError(err: string, error?: any): void {

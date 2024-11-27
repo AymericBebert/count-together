@@ -8,7 +8,9 @@
   <mat-form-field>
     <mat-label>{{ 'edit.player-name.label' | translate }}</mat-label>
     <input matInput name="player" [formControl]="name" [autofocus]="true">
-    <mat-error *ngIf="name.invalid">{{ 'edit.player-name.invalid' | translate }}</mat-error>
+    @if (name.invalid) {
+      <mat-error>{{ 'edit.player-name.invalid' | translate }}</mat-error>
+    }
   </mat-form-field>
 </form>
 

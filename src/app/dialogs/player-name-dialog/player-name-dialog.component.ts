@@ -1,4 +1,3 @@
-import {CommonModule} from '@angular/common';
 import {Component, Inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -18,7 +17,6 @@ export type PlayerNameDialogResult = string | null;
   templateUrl: './player-name-dialog.component.html',
   styleUrls: ['./player-name-dialog.component.scss'],
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatButtonModule,

@@ -1,5 +1,4 @@
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {CommonModule} from '@angular/common';
 import {Component, Inject, Optional} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -21,7 +20,6 @@ export interface NewGameDialogData {
   templateUrl: './new-game-dialog.component.html',
   styleUrls: ['./new-game-dialog.component.scss'],
   imports: [
-    CommonModule,
     TranslateModule,
     DragDropModule,
     ReactiveFormsModule,
@@ -65,7 +63,7 @@ export class NewGameDialogComponent {
     };
   }
 
-  public drop(event: CdkDragDrop<string[]>) {
+  public drop(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -73,17 +71,17 @@ export class NewGameDialogComponent {
     }
   }
 
-  public addPlayerName() {
+  public addPlayerName(): void {
     this.selectedPlayers = [...this.selectedPlayers.filter(n => n !== this.playerName.value), this.playerName.value];
     this.playerName.setValue('');
   }
 
-  public excludePlayer(playerName: string) {
+  public excludePlayer(playerName: string): void {
     this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
     this.otherPlayers = [playerName, ...this.otherPlayers.filter(n => n !== playerName)];
   }
 
-  public forgetPlayer(playerName: string) {
+  public forgetPlayer(playerName: string): void {
     this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
     this.otherPlayers = this.otherPlayers.filter(n => n !== playerName);
     this.gamesService?.forgetPlayer(playerName);

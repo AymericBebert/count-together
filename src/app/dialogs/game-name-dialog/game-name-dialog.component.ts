@@ -1,4 +1,3 @@
-import {CommonModule} from '@angular/common';
 import {Component, Inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -15,7 +14,6 @@ export interface GameNameDialogData {
   templateUrl: './game-name-dialog.component.html',
   styleUrls: ['./game-name-dialog.component.scss'],
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -26,7 +24,10 @@ export interface GameNameDialogData {
 })
 export class GameNameDialogComponent {
 
-  public name = new FormControl<string>(this.data.name, {nonNullable: true, validators: [Validators.required]});
+  public readonly name = new FormControl<string>(
+    this.data.name,
+    {nonNullable: true, validators: [Validators.required]},
+  );
 
   constructor(public readonly ref: MatDialogRef<GameNameDialogComponent, string>,
               @Inject(MAT_DIALOG_DATA) private readonly data: GameNameDialogData,

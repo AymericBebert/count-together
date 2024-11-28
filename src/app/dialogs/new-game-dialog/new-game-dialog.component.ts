@@ -1,5 +1,5 @@
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {Component, Inject, Optional} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -32,6 +32,8 @@ export interface NewGameDialogData {
   ],
 })
 export class NewGameDialogComponent {
+  public readonly data = inject<NewGameDialogData>(MAT_DIALOG_DATA);
+  private readonly gamesService = inject(GamesService, {optional: true});
 
   public readonly gameName = new FormControl<string>('', {nonNullable: true, validators: [Validators.required]});
   public readonly gameType = new FormControl<GameType>('free', {nonNullable: true});
@@ -41,9 +43,9 @@ export class NewGameDialogComponent {
   public selectedPlayers: string[] = [];
   public otherPlayers: string[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: NewGameDialogData,
-              @Optional() private gamesService: GamesService,
-  ) {
+  constructor() {
+    const data = this.data;
+
     data.recentPlayers.forEach(rp => {
       if (rp.wasLatest) {
         this.selectedPlayers.push(rp.name);

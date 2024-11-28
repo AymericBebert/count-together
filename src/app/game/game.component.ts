@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
@@ -38,10 +38,20 @@ import {SocketService} from '../socket/socket.service';
   ],
 })
 export class GameComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly navButtonsService = inject(NavButtonsService);
+  private readonly gameSettingsService = inject(GameSettingsService);
+  private readonly shareService = inject(ShareService);
+  private readonly translateService = inject(TranslateService);
+  private readonly gamesService = inject(GamesService);
+  private readonly socket = inject(SocketService);
+  private readonly dialog = inject(MatDialog);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
-  public game$ = this.gamesService.currentGame$;
+  public readonly game$ = this.gamesService.currentGame$;
 
-  public players$: Observable<EnrichedPlayer[]> = this.game$.pipe(
+  public readonly players$: Observable<EnrichedPlayer[]> = this.game$.pipe(
     filter((game): game is IGame => !!game),
     map(game => {
       const playersNoRank = game.players.map(player => ({
@@ -65,22 +75,9 @@ export class GameComponent implements OnInit, OnDestroy {
     }),
   );
 
-  public connectionError$ = this.socket.connectionError$;
+  public readonly connectionError$ = this.socket.connectionError$;
 
-  private destroy$ = new Subject<void>();
-
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private navButtonsService: NavButtonsService,
-              private gameSettingsService: GameSettingsService,
-              private shareService: ShareService,
-              private translateService: TranslateService,
-              private gamesService: GamesService,
-              private socket: SocketService,
-              private dialog: MatDialog,
-              @Inject(APP_CONFIG) private config: AppConfig,
-  ) {
-  }
+  private readonly destroy$ = new Subject<void>();
 
   private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
     return scores.reduce(

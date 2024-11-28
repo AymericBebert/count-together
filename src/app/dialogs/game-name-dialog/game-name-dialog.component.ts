@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -23,14 +23,11 @@ export interface GameNameDialogData {
   ],
 })
 export class GameNameDialogComponent {
+  public readonly ref = inject<MatDialogRef<GameNameDialogComponent, string>>(MatDialogRef);
+  private readonly data = inject<GameNameDialogData>(MAT_DIALOG_DATA);
 
   public readonly name = new FormControl<string>(
     this.data.name,
     {nonNullable: true, validators: [Validators.required]},
   );
-
-  constructor(public readonly ref: MatDialogRef<GameNameDialogComponent, string>,
-              @Inject(MAT_DIALOG_DATA) private readonly data: GameNameDialogData,
-  ) {
-  }
 }

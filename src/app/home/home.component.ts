@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -33,30 +33,29 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private gamesService = inject(GamesService);
+  private navButtonsService = inject(NavButtonsService);
+  private dialog = inject(MatDialog);
 
-  public readonly gameFormControl: FormControl<string>;
+  public readonly gameFormControl = new FormControl('', {
+    nonNullable: true,
+    asyncValidators: [this.gamesService.gameExistsValidator()],
+  });
   public matcher: ErrorStateMatcher = new ImmediateErrorStateMatcher();
   public deletion = false;
 
-  public gameCheckPending$ = this.gamesService.gameCheckPending$;
+  public readonly gameCheckPending$ = this.gamesService.gameCheckPending$;
 
-  private rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
-  public visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$.pipe(
+  private readonly rawVisitedGames$ = new BehaviorSubject<IStoredGame[]>([]);
+  public readonly visitedGames$: Observable<IStoredGame[]> = this.rawVisitedGames$.pipe(
     map(vg => vg.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))),
   );
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private gamesService: GamesService,
-              private navButtonsService: NavButtonsService,
-              private dialog: MatDialog,
-  ) {
+  constructor() {
     this.getVisitedGames();
-    this.gameFormControl = new FormControl('', {
-      nonNullable: true,
-      asyncValidators: [this.gamesService.gameExistsValidator()],
-    });
 
     this.navButtonsService.navButtonClicked$('nav-tool.wheel')
       .pipe(takeUntil(this.destroy$))

@@ -1,5 +1,5 @@
 import {AsyncPipe} from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
@@ -22,6 +22,9 @@ import {WheelComponent} from '../wheel/wheel.component';
   ],
 })
 export class WheelPageComponent {
+  public readonly settings = inject(SettingsService);
+  private readonly route = inject(ActivatedRoute);
+
   public resetIndex = 0;
 
   private readonly qpNames$ = this.route.queryParams.pipe(
@@ -42,11 +45,6 @@ export class WheelPageComponent {
   private readonly sliderNb$ = new Subject<number>();
 
   public readonly nb$: Observable<number> = merge(this.qpNb$, this.sliderNb$);
-
-  constructor(public readonly settings: SettingsService,
-              private readonly route: ActivatedRoute,
-  ) {
-  }
 
   public onNumberSliderChange(value: number): void {
     this.sliderNb$.next(value);

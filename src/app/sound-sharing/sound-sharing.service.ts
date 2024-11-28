@@ -1,9 +1,11 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {RecordService} from './record.service';
 
 @Injectable()
 export class SoundSharingService {
+  private readonly recordService = inject(RecordService);
+
   public readonly fftSize = 4096;
 
   public readonly gain0 = 1;
@@ -29,9 +31,6 @@ export class SoundSharingService {
   private analysing = false;
   private swapStatus = false;
   private swapTime = performance.now();
-
-  constructor(private readonly recordService: RecordService) {
-  }
 
   public static stringToBinary(payload: string): string {
     return [...atob(payload)].reduce((acc, cur) => acc + cur.charCodeAt(0).toString(2).padStart(8, '0'), '');

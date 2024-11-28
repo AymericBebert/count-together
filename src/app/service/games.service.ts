@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {
@@ -24,21 +24,25 @@ import {StorageService} from '../storage/storage.service';
   providedIn: 'root',
 })
 export class GamesService {
+  private readonly http = inject(HttpClient);
+  private readonly apiError = inject(ApiErrorService);
+  private readonly socket = inject(SocketService);
+  private readonly storageService = inject(StorageService);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
-  public gameCheckPending$ = new BehaviorSubject<boolean>(false);
-  public gameCheck$ = new Subject<IGame | null>();
+  public readonly gameCheckPending$ = new BehaviorSubject<boolean>(false);
+  public readonly gameCheck$ = new Subject<IGame | null>();
 
-  public currentGame$ = new BehaviorSubject<IGame | null>(null);
-  private currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
+  public readonly currentGame$ = new BehaviorSubject<IGame | null>(null);
+  private readonly currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
 
-  private gameLeft$ = this.currentGame$.pipe(skip(1), filter((g): g is null => !g), map<null, void>(() => void 0));
+  private readonly gameLeft$ = this.currentGame$.pipe(
+    skip(1),
+    filter((g): g is null => !g),
+    map<null, void>(() => void 0),
+  );
 
-  constructor(private http: HttpClient,
-              private apiError: ApiErrorService,
-              private socket: SocketService,
-              private storageService: StorageService,
-              @Inject(APP_CONFIG) private config: AppConfig,
-  ) {
+  constructor() {
     this.currentGame$
       .pipe(
         filter((game): game is IGame => !!game && game.gameId === 'offline'),

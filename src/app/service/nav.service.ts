@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject, from} from 'rxjs';
 import {filter, switchMap, tap} from 'rxjs/operators';
@@ -12,25 +12,26 @@ import {SettingsService} from './settings.service';
   providedIn: 'root',
 })
 export class NavService {
-  public mainTitle$ = new BehaviorSubject<string>('');
-  public pinSideNav$ = new BehaviorSubject<boolean>(false);
-  public showBackButton$ = new BehaviorSubject<boolean>(false);
-  public navButtons$ = new BehaviorSubject<string[]>([]);
-  public navTools$ = new BehaviorSubject<{ name: string, icon: string }[]>([]);
+  private readonly navButtonsService = inject(NavButtonsService);
+  private readonly settingsService = inject(SettingsService);
+  private readonly deviceService = inject(DeviceService);
+  private readonly translateService = inject(TranslateService);
+  private readonly storageService = inject(StorageService);
+  private readonly updater = inject(UpdaterService);
+
+  public readonly mainTitle$ = new BehaviorSubject<string>('');
+  public readonly pinSideNav$ = new BehaviorSubject<boolean>(false);
+  public readonly showBackButton$ = new BehaviorSubject<boolean>(false);
+  public readonly navButtons$ = new BehaviorSubject<string[]>([]);
+  public readonly navTools$ = new BehaviorSubject<{ name: string, icon: string }[]>([]);
 
   public notificationBadge = '';
   public displayUpdatesAvailable = false;
   public displayUpdatesActivated = false;
 
-  public language$ = new BehaviorSubject<string>('');
+  public readonly language$ = new BehaviorSubject<string>('');
 
-  constructor(private navButtonsService: NavButtonsService,
-              private settingsService: SettingsService,
-              private deviceService: DeviceService,
-              private translateService: TranslateService,
-              private storageService: StorageService,
-              private updater: UpdaterService,
-  ) {
+  constructor() {
     this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
 
     this.updater.updatesAvailable$.pipe(filter(a => a)).subscribe(() => {

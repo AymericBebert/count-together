@@ -1,5 +1,5 @@
 import {NgIf} from '@angular/common';
-import {Component, ElementRef, OnDestroy, OnInit, viewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, viewChild} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {TranslateModule} from '@ngx-translate/core';
@@ -27,6 +27,8 @@ import {SoundSharingService} from '../sound-sharing.service';
   ],
 })
 export class SoundDebugComponent implements OnInit, OnDestroy {
+  public readonly recordService = inject(RecordService);
+
   readonly replayAudioElement = viewChild.required<ElementRef<HTMLAudioElement>>('replayAudio');
   public replayAvailable = false;
   // public micPermission: PermissionState | null = null;
@@ -34,12 +36,8 @@ export class SoundDebugComponent implements OnInit, OnDestroy {
   public userMedia = navigator.mediaDevices?.getUserMedia({audio: true});
   public mediaRecorderType = typeof MediaRecorder;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private recordBlob: Blob | undefined = undefined;
-
-  constructor(public readonly recordService: RecordService,
-  ) {
-  }
 
   ngOnInit(): void {
     this.recordService.record$

@@ -14,8 +14,8 @@ import {WheelComponent} from '../wheel/wheel.component';
   templateUrl: './wheel-page.component.html',
   styleUrls: ['./wheel-page.component.scss'],
   imports: [
-    TranslateModule,
     AsyncPipe,
+    TranslateModule,
     MatSliderModule,
     MatButton,
     WheelComponent,

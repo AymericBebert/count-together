@@ -1,93 +1,90 @@
-<div style="position: relative">
-  <div *ngIf="connectionError$ | async" class="connection-error">
+@if (connectionError$ | async) {
+  <div class="connection-error tertiary-light-bg">
     <mat-icon style="margin-right: 5px">cloud_off</mat-icon>
     <span>{{ 'misc.connection-error' | translate }}</span>
   </div>
-</div>
+}
 
-<div *ngIf="game$ | async as game" class="wrapper">
-  <div class="header">
-    <mat-icon inline *ngIf="game.gameId === 'offline'">cloud_off</mat-icon>
-    <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
-  </div>
-  <div class="actions-top">
-    <button mat-button color="primary" (click)="removePlayer()">
-      <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
-      <span>{{ 'game.remove-player' | translate }}</span>
-    </button>
-    <button mat-button color="primary" (click)="addPlayer()">
-      <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
-      <span>{{ 'game.add-player' | translate }}</span>
-    </button>
-  </div>
-
-  <div class="score-box mat-elevation-z2">
-    <div *ngFor="let player of players$ | async; index as p; trackBy: playerTrackByFn"
-         class="player-column-wrapper" style="flex: 1 1 auto">
-      <div class="player-column" style="display: flex; flex-direction: column; align-items: center">
-
-        <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
-
-        <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name.trim() || '.' }}</div>
-
-        <div class="total-cell" style="width: 100%">
-          <div class="total">{{ player.total }}</div>
-        </div>
-
-        <ng-container *ngIf="!game.gameType || game.gameType === 'free'">
-          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
-               class="cell free">
-            <div class="add-score" (click)="editScoreOpen(p, i)">
-              {{ score ?? '/' }}
-            </div>
-            <div class="cum-score">
-              {{ player.scoresCumSum[i] || '/' }}
-            </div>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="game.gameType === 'smallScores'">
-          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
-               class="cell small-scores" style="position: relative">
-            <div class="buttons" style="display: flex; justify-content: space-around; align-items: center">
-              <mat-icon (click)="editScore(p, i, (score || 0) - 1)" class="minus">remove_circle</mat-icon>
-              <mat-icon (click)="editScore(p, i, (score || 0) + 1)" class="plus">add_circle</mat-icon>
-            </div>
-            <span class="overlay-score" style="position: absolute">
-              {{ score ?? '/' }}
-            </span>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="game.gameType === 'winOrLose'">
-          <div *ngFor="let score of player.scores; index as i; trackBy: scoreTrackByFn"
-               [ngClass]="{'cell': true, 'win-or-lose': true, win: !!score}"
-               (click)="editScore(p, i, score ? 0 : 1)">
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="game.gameType === 'free'">
-          <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
-            <mat-icon>add_circle_outline</mat-icon>
-          </button>
-          <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
-            <mat-icon>remove_circle_outline</mat-icon>
-          </button>
-        </ng-container>
-
-      </div>
+@if (game$ | async; as game) {
+  <div class="wrapper">
+    <div class="header">
+      @if (game.gameId === 'offline') {
+        <mat-icon inline>cloud_off</mat-icon>
+      }
+      <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
     </div>
+    <div class="actions-top">
+      <button mat-button color="primary" (click)="removePlayer()">
+        <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
+        <span>{{ 'game.remove-player' | translate }}</span>
+      </button>
+      <button mat-button color="primary" (click)="addPlayer()">
+        <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
+        <span>{{ 'game.add-player' | translate }}</span>
+      </button>
+    </div>
+    <div class="score-box mat-elevation-z2">
+      @for (player of players$ | async; track playerTrackByFn(player); let p = $index) {
+        <div class="player-column-wrapper" style="flex: 1 1 auto">
+          <div class="player-column" style="display: flex; flex-direction: column; align-items: center">
+            <app-rank-icon [rank]="player.rank" [isLast]="player.last" class="rank"></app-rank-icon>
+            <div class="player-name" (click)="editPlayerNameOpen(p)">{{ player.name.trim() || '.' }}</div>
+            <div class="total-cell" style="width: 100%">
+              <div class="total">{{ player.total }}</div>
+            </div>
+            @if (!game.gameType || game.gameType === 'free') {
+              @for (score of player.scores; track i; let i = $index) {
+                <div class="cell free">
+                  <div class="add-score" (click)="editScoreOpen(p, i)">
+                    {{ score ?? '/' }}
+                  </div>
+                  <div class="cum-score">
+                    {{ player.scoresCumSum[i] || '/' }}
+                  </div>
+                </div>
+              }
+            }
+            @if (game.gameType === 'smallScores') {
+              @for (score of player.scores; track i; let i = $index) {
+                <div class="cell small-scores" style="position: relative">
+                  <div class="buttons" style="display: flex; justify-content: space-around; align-items: center">
+                    <mat-icon (click)="editScore(p, i, (score || 0) - 1)" class="minus">remove_circle</mat-icon>
+                    <mat-icon (click)="editScore(p, i, (score || 0) + 1)" class="plus">add_circle</mat-icon>
+                  </div>
+                  <span class="overlay-score" style="position: absolute">
+                    {{ score ?? '/' }}
+                  </span>
+                </div>
+              }
+            }
+            @if (game.gameType === 'winOrLose') {
+              @for (score of player.scores; track i; let i = $index) {
+                <div class="cell win-or-lose" [class.win]="!!score" (click)="editScore(p, i, score ? 0 : 1)"></div>
+              }
+            }
+            @if (game.gameType === 'free') {
+              <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+    @if (game.gameType !== 'free') {
+      <div class="actions-bottom">
+        <button mat-button color="accent" (click)="removeScoreLine()">
+          <mat-icon>remove_circle_outline</mat-icon>
+          <span>{{ 'game.remove-row' | translate }}</span>
+        </button>
+        <button mat-button color="accent" (click)="addScoreLine()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>{{ 'game.add-row' | translate }}</span>
+        </button>
+      </div>
+    }
   </div>
-
-  <div *ngIf="game.gameType !== 'free'" class="actions-bottom">
-    <button mat-button color="accent" (click)="removeScoreLine()">
-      <mat-icon>remove_circle_outline</mat-icon>
-      <span>{{ 'game.remove-row' | translate }}</span>
-    </button>
-    <button mat-button color="accent" (click)="addScoreLine()">
-      <mat-icon>add_circle_outline</mat-icon>
-      <span>{{ 'game.add-row' | translate }}</span>
-    </button>
-  </div>
-
-</div>
+}

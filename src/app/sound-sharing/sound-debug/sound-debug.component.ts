@@ -1,4 +1,3 @@
-import {NgIf} from '@angular/common';
 import {Component, ElementRef, inject, OnDestroy, OnInit, viewChild} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -19,7 +18,6 @@ import {SoundSharingService} from '../sound-sharing.service';
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
   imports: [
-    NgIf,
     DebugItemComponent,
     MatIcon,
     TranslateModule,

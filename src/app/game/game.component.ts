@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
@@ -30,7 +30,7 @@ import {SocketService} from '../socket/socket.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
   imports: [
-    CommonModule,
+    AsyncPipe,
     TranslateModule,
     RankIconComponent,
     MatButtonModule,
@@ -280,12 +280,8 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  public playerTrackByFn(index: number, player: EnrichedPlayer): string {
+  public playerTrackByFn(player: EnrichedPlayer): string {
     return `${player.name}:${player.total}:${player.rank}:${player.last}`;
-  }
-
-  public scoreTrackByFn(index: number, score: number | null): number {
-    return index;
   }
 
   private get gameOrThrow(): IGame {

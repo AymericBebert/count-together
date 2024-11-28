@@ -1,74 +1,63 @@
-<div style="padding: 20px; text-align: center">
+<!--  <app-debug-item [isOk]="micPermission === 'granted'" [label]="'micPermission'">-->
+<!--    {{ micPermission }}-->
+<!--  </app-debug-item>-->
+<app-debug-item [isOk]="!!mediaDevices" [label]="'mediaDevices'">
+  {{ mediaDevices }}
+</app-debug-item>
+<app-debug-item [isOk]="!!userMedia" [label]="'userMedia'">
+  {{ userMedia }}
+</app-debug-item>
+<app-debug-item [isOk]="mediaRecorderType !== 'undefined'" [label]="'mediaRecorderType'">
+  {{ mediaRecorderType }}
+</app-debug-item>
 
-  <!--  <app-debug-item [isOk]="micPermission === 'granted'" [label]="'micPermission'">-->
-  <!--    {{ micPermission }}-->
-  <!--  </app-debug-item>-->
-  <app-debug-item [isOk]="!!mediaDevices" [label]="'mediaDevices'">
-    {{ mediaDevices }}
-  </app-debug-item>
-  <app-debug-item [isOk]="!!userMedia" [label]="'userMedia'">
-    {{ userMedia }}
-  </app-debug-item>
-  <app-debug-item [isOk]="mediaRecorderType !== 'undefined'" [label]="'mediaRecorderType'">
-    {{ mediaRecorderType }}
-  </app-debug-item>
+<div style="margin-bottom: 20px">
+  <audio #replayAudio [class.hidden]="!replayAvailable || recordService.status === 'recording'" controls></audio>
+</div>
 
-  <div style="margin-bottom: 20px">
-    <audio #replayAudio [class.hidden]="!replayAvailable || recordService.status === 'recording'" controls></audio>
-  </div>
-
-  <p *ngIf="recordService.status === 'recording'" class="record-indicator">
+@if (recordService.status === 'recording') {
+  <p class="record-indicator">
     REC
     <mat-icon [inline]="true">fiber_manual_record</mat-icon>
   </p>
+}
 
-  <div style="margin-bottom: 20px">
-    <button
-      *ngIf="recordService.status === 'notStarted'"
-      mat-raised-button
-      color="accent"
-      (click)="askUserPermission()"
-    >
+<div style="margin-bottom: 20px">
+  @if (recordService.status === 'notStarted') {
+    <button mat-raised-button color="accent" (click)="askUserPermission()">
       {{ 'sound-sharing.debug.ask-permission' | translate }}
     </button>
-  </div>
+  }
+</div>
 
-  <div style="margin-bottom: 20px">
-    <button
-      *ngIf="recordService.status === 'ready' || recordService.status === 'notStarted'"
-      mat-raised-button
-      color="accent"
-      (click)="startRecording()"
-    >
+<div style="margin-bottom: 20px">
+  @if (recordService.status === 'ready' || recordService.status === 'notStarted') {
+    <button mat-raised-button color="accent" (click)="startRecording()">
       {{ 'sound-sharing.debug.start-recording' | translate }}
     </button>
-  </div>
+  }
+</div>
 
-  <div style="margin-bottom: 20px">
-    <button
-      *ngIf="recordService.status === 'recording'"
-      mat-raised-button
-      color="accent"
-      (click)="stopRecording()"
-    >
+<div style="margin-bottom: 20px">
+  @if (recordService.status === 'recording') {
+    <button mat-raised-button color="accent" (click)="stopRecording()">
       {{ 'sound-sharing.debug.stop-recording' | translate }}
     </button>
-  </div>
-
-  <p *ngIf="!recordService.error && recordService.status === 'awaitingAuthorization'">
-    {{ 'sound-sharing.debug.authorize' | translate }}
-  </p>
-  <p *ngIf="recordService.status === 'error'">
-    {{ 'sound-sharing.debug.error' | translate }}
-  </p>
-  <p *ngIf="recordService.error === 'NotSupportedError'">
-    {{ 'sound-sharing.debug.not-supported' | translate }}
-  </p>
-  <p *ngIf="recordService.error === 'NotFoundError'">
-    {{ 'sound-sharing.debug.not-found' | translate }}
-  </p>
-  <p *ngIf="recordService.error === 'NotAllowedError'">
-    {{ 'sound-sharing.debug.not-allowed' | translate }}
-  </p>
-
+  }
 </div>
+
+@if (!recordService.error && recordService.status === 'awaitingAuthorization') {
+  <p>{{ 'sound-sharing.debug.authorize' | translate }}</p>
+}
+@if (recordService.status === 'error') {
+  <p>{{ 'sound-sharing.debug.error' | translate }}</p>
+}
+@if (recordService.error === 'NotSupportedError') {
+  <p>{{ 'sound-sharing.debug.not-supported' | translate }}</p>
+}
+@if (recordService.error === 'NotFoundError') {
+  <p>{{ 'sound-sharing.debug.not-found' | translate }}</p>
+}
+@if (recordService.error === 'NotAllowedError') {
+  <p>{{ 'sound-sharing.debug.not-allowed' | translate }}</p>
+}

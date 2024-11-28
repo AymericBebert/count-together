@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -22,7 +22,7 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
-    CommonModule,
+    AsyncPipe,
     TranslateModule,
     ReactiveFormsModule,
     RouterLink,

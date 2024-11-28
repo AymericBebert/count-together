@@ -19,12 +19,14 @@
            [formControl]="gameFormControl"
            [errorStateMatcher]="matcher"
            [placeholder]="'home.form.placeholder' | translate">
-    <mat-error *ngIf="gameFormControl.errors?.gameNotFound">
-      {{ 'home.form.game-not-found' | translate }}
-    </mat-error>
+    @if (gameFormControl.errors?.gameNotFound) {
+      <mat-error>{{ 'home.form.game-not-found' | translate }}</mat-error>
+    }
   </mat-form-field>
   <div style="width: 24px">
-    <mat-spinner *ngIf="gameCheckPending$ | async" diameter="24" style="margin-top: 18px"></mat-spinner>
+    @if (gameCheckPending$ | async) {
+      <mat-spinner diameter="24" style="margin-top: 18px"></mat-spinner>
+    }
   </div>
 </form>
 
@@ -33,17 +35,22 @@
   {{ 'home.sound-share' | translate }}
 </button>
 
-<ng-container *ngIf="visitedGames$ | async as visitedGames">
-  <ng-container *ngIf="visitedGames.length > 0">
+@if (visitedGames$ | async; as visitedGames) {
+  @if (visitedGames.length > 0) {
     <h3 style="margin-top: 48px">{{ 'home.visited-games.title' | translate }}</h3>
-    <div *ngFor="let game of visitedGames">
-      <button mat-button [color]="deletion ? 'warn' : 'primary'" (click)="visitedGameClicked(game.gameId)">
-        {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
-      </button>
-    </div>
+    @for (game of visitedGames; track game.gameId) {
+      <div>
+        <button mat-button [color]="deletion ? 'warn' : 'primary'" (click)="visitedGameClicked(game.gameId)">
+          {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
+        </button>
+      </div>
+    }
     <button mat-button color="primary" (click)="toggleDeletion()" [style.opacity]="deletion ? 1 : 0.4">
-      <ng-container *ngIf="deletion; else notDeletion">{{ 'home.visited-games.delete-stop' | translate }}</ng-container>
-      <ng-template #notDeletion>{{ 'home.visited-games.delete' | translate }}</ng-template>
+      @if (deletion) {
+        {{ 'home.visited-games.delete-stop' | translate }}
+      } @else {
+        {{ 'home.visited-games.delete' | translate }}
+      }
     </button>
-  </ng-container>
-</ng-container>
+  }
+}

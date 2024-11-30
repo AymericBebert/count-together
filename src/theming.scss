@@ -23,12 +23,14 @@
 }
 
 @mixin theme-overrides-light() {
+  $bars-color: map.get(tc.$secondary-palette, 90);
+
   @include mat.toolbar-overrides((
-    container-background-color: map.get(tc.$secondary-palette, 90),
+    container-background-color: $bars-color,
   ));
   @include mat.sidenav-overrides((
-    content-background-color: map.get(tc.$secondary-palette, 90),
-    container-background-color: map.get(tc.$secondary-palette, 90),
+    content-background-color: $bars-color,
+    container-background-color: $bars-color,
   ));
 
   .mat-drawer-content > router-outlet + * {
@@ -44,17 +46,18 @@
 }
 
 @mixin theme-overrides-dark() {
+  $bars-color: map.get(tc.$primary-palette, 10);
+
   @include mat.toolbar-overrides((
-    container-background-color: map.get(tc.$secondary-palette, 20),
+    container-background-color: $bars-color,
   ));
   @include mat.sidenav-overrides((
-    content-background-color: map.get(tc.$secondary-palette, 20),
-    container-background-color: map.get(tc.$secondary-palette, 20),
+    content-background-color: $bars-color,
+    container-background-color: $bars-color,
   ));
   @include mat.dialog-overrides((
     container-color: map.get(tc.$neutral-palette, 12),
   ));
-  //@include mat.slide-toggle-color(tc.$light-theme, $color-variant: tertiary);
 
   .mat-drawer-content > router-outlet + * {
     background-color: map.get(tc.$neutral-palette, 4);

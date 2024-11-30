@@ -11,10 +11,6 @@
   }
 }
 
-.sidenav .mat-toolbar {
-  background: inherit;
-}
-
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
@@ -44,9 +40,24 @@ img.main-icon {
   padding: 0 16px;
 }
 
-mat-list-item {
+.mat-mdc-list-item {
   mat-icon {
     vertical-align: sub;
+  }
+
+  &.selectable {
+    border-radius: 0;
+    $corner-border-radius: 24px;
+
+    &:nth-child(1 of .even), &:nth-child(1 of .odd) {
+      border-top-right-radius: $corner-border-radius;
+      border-top-left-radius: $corner-border-radius;
+    }
+
+    &:nth-last-child(1 of .even), &:nth-last-child(1 of .odd) {
+      border-bottom-right-radius: $corner-border-radius;
+      border-bottom-left-radius: $corner-border-radius;
+    }
   }
 }
 

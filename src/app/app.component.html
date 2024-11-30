@@ -20,14 +20,14 @@
       @if (gameSettingsService.gameSettings$ | async; as gameSettings) {
         <h3 matSubheader>{{ 'nav.game-settings.title' | translate }}</h3>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
-                       class="selectable"
+                       class="selectable even"
                        [class.selected]="!gameSettings.lowerScoreWins">
           <span class="crown-icon-bw"></span>
           <mat-icon>arrow_drop_up</mat-icon>
           <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
-                       class="selectable"
+                       class="selectable even"
                        [class.selected]="gameSettings.lowerScoreWins">
           <span class="crown-icon-bw"></span>
           <mat-icon>arrow_drop_down</mat-icon>

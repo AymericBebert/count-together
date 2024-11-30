@@ -4,8 +4,8 @@
 
 @mixin component-theme($light-or-dark) {
   app-root {
-    .mat-mdc-list-item.selectable {
-      background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.06);
+    .mat-mdc-list-item.selectable.even {
+      background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.08);
 
       &.selected {
         background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.35);
@@ -17,7 +17,7 @@
     }
 
     .mat-mdc-list-item.selectable.odd {
-      background-color: rgba(map.get(tc.$primary-palette, 50), 0.06);
+      background-color: rgba(map.get(tc.$primary-palette, 50), 0.1);
 
       &.selected {
         background-color: rgba(map.get(tc.$primary-palette, 50), 0.4);

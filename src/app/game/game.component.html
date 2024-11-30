@@ -1,4 +1,4 @@
-@if (connectionError$ | async) {
+@if (connectionError()) {
   <div class="connection-error tertiary-light-bg">
     <mat-icon style="margin-right: 5px">cloud_off</mat-icon>
     <span>{{ 'misc.connection-error' | translate }}</span>
@@ -14,11 +14,11 @@
       <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
     </div>
     <div class="actions-top">
-      <button mat-button color="primary" (click)="removePlayer()">
+      <button mat-button (click)="removePlayer()">
         <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
         <span>{{ 'game.remove-player' | translate }}</span>
       </button>
-      <button mat-button color="primary" (click)="addPlayer()">
+      <button mat-button (click)="addPlayer()">
         <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
         <span>{{ 'game.add-player' | translate }}</span>
       </button>
@@ -63,10 +63,10 @@
               }
             }
             @if (game.gameType === 'free') {
-              <button mat-icon-button color="accent" aria-label="Add Score" (click)="addScore(p)">
+              <button mat-icon-button class="color-tertiary" aria-label="Add Score" (click)="addScore(p)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
-              <button mat-icon-button color="accent" aria-label="Remove Score" (click)="removeScore(p)">
+              <button mat-icon-button class="color-tertiary" aria-label="Remove Score" (click)="removeScore(p)">
                 <mat-icon>remove_circle_outline</mat-icon>
               </button>
             }
@@ -76,11 +76,11 @@
     </div>
     @if (game.gameType !== 'free') {
       <div class="actions-bottom">
-        <button mat-button color="accent" (click)="removeScoreLine()">
+        <button mat-button class="color-tertiary" (click)="removeScoreLine()">
           <mat-icon>remove_circle_outline</mat-icon>
           <span>{{ 'game.remove-row' | translate }}</span>
         </button>
-        <button mat-button color="accent" (click)="addScoreLine()">
+        <button mat-button class="color-tertiary" (click)="addScoreLine()">
           <mat-icon>add_circle_outline</mat-icon>
           <span>{{ 'game.add-row' | translate }}</span>
         </button>

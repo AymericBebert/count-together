@@ -13,12 +13,10 @@ describe('WheelComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        WheelComponent,
-      ],
       imports: [
         translateTestingModule,
         RouterTestingModule,
+        WheelComponent,
       ],
       providers: [
         {provide: ActivatedRoute, useValue: {paramMap: EMPTY}},

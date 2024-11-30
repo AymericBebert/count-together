@@ -1,64 +1,54 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '../../theme-colors' as tc;
 
-@mixin game-component-theme($theme) {
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  //$warn: map.get($theme, warn);
-  //$foreground: map.get($theme, foreground);
-  $background: map.get($theme, background);
-
+@mixin component-theme($light-or-dark) {
   app-game {
-    .score-box {
-      background-color: mat.m2-get-color-from-palette($background, background);
-    }
-
-    .player-column-wrapper:not(:last-child) {
-      border-right: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.2);
-    }
-
-    .win-or-lose.win {
-      background-color: mat.m2-get-color-from-palette($primary, 0.6);
-    }
-
-    .total-cell {
-      border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300);
-    }
-
-    .cell {
-      border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.2);
-
-      &.free {
-      }
-
-      &.small-scores .buttons mat-icon {
-        &.plus {
-          color: mat.m2-get-color-from-palette($primary, 0.1);
-        }
-
-        &.minus {
-          color: mat.m2-get-color-from-palette($accent, 0.1);
-        }
-      }
-
-      &.win-or-lose {
-        border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 100, 0.6);
-      }
+    @if $light-or-dark == light {
+      @include game-component-theme(
+          map.get(tc.$secondary-palette, 100),
+          map.get(tc.$primary-palette, 50),
+          map.get(tc.$primary-palette, 50),
+          map.get(tc.$tertiary-palette, 50),
+      );
+    } @else {
+      @include game-component-theme(
+          map.get(tc.$neutral-palette, 10),
+          map.get(tc.$primary-palette, 50),
+          map.get(tc.$primary-palette, 50),
+          map.get(tc.$tertiary-palette, 50),
+      );
     }
   }
 }
 
-@mixin game-component-dark-theme($theme) {
-  $primary: map.get($theme, primary);
+@mixin game-component-theme($bg-color, $border-color, $primary, $accent) {
+  .score-box {
+    background-color: $bg-color;
+  }
 
-  app-game {
-    .cell {
-      &.small-scores .buttons mat-icon.plus {
-        color: mat.m2-get-color-from-palette($primary, 400, 0.2);
+  .player-column-wrapper:not(:last-child) {
+    border-right: 1px solid rgba($border-color, 0.2);
+  }
+
+  .win-or-lose.win {
+    background-color: rgba($primary, 0.6);
+  }
+
+  .total-cell {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .cell {
+    border-bottom: 1px solid rgba($border-color, 0.2);
+
+    &.small-scores .buttons mat-icon {
+      &.plus {
+        color: rgba($primary, 0.1);
       }
 
-      &.win-or-lose {
-        border-bottom: 1px solid mat.m2-get-color-from-palette($primary, 300, 0.6);
+      &.minus {
+        color: rgba($accent, 0.1);
       }
     }
   }

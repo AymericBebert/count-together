@@ -2,6 +2,7 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
+import {APP_CONFIG, appConfigFactory} from '../../config/app.config';
 import {translateTestingModule} from '../testing/translate-testing-module';
 import {UpdaterTestingModule} from '../testing/updater-testing.module';
 import {DeviceService} from './device.service';
@@ -17,6 +18,7 @@ describe('NavService', () => {
       UpdaterTestingModule,
     ],
     providers: [
+      {provide: APP_CONFIG, useFactory: appConfigFactory},
       NavService,
       NavButtonsService,
       SettingsService,

@@ -1,10 +1,10 @@
 <p style="margin: 0 0 24px">{{ 'home.welcome' | translate }}</p>
 
-<button mat-raised-button color="primary" [routerLink]="['game', 'offline']">
+<button mat-flat-button [routerLink]="['game', 'offline']">
   {{ 'home.offline' | translate }}
 </button>
 <br>
-<button mat-raised-button color="primary" (click)="newGameOpen()" style="margin-top: 16px">
+<button mat-flat-button (click)="newGameOpen()" style="margin-top: 16px">
   {{ 'home.new-game' | translate }}
 </button>
 
@@ -24,33 +24,31 @@
     }
   </mat-form-field>
   <div style="width: 24px">
-    @if (gameCheckPending$ | async) {
+    @if (gameCheckPending()) {
       <mat-spinner diameter="24" style="margin-top: 18px"></mat-spinner>
     }
   </div>
 </form>
 
-<button mat-button color="primary" [routerLink]="'sound-share'">
+<button mat-button [routerLink]="'sound-share'">
   <mat-icon>mic</mat-icon>
   {{ 'home.sound-share' | translate }}
 </button>
 
-@if (visitedGames$ | async; as visitedGames) {
-  @if (visitedGames.length > 0) {
-    <h3 style="margin-top: 48px">{{ 'home.visited-games.title' | translate }}</h3>
-    @for (game of visitedGames; track game.gameId) {
-      <div>
-        <button mat-button [color]="deletion ? 'warn' : 'primary'" (click)="visitedGameClicked(game.gameId)">
-          {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substr(0, 24) + '...' : game.name }}
-        </button>
-      </div>
-    }
-    <button mat-button color="primary" (click)="toggleDeletion()" [style.opacity]="deletion ? 1 : 0.4">
-      @if (deletion) {
-        {{ 'home.visited-games.delete-stop' | translate }}
-      } @else {
-        {{ 'home.visited-games.delete' | translate }}
-      }
-    </button>
+@if (visitedGames().length > 0) {
+  <h3 style="margin-top: 48px">{{ 'home.visited-games.title' | translate }}</h3>
+  @for (game of visitedGames(); track game.gameId) {
+    <div>
+      <button mat-button [class.color-warn]="deletion()" (click)="visitedGameClicked(game.gameId)">
+        {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substring(0, 24) + '...' : game.name }}
+      </button>
+    </div>
   }
+  <button mat-button (click)="toggleDeletion()" [style.opacity]="deletion() ? 1 : 0.4">
+    @if (deletion()) {
+      {{ 'home.visited-games.delete-stop' | translate }}
+    } @else {
+      {{ 'home.visited-games.delete' | translate }}
+    }
+  </button>
 }

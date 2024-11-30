@@ -24,7 +24,7 @@
 
 <div style="margin-bottom: 20px">
   @if (recordService.status === 'notStarted') {
-    <button mat-raised-button color="accent" (click)="askUserPermission()">
+    <button mat-flat-button class="color-tertiary" (click)="askUserPermission()">
       {{ 'sound-sharing.debug.ask-permission' | translate }}
     </button>
   }
@@ -32,7 +32,7 @@
 
 <div style="margin-bottom: 20px">
   @if (recordService.status === 'ready' || recordService.status === 'notStarted') {
-    <button mat-raised-button color="accent" (click)="startRecording()">
+    <button mat-flat-button class="color-tertiary" (click)="startRecording()">
       {{ 'sound-sharing.debug.start-recording' | translate }}
     </button>
   }
@@ -40,7 +40,7 @@
 
 <div style="margin-bottom: 20px">
   @if (recordService.status === 'recording') {
-    <button mat-raised-button color="accent" (click)="stopRecording()">
+    <button mat-flat-button class="color-tertiary" (click)="stopRecording()">
       {{ 'sound-sharing.debug.stop-recording' | translate }}
     </button>
   }

@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {
@@ -30,7 +30,7 @@ export class GamesService {
   private readonly storageService = inject(StorageService);
   private readonly config = inject<AppConfig>(APP_CONFIG);
 
-  public readonly gameCheckPending$ = new BehaviorSubject<boolean>(false);
+  public readonly gameCheckPending = signal<boolean>(false);
   public readonly gameCheck$ = new Subject<IGame | null>();
 
   public readonly currentGame$ = new BehaviorSubject<IGame | null>(null);
@@ -243,14 +243,14 @@ export class GamesService {
   }
 
   private gameExistsCheck$(token: string): Observable<IGame | null> {
-    this.gameCheckPending$.next(true);
+    this.gameCheckPending.set(true);
     return this.getGameNotFoundOk$(token).pipe(
       catchError(err => {
         console.error(err);
         return of(null);
       }),
       tap(game => this.gameCheck$.next(game)),
-      finalize(() => this.gameCheckPending$.next(false)),
+      finalize(() => this.gameCheckPending.set(false)),
     );
   }
 

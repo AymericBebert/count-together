@@ -1,5 +1,4 @@
-import {inject, Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {inject, Injectable, signal} from '@angular/core';
 import {RecordService} from './record.service';
 
 @Injectable()
@@ -17,10 +16,10 @@ export class SoundSharingService {
   public readonly fftIndex0 = Math.round(this.frequency0 / 11.72);
   public readonly fftIndex1 = Math.round(this.frequency1 / 11.72);
 
-  public readonly receivedPayload$ = new Subject<string>();
-  public readonly receivedCode$ = new Subject<string>();
+  public readonly receivedPayload = signal<string>('');
+  public readonly receivedCode = signal<string>('');
 
-  public dataArray: Uint8Array | undefined;
+  public readonly dataArray = signal<Uint8Array | undefined>(undefined);
 
   private readonly timeStep = 160;
 
@@ -84,7 +83,7 @@ export class SoundSharingService {
 
   public stopAnalysing() {
     this.analysing = false;
-    this.dataArray = undefined;
+    this.dataArray.set(undefined);
     this.recordService.stopStream();
   }
 
@@ -98,7 +97,7 @@ export class SoundSharingService {
     this.analyser = this.audioCtx.createAnalyser();
     this.analyser.fftSize = this.fftSize;
     const bufferLength = this.analyser.frequencyBinCount;
-    this.dataArray = new Uint8Array(bufferLength);
+    this.dataArray.set(new Uint8Array(bufferLength));
 
     const source = this.audioCtx.createMediaStreamSource(stream);
     source.connect(this.analyser);
@@ -114,7 +113,7 @@ export class SoundSharingService {
       return;
     }
 
-    const dataArray = this.dataArray;
+    const dataArray = this.dataArray();
     if (!dataArray) {
       throw new Error('No dataArray');
     }
@@ -130,15 +129,15 @@ export class SoundSharingService {
       const steps = Math.round(swapDelta / this.timeStep);
       if (steps <= 10) {
         new Array(steps).fill(1).forEach(() => this.hearing += this.swapStatus ? '1' : '0');
-        this.receivedPayload$.next(SoundSharingService.cutBytes(this.hearing.substring(1)));
+        this.receivedPayload.set(SoundSharingService.cutBytes(this.hearing.substring(1)));
       }
       console.log(this.swapStatus ? '1' : '0', steps, swapDelta);
     }
 
     if (this.hearing && (performance.now() - this.swapTime > this.timeStep * 10)) {
       const {cut, decoded} = SoundSharingService.soundDecode(this.hearing);
-      this.receivedPayload$.next(cut);
-      this.receivedCode$.next(decoded);
+      this.receivedPayload.set(cut);
+      this.receivedCode.set(decoded);
       this.hearing = '';
     }
   }

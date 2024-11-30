@@ -1,12 +1,13 @@
 import {AsyncPipe} from '@angular/common';
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {Observable, Subject} from 'rxjs';
-import {filter, map, takeUntil, withLatestFrom} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {filter, map, withLatestFrom} from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ConfirmDialogComponent, ConfirmDialogData} from '../dialogs/confirm-dialog/confirm-dialog.component';
 import {GameNameDialogComponent, GameNameDialogData} from '../dialogs/game-name-dialog/game-name-dialog.component';
@@ -37,7 +38,7 @@ import {SocketService} from '../socket/socket.service';
     MatIconModule,
   ],
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly navButtonsService = inject(NavButtonsService);
@@ -75,9 +76,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }),
   );
 
-  public readonly connectionError$ = this.socket.connectionError$;
-
-  private readonly destroy$ = new Subject<void>();
+  public readonly connectionError = toSignal(this.socket.connectionError$, {initialValue: false});
 
   private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
     return scores.reduce(
@@ -89,11 +88,15 @@ export class GameComponent implements OnInit, OnDestroy {
     );
   }
 
+  constructor(private readonly destroyRef: DestroyRef) {
+    this.destroyRef.onDestroy(() => this.gamesService.setCurrentGameId(null));
+  }
+
   ngOnInit(): void {
     this.navButtonsService.navButtonClicked$()
       .pipe(
         withLatestFrom(this.game$),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(([btn, game]) => {
         if (!game) {
@@ -124,23 +127,16 @@ export class GameComponent implements OnInit, OnDestroy {
       });
 
     this.route.paramMap
-      .pipe(map(params => params.get('gameId')), takeUntil(this.destroy$))
+      .pipe(map(params => params.get('gameId')), takeUntilDestroyed(this.destroyRef))
       .subscribe(gameId => this.gamesService.setCurrentGameId(gameId ?? 'offline'));
 
     this.gameSettingsService.lowerScoreWins$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(lowerScoreWins => this.setLowerScoreWins(lowerScoreWins));
 
     this.gameSettingsService.gameType$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(gameType => this.setGameTypeOpen(gameType));
-  }
-
-  ngOnDestroy(): void {
-    this.gamesService.setCurrentGameId(null);
-
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public editGameOpen(): void {
@@ -150,7 +146,7 @@ export class GameComponent implements OnInit, OnDestroy {
       {data: {name: currentGame.name}},
     )
       .afterClosed()
-      .pipe(filter((res): res is string => res !== undefined), takeUntil(this.destroy$))
+      .pipe(filter((res): res is string => res !== undefined), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         this.editGame(res);
       });
@@ -176,7 +172,7 @@ export class GameComponent implements OnInit, OnDestroy {
       {data: {name: this.gameOrThrow.players[p].name, isNew}},
     )
       .afterClosed()
-      .pipe(filter((res): res is string => !!res), takeUntil(this.destroy$))
+      .pipe(filter((res): res is string => !!res), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         this.editPlayerName(p, res);
       });
@@ -198,7 +194,7 @@ export class GameComponent implements OnInit, OnDestroy {
       };
       this.dialog.open(ConfirmDialogComponent, {data})
         .afterClosed()
-        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           currentGame.players.pop();
           this.gamesService.gameRemovePlayer(currentGame.gameId, currentNbPlayers - 1);
@@ -220,7 +216,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const data: EditScoreDialogData = {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew};
     this.dialog.open(ScoreDialogComponent, {data})
       .afterClosed()
-      .pipe(filter(res => res !== undefined), takeUntil(this.destroy$))
+      .pipe(filter(res => res !== undefined), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         this.editScore(p, i, res);
       });
@@ -267,7 +263,7 @@ export class GameComponent implements OnInit, OnDestroy {
       };
       this.dialog.open(ConfirmDialogComponent, {data})
         .afterClosed()
-        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           currentGame.players.forEach(p => p.scores.pop());
           this.gamesService.gameRemoveScore(currentGame.gameId, -1, currentGame.players[0].scores.length);
@@ -316,7 +312,7 @@ export class GameComponent implements OnInit, OnDestroy {
       };
       this.dialog.open(ConfirmDialogComponent, {data})
         .afterClosed()
-        .pipe(filter(res => !!res), takeUntil(this.destroy$))
+        .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.editGameType(gameType));
     } else {
       this.editGameType(gameType);
@@ -344,7 +340,7 @@ export class GameComponent implements OnInit, OnDestroy {
       console.error('Trying to share but game is null?');
     } else if (game.gameId === 'offline') {
       this.gamesService.postNewGame$(game)
-        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
+        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntilDestroyed(this.destroyRef))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId]).then(() => {
             this.shareService.shareOrCopy(shareTitle, shareText, `${this.config.websiteUrl}/game/${newGameId}`);
@@ -362,7 +358,7 @@ export class GameComponent implements OnInit, OnDestroy {
       console.error('Trying to duplicate but game is offline?');
     } else {
       this.gamesService.duplicateGame$(game.gameId)
-        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntil(this.destroy$))
+        .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntilDestroyed(this.destroyRef))
         .subscribe(newGameId => {
           this.router.navigate(['game', newGameId])
             .catch(err => console.error('Could not navigate after duplication?', err));

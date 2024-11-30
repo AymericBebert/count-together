@@ -14,10 +14,12 @@ describe('DebugItemComponent', () => {
       .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(DebugItemComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.componentRef.setInput('isOk', true);
+    fixture.componentRef.setInput('label', 'Test');
+    await fixture.whenStable();
   });
 
   it('should create', () => {

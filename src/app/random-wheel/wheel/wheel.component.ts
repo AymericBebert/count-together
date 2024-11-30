@@ -1,5 +1,14 @@
-import {AfterViewInit, Component, computed, ElementRef, HostListener, input, OnDestroy, viewChild} from '@angular/core';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  HostListener,
+  input,
+  viewChild
+} from '@angular/core';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 import {interpolateString} from 'd3-interpolate';
 import {scaleLinear} from 'd3-scale';
 import {select, Selection} from 'd3-selection';
@@ -14,7 +23,7 @@ import {debounceTime, delay, filter, skip, takeUntil} from 'rxjs/operators';
   styleUrls: ['./wheel.component.scss'],
   imports: [],
 })
-export class WheelComponent implements OnDestroy, AfterViewInit {
+export class WheelComponent implements AfterViewInit {
 
   public readonly names = input<string[] | null>(null);
   public readonly nb = input<number | null>(5);
@@ -53,7 +62,6 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
 
   private reset$ = toObservable(this.reset).pipe(skip(1));
   private resize$ = new Subject<void>();
-  private destroy$ = new Subject<void>();
 
   private arrowPathData: [number, number][] = [
     [0, -0.2], [-0.3, -0.4], [0, 0.8], [0.3, -0.4],
@@ -63,22 +71,34 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
     .x(d => d[0])
     .y(d => d[1]);
 
-  constructor() {
-    toObservable(this.computedNb).pipe(filter(() => this.arrowPrepared), takeUntil(this.destroy$)).subscribe(() => {
+  constructor(private readonly destroyRef: DestroyRef) {
+    toObservable(this.computedNb).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
       this.onNbChanged();
       this.adjustZones();
     });
 
-    toObservable(this.computedNames).pipe(filter(() => this.arrowPrepared), takeUntil(this.destroy$)).subscribe(() => {
+    toObservable(this.computedNames).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
       this.adjustZones();
     });
 
-    toObservable(this.dark).pipe(filter(() => this.arrowPrepared), takeUntil(this.destroy$)).subscribe(() => {
+    toObservable(this.dark).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
       this.adjustZones();
       this.adjustArrowColor();
     });
 
-    this.reset$.pipe(filter(() => this.arrowPrepared), takeUntil(this.destroy$)).subscribe(() => {
+    this.reset$.pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
       this.adjustArrowReset();
       this.adjustCrownReset();
     });
@@ -87,11 +107,6 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
   @HostListener('window:resize')
   public onResize(): void {
     this.resize$.next();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   ngAfterViewInit(): void {
@@ -106,7 +121,7 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
     }, 50);
 
     this.resize$
-      .pipe(debounceTime(100), takeUntil(this.destroy$))
+      .pipe(debounceTime(100), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.updateSizes();
         this.adjustZones();
@@ -126,7 +141,7 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
     of({nb: this.computedNb(), angle: this.angle}).pipe(
       delay(this.spinDuration),
       takeUntil(this.reset$),
-      takeUntil(this.destroy$),
+      takeUntilDestroyed(this.destroyRef),
     ).subscribe(data => {
       this.oldAngle = this.angle;
       this.spinning = false;
@@ -180,7 +195,7 @@ export class WheelComponent implements OnDestroy, AfterViewInit {
       .style('opacity', 1);
 
     const labelPathDFn = (_: string, i: number) => radarLine([[0, 0], [1, i + 0.5]]);
-    const labelColorFn = this.dark() ? '#cccccc' : '#444444';
+    const labelColorFn = this.dark() ? '#ffb2bf' : '#444444';
 
     labelsEnter.append('path')
       .attr('d', labelPathDFn)

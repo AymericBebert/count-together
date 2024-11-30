@@ -1,6 +1,6 @@
 @if (gameShareData$ | async; as gameShareData) {
   <div style="margin-bottom: 20px">
-    <button mat-raised-button color="primary" (click)="shareSound(gameShareData.gameId)">
+    <button mat-flat-button (click)="shareSound(gameShareData.gameId)">
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share' | translate }} {{ gameShareData.gameId }}
     </button>
@@ -8,45 +8,41 @@
   </div>
 }
 
-@if (!soundSharing.dataArray) {
+@if (soundSharing.dataArray(); as dataArray) {
   <div style="margin-bottom: 20px">
-    <button mat-raised-button color="primary" (click)="analyse()">
+    <button mat-flat-button class="color-tertiary" (click)="stopAnalysing()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
+      {{ 'sound-sharing.stop-listening' | translate }}
+    </button>
+  </div>
+
+  <div class="frequency-bars">
+    @for (i of analyseRange; track i) {
+      <div
+        class="frequency-bar"
+        [style.transform]="'scaleX(' + dataArray[i] * 100 / 256 + ')'"
+        [style.background-color]="i === soundSharing.fftIndex0 || i === soundSharing.fftIndex1 ? '#a21e6d' : '#3b1ea2'"
+      ></div>
+    }
+  </div>
+} @else {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button (click)="analyse()">
       <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
       {{ 'sound-sharing.listen' | translate }}
     </button>
   </div>
 }
 
-@if (soundSharing.dataArray) {
-  <div style="margin-bottom: 20px">
-    <button mat-raised-button color="accent" (click)="stopAnalysing()">
-      <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
-      {{ 'sound-sharing.stop-listening' | translate }}
-    </button>
-  </div>
-}
-
-@if (soundSharing.dataArray) {
-  <div class="frequency-bars">
-    @for (i of analyseRange; track i) {
-      <div
-        class="frequency-bar"
-        [style.transform]="'scaleX(' + soundSharing.dataArray[i] * 100 / 256 + ')'"
-        [style.background-color]="i === soundSharing.fftIndex0 || i === soundSharing.fftIndex1 ? '#a21e6d' : '#3b1ea2'"
-      ></div>
-    }
-  </div>
-}
-
-@if (soundSharing.receivedPayload$ | async; as payload) {
+@if (soundSharing.receivedPayload(); as payload) {
   <div class="binary-payload">
     <span>{{ payload }}</span>
   </div>
 }
 
-@if (soundSharing.receivedCode$ | async; as code) {
+@if (soundSharing.receivedCode(); as code) {
   <div style="margin-bottom: 20px">
-    <button mat-button color="primary" [routerLink]="'/game/' + code">
+    <button mat-button [routerLink]="'/game/' + code">
       <mat-icon style="vertical-align: middle; margin-right: 10px">open_in_new</mat-icon>
       {{ code }}
     </button>
@@ -55,7 +51,7 @@
 
 @if ((gameShareData$ | async) === null) {
   <div style="margin: 20px 0">
-    <button mat-button color="primary" (click)="shareSound('aym3ric5')">
+    <button mat-button (click)="shareSound('aym3ric5')">
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share-test' | translate }}
     </button>
@@ -63,7 +59,7 @@
 }
 
 <div style="margin-bottom: 20px">
-  <button mat-button color="accent" routerLink="debug">
+  <button mat-button class="color-tertiary" routerLink="debug">
     {{ 'sound-sharing.goto-debug' | translate }}
   </button>
 </div>

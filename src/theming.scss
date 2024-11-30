@@ -1,0 +1,90 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme-colors' as tc;
+
+@use 'app/app.component.theme' as app;
+@use 'app/game/game.component.theme' as game;
+@use 'app/random-wheel/wheel-page/wheel-page.component.theme' as wheel-page;
+@use 'app/rank-icon/rank-icon.component.theme' as rank-icon;
+
+@mixin theme-overrides($light-or-dark) {
+  @include app.component-theme($light-or-dark);
+  @include wheel-page.component-theme($light-or-dark);
+  @include rank-icon.component-theme($light-or-dark);
+  @include game.component-theme($light-or-dark);
+
+  @if $light-or-dark == light {
+    @include theme-overrides-light();
+    @include theme-overrides-colors(tc.$light-theme);
+  } @else {
+    @include theme-overrides-dark();
+    @include theme-overrides-colors(tc.$dark-theme);
+  }
+}
+
+@mixin theme-overrides-light() {
+  @include mat.toolbar-overrides((
+    container-background-color: map.get(tc.$secondary-palette, 90),
+  ));
+  @include mat.sidenav-overrides((
+    content-background-color: map.get(tc.$secondary-palette, 90),
+    container-background-color: map.get(tc.$secondary-palette, 90),
+  ));
+
+  .mat-drawer-content > router-outlet + * {
+    background-color: map.get(tc.$primary-palette, 98);
+  }
+
+  .tertiary-light-bg {
+    background-color: map.get(tc.$tertiary-palette, 80);
+    box-shadow: 0 2px 4px -1px rgba(map.get(tc.$tertiary-palette, 20), 0.25),
+    0 4px 5px 0 rgba(map.get(tc.$tertiary-palette, 30), 0.14),
+    0 1px 10px 0 rgba(map.get(tc.$tertiary-palette, 35), 0.12);
+  }
+}
+
+@mixin theme-overrides-dark() {
+  @include mat.toolbar-overrides((
+    container-background-color: map.get(tc.$secondary-palette, 20),
+  ));
+  @include mat.sidenav-overrides((
+    content-background-color: map.get(tc.$secondary-palette, 20),
+    container-background-color: map.get(tc.$secondary-palette, 20),
+  ));
+  @include mat.dialog-overrides((
+    container-color: map.get(tc.$neutral-palette, 12),
+  ));
+  //@include mat.slide-toggle-color(tc.$light-theme, $color-variant: tertiary);
+
+  .mat-drawer-content > router-outlet + * {
+    background-color: map.get(tc.$neutral-palette, 4);
+  }
+
+  .tertiary-light-bg {
+    background-color: map.get(tc.$tertiary-palette, 40);
+    box-shadow: 0 2px 4px -1px rgba(map.get(tc.$tertiary-palette, 20), 0.5),
+    0 4px 5px 0 rgba(map.get(tc.$tertiary-palette, 30), 0.2),
+    0 1px 10px 0 rgba(map.get(tc.$tertiary-palette, 40), 0.15);
+  }
+}
+
+@mixin theme-overrides-colors($theme) {
+  .color-tertiary {
+    &.mdc-button {
+      @include mat.button-color($theme, $color-variant: tertiary);
+    }
+
+    &.mdc-icon-button {
+      @include mat.icon-button-color($theme, $color-variant: tertiary);
+    }
+  }
+  .color-warn {
+    &.mdc-button {
+      @include mat.button-color($theme, $color-variant: error);
+    }
+
+    &.mdc-icon-button {
+      @include mat.icon-button-color($theme, $color-variant: error);
+    }
+  }
+}

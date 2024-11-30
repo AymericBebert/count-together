@@ -1,8 +1,8 @@
 <div class="debug-item">
   @if (isOk()) {
-    <mat-icon color="primary" style="margin-right: 4px">check_circle_outline</mat-icon>
+    <mat-icon class="color-primary" style="margin-right: 4px">check_circle_outline</mat-icon>
   } @else {
-    <mat-icon color="accent" style="margin-right: 4px">highlight_off</mat-icon>
+    <mat-icon class="color-tertiary" style="margin-right: 4px">highlight_off</mat-icon>
   }
   <span style="font-weight: bold; margin-right: 4px">{{ label() }}</span>&nbsp;:
   <ng-content></ng-content>

@@ -1,55 +1,31 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '../theme-colors' as tc;
 
-@mixin sidenav-content-component-theme($theme) {
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  //$warn: map.get($theme, warn);
-  $foreground: map.get($theme, foreground);
-  $background: map.get($theme, background);
+@mixin component-theme($light-or-dark) {
+  app-root {
+    .mat-mdc-list-item.selectable {
+      background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.06);
 
-  .mat-sidenav-content {
-    color: mat.m2-get-color-from-palette($foreground, text);
-    background-color: mat.m2-get-color-from-palette($background, app-bar);
-  }
+      &.selected {
+        background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.35);
+      }
 
-  .mat-mdc-list-item.selectable {
-    background-color: mat.m2-get-color-from-palette($accent, 0.04);
-
-    &.selected {
-      background-color: mat.m2-get-color-from-palette($accent, 0.15);
+      &:hover {
+        background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.45);
+      }
     }
 
-    &:hover {
-      background-color: mat.m2-get-color-from-palette($accent, 0.25);
-    }
-  }
+    .mat-mdc-list-item.selectable.odd {
+      background-color: rgba(map.get(tc.$primary-palette, 50), 0.06);
 
-  .mat-mdc-list-item.selectable.odd {
-    background-color: mat.m2-get-color-from-palette($primary, 0.04);
+      &.selected {
+        background-color: rgba(map.get(tc.$primary-palette, 50), 0.4);
+      }
 
-    &.selected {
-      background-color: mat.m2-get-color-from-palette($primary, 0.15);
-    }
-
-    &:hover {
-      background-color: mat.m2-get-color-from-palette($primary, 0.25);
-    }
-  }
-}
-
-@mixin sidenav-content-component-dark-theme($theme) {
-  $primary: map.get($theme, primary);
-
-  .mat-mdc-list-item.selectable.odd {
-    background-color: mat.m2-get-color-from-palette($primary, 300, 0.06);
-
-    &.selected {
-      background-color: mat.m2-get-color-from-palette($primary, 300, 0.3);
-    }
-
-    &:hover {
-      background-color: mat.m2-get-color-from-palette($primary, 300, 0.4);
+      &:hover {
+        background-color: rgba(map.get(tc.$primary-palette, 50), 0.5);
+      }
     }
   }
 }

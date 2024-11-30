@@ -1,19 +1,20 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '../../theme-colors' as tc;
 
-@mixin rank-icon-component-theme($theme) {
+@mixin component-theme($light-or-dark) {
   app-rank-icon {
-    //$primary: map.get($theme, primary);
-    //$accent: map.get($theme, accent);
-    //$warn: map.get($theme, warn);
-    $foreground: map.get($theme, foreground);
-    $background: map.get($theme, background);
-
-    span {
-      color: mat.m2-get-color-from-palette($foreground, text);
-      text-shadow: 0 0 4px mat.m2-get-color-from-palette($background, background),
-      0 0 3px mat.m2-get-color-from-palette($background, background),
-      0 0 2px mat.m2-get-color-from-palette($background, background);
+    @if $light-or-dark == light {
+      @include rank-icon-component-theme(#000000de, #fafafa);
+    } @else {
+      @include rank-icon-component-theme(#ffffff, #202020);
     }
+  }
+}
+
+@mixin rank-icon-component-theme($foreground, $background) {
+  > span {
+    color: $foreground;
+    text-shadow: 0 0 4px $background, 0 0 3px $background, 0 0 2px $background;
   }
 }

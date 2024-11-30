@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {marker} from '@biesbjerg/ngx-translate-extract-marker';
 import {SoundDebugComponent} from './sound-debug/sound-debug.component';
 import {SoundSharingComponent} from './sound-sharing/sound-sharing.component';
 
@@ -8,7 +9,7 @@ export const soundSharingRoutes: Routes = [
     component: SoundSharingComponent,
     data: {
       backRouterNavigate: '[back]',
-      mainTitle: 'main-title.sound-share',
+      mainTitle: marker('main-title.sound-share'),
     },
   },
   {
@@ -16,7 +17,7 @@ export const soundSharingRoutes: Routes = [
     component: SoundDebugComponent,
     data: {
       backRouterNavigate: '.',
-      mainTitle: 'main-title.sound-share-debug',
+      mainTitle: marker('main-title.sound-share-debug'),
     },
   },
 ];

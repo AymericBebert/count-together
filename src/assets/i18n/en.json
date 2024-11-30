@@ -37,6 +37,12 @@
       "title": "Remove player {{player}}?"
     },
     "remove-row": "Remove row",
+    "remove-score-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "",
+      "title": "Remove last score for {{player}}?"
+    },
     "remove-score-line-dialog": {
       "confirm": "Yes",
       "dismiss": "Cancel",
@@ -91,7 +97,6 @@
       "win-or-lose": "Win or Lose"
     },
     "menu-title": "Menu",
-    "pin-sidenav": "Pin Sidenav",
     "settings": "Settings",
     "tools": "Tools",
     "update-activated": "Update activated",
@@ -115,10 +120,7 @@
     }
   },
   "share": {
-    "copied": "Copied",
-    "copy": "Copy",
-    "disabled": "Sharing disabled",
-    "share": "Share"
+    "copied": "Copied"
   },
   "sound-sharing": {
     "debug": {

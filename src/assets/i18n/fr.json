@@ -15,7 +15,7 @@
       "label": "Nom du joueur"
     },
     "score": {
-      "header": "Édition score",
+      "header": "Modification du score",
       "header-new": "Nouveau score",
       "label": "Score"
     }
@@ -37,6 +37,12 @@
       "title": "Supprimer le joueur {{player}} ?"
     },
     "remove-row": "Ligne",
+    "remove-score-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "",
+      "title": "Supprimer le dernier score de {{player}} ?"
+    },
     "remove-score-line-dialog": {
       "confirm": "Oui",
       "dismiss": "Annuler",
@@ -91,7 +97,6 @@
       "win-or-lose": "Gagne ou Perd"
     },
     "menu-title": "Menu",
-    "pin-sidenav": "Épingler",
     "settings": "Paramètres",
     "tools": "Outils",
     "update-activated": "MàJ activée",
@@ -115,10 +120,7 @@
     }
   },
   "share": {
-    "copied": "Lien copié",
-    "copy": "Copier",
-    "disabled": "Partage désactivé",
-    "share": "Partager"
+    "copied": "Lien copié"
   },
   "sound-sharing": {
     "debug": {

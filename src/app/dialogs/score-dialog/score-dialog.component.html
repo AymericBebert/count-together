@@ -1,8 +1,8 @@
-<div mat-dialog-title style="min-width: 200px">
-  <span class="dialog-header">
-    {{ isNew ? ('edit.score.header-new' | translate) : ('edit.score.header' | translate) }}
-  </span>
-</div>
+<h1 mat-dialog-title>{{
+    isNew
+      ? ('edit.score.header-new' | translate)
+      : ('edit.score.header' | translate)
+  }}</h1>
 
 <form mat-dialog-content style="display: flex; align-items: center" (ngSubmit)="ref.close(score)">
   <mat-form-field subscriptSizing="dynamic" style="flex: 1 1 120px">

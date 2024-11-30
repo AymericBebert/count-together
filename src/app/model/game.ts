@@ -58,7 +58,7 @@ export interface IGameEditScore {
   gameId: string;
   playerId: number;
   scoreId: number;
-  score: number;
+  score: number | null;
 }
 
 export interface IGameRemoveScore {

@@ -1,8 +1,4 @@
-<div mat-dialog-title style="min-width: 200px">
-  <span class="dialog-header">
-    {{ 'edit.game-name.header' | translate }}
-  </span>
-</div>
+<h1 mat-dialog-title>{{ 'edit.game-name.header' | translate }}</h1>
 
 <form mat-dialog-content (ngSubmit)="ref.close(name.value)">
   <mat-form-field subscriptSizing="dynamic">

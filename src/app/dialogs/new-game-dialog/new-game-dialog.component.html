@@ -1,8 +1,4 @@
-<div mat-dialog-title>
-  <span class="dialog-header">
-    {{ 'new-game.dialog.header' | translate }}
-  </span>
-</div>
+<h1 mat-dialog-title>{{ 'new-game.dialog.header' | translate }}</h1>
 
 <div mat-dialog-content>
   <div style="margin-bottom: 5px">
@@ -44,7 +40,8 @@
         @for (item of selectedPlayers; track item) {
           <div class="player-dnd-box" cdkDrag>
             <span style="flex-grow: 1">{{ item }}</span>
-            <button mat-icon-button aria-label="Exclude player" (click)="excludePlayer(item)">
+            <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Exclude player"
+                    (click)="excludePlayer(item)">
               <mat-icon>arrow_downward</mat-icon>
             </button>
             <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
@@ -80,7 +77,8 @@
         @for (item of otherPlayers; track item) {
           <div class="player-dnd-box" cdkDrag>
             <span style="flex-grow: 1">{{ item }}</span>
-            <button mat-icon-button class="color-warn" aria-label="Forget player" (click)="forgetPlayer(item)">
+            <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Forget player"
+                    (click)="forgetPlayer(item)">
               <mat-icon>clear</mat-icon>
             </button>
             <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>

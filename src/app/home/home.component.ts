@@ -79,11 +79,13 @@ export class HomeComponent implements OnInit {
 
   public newGameOpen() {
     const recentPlayers = this.gamesService.getRegisteredPlayers();
-    const data: NewGameDialogData = {recentPlayers};
-    this.dialog.open(NewGameDialogComponent, {data})
+    this.dialog.open<NewGameDialogComponent, NewGameDialogData, IGame>(
+      NewGameDialogComponent,
+      {data: {recentPlayers}},
+    )
       .afterClosed()
       .pipe(
-        filter<IGame>(res => res !== undefined),
+        filter(res => res !== undefined),
         switchMap(res => this.gamesService.postNewGame$(res)),
         takeUntilDestroyed(this.destroyRef),
       )

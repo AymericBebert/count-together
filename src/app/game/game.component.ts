@@ -146,7 +146,7 @@ export class GameComponent implements OnInit {
       {data: {name: currentGame.name}},
     )
       .afterClosed()
-      .pipe(filter((res): res is string => res !== undefined), takeUntilDestroyed(this.destroyRef))
+      .pipe(filter(res => res !== undefined), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         this.editGame(res);
       });
@@ -186,13 +186,17 @@ export class GameComponent implements OnInit {
     }
     const lastPlayer = currentGame.players[currentNbPlayers - 1];
     if (lastPlayer.scores.filter(s => s !== null).length > 0) {
-      const data: ConfirmDialogData = {
-        title: this.translateService.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
-        message: this.translateService.instant('game.remove-player-dialog.message'),
-        confirm: this.translateService.instant('game.remove-player-dialog.confirm'),
-        dismiss: this.translateService.instant('game.remove-player-dialog.dismiss'),
-      };
-      this.dialog.open(ConfirmDialogComponent, {data})
+      this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+        ConfirmDialogComponent,
+        {
+          data: {
+            title: this.translateService.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
+            message: this.translateService.instant('game.remove-player-dialog.message'),
+            confirm: this.translateService.instant('game.remove-player-dialog.confirm'),
+            dismiss: this.translateService.instant('game.remove-player-dialog.dismiss'),
+          },
+        },
+      )
         .afterClosed()
         .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
@@ -213,8 +217,10 @@ export class GameComponent implements OnInit {
   }
 
   public editScoreOpen(p: number, i: number, isNew = false): void {
-    const data: EditScoreDialogData = {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew};
-    this.dialog.open(ScoreDialogComponent, {data})
+    this.dialog.open<ScoreDialogComponent, EditScoreDialogData, number | null>(
+      ScoreDialogComponent,
+      {data: {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew}},
+    )
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
@@ -222,7 +228,7 @@ export class GameComponent implements OnInit {
       });
   }
 
-  public editScore(p: number, i: number, s: number): void {
+  public editScore(p: number, i: number, s: number | null): void {
     const currentGame = this.gameOrThrow;
     if (i === currentGame.players[p].scores.length) {
       currentGame.players[p].scores.push(s);
@@ -235,6 +241,28 @@ export class GameComponent implements OnInit {
 
   public removeScore(p: number): void {
     const currentGame = this.gameOrThrow;
+    const player = currentGame.players[p];
+    if (player.scores.at(-1)) {
+      this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+        ConfirmDialogComponent,
+        {
+          data: {
+            title: this.translateService.instant('game.remove-score-dialog.title', {player: player.name}),
+            message: this.translateService.instant('game.remove-score-dialog.message'),
+            confirm: this.translateService.instant('game.remove-score-dialog.confirm'),
+            dismiss: this.translateService.instant('game.remove-score-dialog.dismiss'),
+          },
+        },
+      )
+        .afterClosed()
+        .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.doRemoveScore(currentGame, p));
+    } else {
+      this.doRemoveScore(currentGame, p);
+    }
+  }
+
+  public doRemoveScore(currentGame: IGame, p: number): void {
     currentGame.players[p].scores.pop();
     this.gamesService.gameRemoveScore(currentGame.gameId, p, currentGame.players[p].scores.length);
     this.gamesService.updateSavedGame(currentGame);
@@ -255,13 +283,17 @@ export class GameComponent implements OnInit {
     }
     const maxScoreLength = Math.max(...currentGame.players.map(p => p.scores.length));
     if (currentGame.players.filter(p => p.scores[maxScoreLength - 1] !== 0).length > 0) {
-      const data: ConfirmDialogData = {
-        title: this.translateService.instant('game.remove-score-line-dialog.title'),
-        message: this.translateService.instant('game.remove-score-line-dialog.message'),
-        confirm: this.translateService.instant('game.remove-score-line-dialog.confirm'),
-        dismiss: this.translateService.instant('game.remove-score-line-dialog.dismiss'),
-      };
-      this.dialog.open(ConfirmDialogComponent, {data})
+      this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+        ConfirmDialogComponent,
+        {
+          data: {
+            title: this.translateService.instant('game.remove-score-line-dialog.title'),
+            message: this.translateService.instant('game.remove-score-line-dialog.message'),
+            confirm: this.translateService.instant('game.remove-score-line-dialog.confirm'),
+            dismiss: this.translateService.instant('game.remove-score-line-dialog.dismiss'),
+          },
+        },
+      )
         .afterClosed()
         .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
@@ -304,13 +336,17 @@ export class GameComponent implements OnInit {
 
   private setGameTypeOpen(gameType: GameType): void {
     if (gameType === 'winOrLose') {
-      const data: ConfirmDialogData = {
-        title: this.translateService.instant('game.change-game-type-dialog.title'),
-        message: this.translateService.instant('game.change-game-type-dialog.message'),
-        confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
-        dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
-      };
-      this.dialog.open(ConfirmDialogComponent, {data})
+      this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+        ConfirmDialogComponent,
+        {
+          data: {
+            title: this.translateService.instant('game.change-game-type-dialog.title'),
+            message: this.translateService.instant('game.change-game-type-dialog.message'),
+            confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
+            dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
+          },
+        },
+      )
         .afterClosed()
         .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.editGameType(gameType));

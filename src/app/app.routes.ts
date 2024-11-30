@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {marker} from '@biesbjerg/ngx-translate-extract-marker';
 import {GameComponent} from './game/game.component';
 import {HomeComponent} from './home/home.component';
 
@@ -7,7 +8,7 @@ export const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      navTools: [{name: 'nav-tool.wheel', icon: 'near_me'}],
+      navTools: [{name: marker('nav-tool.wheel'), icon: 'near_me'}],
     },
   },
   {
@@ -17,7 +18,7 @@ export const routes: Routes = [
       backRouterNavigate: '/',
       navButtons: ['share'],
       navTools: [
-        {name: 'nav-tool.wheel', icon: 'near_me'},
+        {name: marker('nav-tool.wheel'), icon: 'near_me'},
       ],
     },
   },
@@ -28,10 +29,10 @@ export const routes: Routes = [
       backRouterNavigate: '/',
       navButtons: ['share'],
       navTools: [
-        {name: 'nav-tool.wheel', icon: 'near_me'},
-        {name: 'nav-tool.sound-share', icon: 'volume_up'},
-        {name: 'nav-tool.duplicate', icon: 'content_copy'},
-        {name: 'nav-tool.save-offline', icon: 'download'},
+        {name: marker('nav-tool.wheel'), icon: 'near_me'},
+        {name: marker('nav-tool.sound-share'), icon: 'volume_up'},
+        {name: marker('nav-tool.duplicate'), icon: 'content_copy'},
+        {name: marker('nav-tool.save-offline'), icon: 'download'},
       ],
     },
   },

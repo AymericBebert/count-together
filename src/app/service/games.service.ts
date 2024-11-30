@@ -146,7 +146,7 @@ export class GamesService {
     this.socket.emit('game remove player', {gameId, playerId});
   }
 
-  public gameEditScore(gameId: string, playerId: number, scoreId: number, score: number): void {
+  public gameEditScore(gameId: string, playerId: number, scoreId: number, score: number | null): void {
     if (gameId === 'offline') {
       return;
     }

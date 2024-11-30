@@ -1,5 +1,5 @@
 /// <reference types="@types/dom-mediacapture-record" />
-import {Inject, Injectable, InjectionToken, NgZone, OnDestroy, Optional} from '@angular/core';
+import {inject, Injectable, InjectionToken, NgZone, OnDestroy} from '@angular/core';
 import {BehaviorSubject, from, Observable, of, OperatorFunction, Subject} from 'rxjs';
 import {catchError, filter, first, take, tap, timeout} from 'rxjs/operators';
 import {BrowserCompatibilityService} from './browser-compatibility.service';
@@ -28,6 +28,10 @@ export const RECORDER_CONFIG = new InjectionToken<Partial<RecorderConfig>>('reco
 
 @Injectable()
 export class RecordService implements OnDestroy {
+  private readonly recorderConfig = inject<Partial<RecorderConfig> | null>(RECORDER_CONFIG, {optional: true});
+  private readonly browserCompatibilityService = inject(BrowserCompatibilityService);
+  private readonly ngZone = inject(NgZone);
+
   public error?: string;
   public status: RecorderStatus = 'notStarted';
   public readonly recordProgress$ = new BehaviorSubject<number>(0);
@@ -44,11 +48,9 @@ export class RecordService implements OnDestroy {
     maxDurationMs: null,
   };
 
-  constructor(
-    @Optional() @Inject(RECORDER_CONFIG) private readonly recorderConfig: Partial<RecorderConfig> | null,
-    private readonly browserCompatibilityService: BrowserCompatibilityService,
-    private readonly ngZone: NgZone,
-  ) {
+  constructor() {
+    const recorderConfig = this.recorderConfig;
+
     if (recorderConfig) {
       this.config = {...this.config, ...recorderConfig};
     }

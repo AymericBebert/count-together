@@ -1,26 +1,27 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {inject, Injectable, signal} from '@angular/core';
 import {RecordService} from './record.service';
 
 @Injectable()
 export class SoundSharingService {
-  public readonly FFT_SIZE = 4096;
+  private readonly recordService = inject(RecordService);
 
-  public readonly GAIN_0 = 1;
-  public readonly GAIN_1 = 1;
+  public readonly fftSize = 4096;
 
-  public readonly FREQUENCY_0 = 3800;
-  public readonly FREQUENCY_1 = 4000;
+  public readonly gain0 = 1;
+  public readonly gain1 = 1;
 
-  public readonly FFT_INDEX_0 = Math.round(this.FREQUENCY_0 / 11.72);
-  public readonly FFT_INDEX_1 = Math.round(this.FREQUENCY_1 / 11.72);
+  public readonly frequency0 = 3800;
+  public readonly frequency1 = 4000;
 
-  public readonly receivedPayload$ = new Subject<string>();
-  public readonly receivedCode$ = new Subject<string>();
+  public readonly fftIndex0 = Math.round(this.frequency0 / 11.72);
+  public readonly fftIndex1 = Math.round(this.frequency1 / 11.72);
 
-  public dataArray: Uint8Array | undefined;
+  public readonly receivedPayload = signal<string>('');
+  public readonly receivedCode = signal<string>('');
 
-  private readonly TIME_STEP = 160;
+  public readonly dataArray = signal<Uint8Array | undefined>(undefined);
+
+  private readonly timeStep = 160;
 
   private audioCtx!: AudioContext;
   private analyser!: AnalyserNode;
@@ -29,9 +30,6 @@ export class SoundSharingService {
   private analysing = false;
   private swapStatus = false;
   private swapTime = performance.now();
-
-  constructor(private readonly recordService: RecordService) {
-  }
 
   public static stringToBinary(payload: string): string {
     return [...atob(payload)].reduce((acc, cur) => acc + cur.charCodeAt(0).toString(2).padStart(8, '0'), '');
@@ -69,15 +67,15 @@ export class SoundSharingService {
     oscillator.connect(gainNode);
     gainNode.connect(audioCtx.destination);
 
-    gainNode.gain.value = this.GAIN_0;
-    oscillator.frequency.value = this.FREQUENCY_0;
+    gainNode.gain.value = this.gain0;
+    oscillator.frequency.value = this.frequency0;
     oscillator.type = 'sine';
     oscillator.start();
 
     for (const x of data) {
-      oscillator.frequency.value = x === '1' ? this.FREQUENCY_1 : this.FREQUENCY_0;
-      gainNode.gain.value = x === '1' ? this.GAIN_1 : this.GAIN_0;
-      await new Promise(r => setTimeout(r, this.TIME_STEP));
+      oscillator.frequency.value = x === '1' ? this.frequency1 : this.frequency0;
+      gainNode.gain.value = x === '1' ? this.gain1 : this.gain0;
+      await new Promise(r => setTimeout(r, this.timeStep));
     }
 
     oscillator.stop();
@@ -85,11 +83,11 @@ export class SoundSharingService {
 
   public stopAnalysing() {
     this.analysing = false;
-    this.dataArray = undefined;
+    this.dataArray.set(undefined);
     this.recordService.stopStream();
   }
 
-  public async soundAnalyse() {
+  public soundAnalyse(): void {
     const stream = this.recordService.stream$.getValue();
     if (!stream) {
       return;
@@ -97,9 +95,9 @@ export class SoundSharingService {
 
     this.audioCtx = new (window.AudioContext)();
     this.analyser = this.audioCtx.createAnalyser();
-    this.analyser.fftSize = this.FFT_SIZE;
+    this.analyser.fftSize = this.fftSize;
     const bufferLength = this.analyser.frequencyBinCount;
-    this.dataArray = new Uint8Array(bufferLength);
+    this.dataArray.set(new Uint8Array(bufferLength));
 
     const source = this.audioCtx.createMediaStreamSource(stream);
     source.connect(this.analyser);
@@ -115,31 +113,31 @@ export class SoundSharingService {
       return;
     }
 
-    const dataArray = this.dataArray;
+    const dataArray = this.dataArray();
     if (!dataArray) {
       throw new Error('No dataArray');
     }
     this.analyser.getByteFrequencyData(dataArray);
-    const f0 = dataArray[this.FFT_INDEX_0];
-    const f1 = dataArray[this.FFT_INDEX_1];
+    const f0 = dataArray[this.fftIndex0];
+    const f1 = dataArray[this.fftIndex1];
 
     if (f0 > 128 && f1 > 128 && (this.swapStatus && f1 >= f0 || !this.swapStatus && f1 < f0)) {
       this.swapStatus = f1 < f0;
       const newSwapTime = performance.now();
       const swapDelta = newSwapTime - this.swapTime;
       this.swapTime = newSwapTime;
-      const steps = Math.round(swapDelta / this.TIME_STEP);
+      const steps = Math.round(swapDelta / this.timeStep);
       if (steps <= 10) {
         new Array(steps).fill(1).forEach(() => this.hearing += this.swapStatus ? '1' : '0');
-        this.receivedPayload$.next(SoundSharingService.cutBytes(this.hearing.substring(1)));
+        this.receivedPayload.set(SoundSharingService.cutBytes(this.hearing.substring(1)));
       }
       console.log(this.swapStatus ? '1' : '0', steps, swapDelta);
     }
 
-    if (this.hearing && (performance.now() - this.swapTime > this.TIME_STEP * 10)) {
+    if (this.hearing && (performance.now() - this.swapTime > this.timeStep * 10)) {
       const {cut, decoded} = SoundSharingService.soundDecode(this.hearing);
-      this.receivedPayload$.next(cut);
-      this.receivedCode$.next(decoded);
+      this.receivedPayload.set(cut);
+      this.receivedCode.set(decoded);
       this.hearing = '';
     }
   }

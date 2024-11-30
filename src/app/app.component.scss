@@ -4,10 +4,10 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 220px;
 
-  &.non-clickable {
-    color: #bbbbbb;
+  mat-nav-list {
+    padding: 8px;
   }
 }
 
@@ -21,11 +21,8 @@
   z-index: 10;
 }
 
-.fill-remaining-space {
-  flex: 1 1 auto;
-}
-
 .main-title {
+  flex-grow: 1;
   overflow: auto;
   cursor: pointer;
 }
@@ -63,7 +60,7 @@ mat-list-item {
   vertical-align: sub;
 }
 
-:host-context(.myrtille-dark-theme) {
+:host-context(html[dark-theme=true]) {
   .crown-icon-bw {
     background-image: url('/assets/icons/crown-white-64.png');
   }

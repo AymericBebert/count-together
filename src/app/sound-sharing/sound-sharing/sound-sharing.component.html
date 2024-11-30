@@ -1,58 +1,65 @@
-<div style="padding: 20px; text-align: center">
-
-  <div *ngIf="gameShareData$ | async as gameShareData" style="margin-bottom: 20px">
-    <button mat-raised-button color="primary" (click)="shareSound(gameShareData.gameId)">
+@if (gameShareData$ | async; as gameShareData) {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button (click)="shareSound(gameShareData.gameId)">
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share' | translate }} {{ gameShareData.gameId }}
     </button>
-
     <p class="binary-payload">{{ gameShareData.gamePayload }}</p>
   </div>
+}
 
-  <div *ngIf="!soundSharing.dataArray" style="margin-bottom: 20px">
-    <button mat-raised-button color="primary" (click)="analyse()">
-      <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
-      {{ 'sound-sharing.listen' | translate }}
-    </button>
-  </div>
-
-  <div *ngIf="soundSharing.dataArray" style="margin-bottom: 20px">
-    <button mat-raised-button color="accent" (click)="stopAnalysing()">
+@if (soundSharing.dataArray(); as dataArray) {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button class="color-tertiary" (click)="stopAnalysing()">
       <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
       {{ 'sound-sharing.stop-listening' | translate }}
     </button>
   </div>
 
-  <div *ngIf="soundSharing.dataArray" class="frequency-bars">
-    <div *ngFor="let i of analyseRange" class="frequency-bar"
-         [ngStyle]="{
-           transform: 'scaleX(' + soundSharing.dataArray[i] * 100 / 256 + ')',
-           backgroundColor: i === soundSharing.FFT_INDEX_0 || i === soundSharing.FFT_INDEX_1 ? '#a21e6d' : '#3b1ea2'
-         }"
-    ></div>
+  <div class="frequency-bars">
+    @for (i of analyseRange; track i) {
+      <div
+        class="frequency-bar"
+        [style.transform]="'scaleX(' + dataArray[i] * 100 / 256 + ')'"
+        [style.background-color]="i === soundSharing.fftIndex0 || i === soundSharing.fftIndex1 ? '#a21e6d' : '#3b1ea2'"
+      ></div>
+    }
   </div>
+} @else {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button (click)="analyse()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
+      {{ 'sound-sharing.listen' | translate }}
+    </button>
+  </div>
+}
 
-  <div *ngIf="soundSharing.receivedPayload$ | async as payload" class="binary-payload">
+@if (soundSharing.receivedPayload(); as payload) {
+  <div class="binary-payload">
     <span>{{ payload }}</span>
   </div>
+}
 
-  <div *ngIf="soundSharing.receivedCode$ | async as code" style="margin-bottom: 20px">
-    <button mat-button color="primary" [routerLink]="'/game/' + code">
+@if (soundSharing.receivedCode(); as code) {
+  <div style="margin-bottom: 20px">
+    <button mat-button [routerLink]="'/game/' + code">
       <mat-icon style="vertical-align: middle; margin-right: 10px">open_in_new</mat-icon>
       {{ code }}
     </button>
   </div>
+}
 
-  <div *ngIf="(gameShareData$ | async) === null" style="margin: 20px 0">
-    <button mat-button color="primary" (click)="shareSound('aym3ric5')">
+@if ((gameShareData$ | async) === null) {
+  <div style="margin: 20px 0">
+    <button mat-button (click)="shareSound('aym3ric5')">
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share-test' | translate }}
     </button>
   </div>
+}
 
-  <div style="margin-bottom: 20px">
-    <button mat-button color="accent" routerLink="debug">
-      {{ 'sound-sharing.goto-debug' | translate }}
-    </button>
-  </div>
+<div style="margin-bottom: 20px">
+  <button mat-button class="color-tertiary" routerLink="debug">
+    {{ 'sound-sharing.goto-debug' | translate }}
+  </button>
 </div>

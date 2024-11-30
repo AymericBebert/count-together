@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
-// @ts-ignore
 @Component({
   selector: 'app-translation-markers',
   template: '<p>Nope</p>',
-  standalone: true,
 })
 export class TranslationMarkersComponent {
-  constructor(public translate: TranslateService) {
+  private readonly translate = inject(TranslateService);
+
+  constructor() {
+    const translate = this.translate;
 
     // Translation markers so that ngx-translate-extract will extract them
 

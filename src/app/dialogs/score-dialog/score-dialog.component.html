@@ -4,21 +4,21 @@
   </span>
 </div>
 
-<form mat-dialog-content style="display: flex" (ngSubmit)="ref.close(score)">
-  <mat-form-field style="flex: 1 1 120px">
+<form mat-dialog-content style="display: flex; align-items: center" (ngSubmit)="ref.close(score)">
+  <mat-form-field subscriptSizing="dynamic" style="flex: 1 1 120px">
     <mat-label>{{ 'edit.score.label' | translate }}</mat-label>
     <input matInput type="number" autocomplete="off" name="score" [(ngModel)]="score" [autofocus]="true">
   </mat-form-field>
-  <button mat-icon-button color="primary" aria-label="Add Score" [mat-dialog-close]="null">
+  <button mat-icon-button aria-label="Add Score" [mat-dialog-close]="null">
     <mat-icon>clear</mat-icon>
   </button>
 </form>
 
-<div mat-dialog-actions style="display: flex; justify-content: space-between">
-  <button mat-button color="primary" [mat-dialog-close]="undefined">
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-button color="primary" [mat-dialog-close]="score" type="submit">
+  <button mat-flat-button [mat-dialog-close]="score" type="submit">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

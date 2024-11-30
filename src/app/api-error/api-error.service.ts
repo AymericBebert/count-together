@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiErrorService {
-  constructor(private snackBar: MatSnackBar) {
-  }
+  private readonly snackBar = inject(MatSnackBar);
 
   public displayError(err: string, error?: any): void {
     console.error(`API error: ${err}${error ? ` (${error})` : ''}`);

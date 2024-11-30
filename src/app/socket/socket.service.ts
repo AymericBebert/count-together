@@ -1,6 +1,16 @@
-import {Inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, fromEvent, Observable, of, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, shareReplay, skip, startWith, take, takeUntil, tap} from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  skip,
+  startWith,
+  take,
+  takeUntil,
+  tap
+} from 'rxjs/operators';
 import {io, Socket} from 'socket.io-client';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
@@ -9,13 +19,14 @@ import {EmittedEventTypes, ReceivedEventTypes} from './socket-event-types';
   providedIn: 'root',
 })
 export class SocketService {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
-  public connected$ = new Subject<boolean>();
+  public readonly connected$ = new Subject<boolean>();
 
   private socket: Socket | null = null;
-  private shouldBeConnected$ = new BehaviorSubject<boolean>(false);
+  private readonly shouldBeConnected$ = new BehaviorSubject<boolean>(false);
 
-  public connectionError$ = combineLatest([
+  public readonly connectionError$ = combineLatest([
     this.shouldBeConnected$,
     this.connected$.pipe(startWith(false)),
   ]).pipe(
@@ -27,9 +38,9 @@ export class SocketService {
     shareReplay(1),
   );
 
-  private disconnect$ = new Subject<void>();
+  private readonly disconnect$ = new Subject<void>();
 
-  constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  constructor() {
     this.shouldBeConnected$
       .pipe(distinctUntilChanged(), skip(1))
       .subscribe(shouldConnect => {
@@ -75,7 +86,7 @@ export class SocketService {
     return this.on<T>(eventName).pipe(take(1));
   }
 
-  public emit<T extends keyof EmittedEventTypes>(eventName: T, ...args: Array<EmittedEventTypes[T]>): void {
+  public emit<T extends keyof EmittedEventTypes>(eventName: T, ...args: EmittedEventTypes[T][]): void {
     if (this.socket === null) {
       console.error('Cannot emit event: null socket');
       return;

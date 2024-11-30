@@ -1,4 +1,10 @@
-<img *ngIf="isLast" [src]="'assets/icons/tp-64.png'" alt="rank-icon"/>
-<img *ngIf="!isLast && rank < 4" [src]="'assets/icons/crown-' + rank + '-64.png'" alt="rank-icon"/>
-<img *ngIf="!isLast && rank > 3" [src]="'assets/icons/crown-2-64.png'" alt="rank-icon" style="opacity: 0.1"/>
-<span>{{ rank }}</span>
+@if (isLast()) {
+  <img [src]="'assets/icons/tp-64.png'" alt="rank-icon"/>
+}
+@if (!isLast() && rank() < 4) {
+  <img [src]="'assets/icons/crown-' + rank() + '-64.png'" alt="rank-icon"/>
+}
+@if (!isLast() && rank() > 3) {
+  <img [src]="'assets/icons/crown-2-64.png'" alt="rank-icon" style="opacity: 0.1"/>
+}
+<span>{{ rank() }}</span>

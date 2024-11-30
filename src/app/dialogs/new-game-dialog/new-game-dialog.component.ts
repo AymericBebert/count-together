@@ -1,6 +1,5 @@
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {CommonModule} from '@angular/common';
-import {Component, Inject, Optional} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -20,9 +19,7 @@ export interface NewGameDialogData {
   selector: 'app-new-game-dialog',
   templateUrl: './new-game-dialog.component.html',
   styleUrls: ['./new-game-dialog.component.scss'],
-  standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     DragDropModule,
     ReactiveFormsModule,
@@ -35,6 +32,8 @@ export interface NewGameDialogData {
   ],
 })
 export class NewGameDialogComponent {
+  public readonly data = inject<NewGameDialogData>(MAT_DIALOG_DATA);
+  private readonly gamesService = inject(GamesService, {optional: true});
 
   public readonly gameName = new FormControl<string>('', {nonNullable: true, validators: [Validators.required]});
   public readonly gameType = new FormControl<GameType>('free', {nonNullable: true});
@@ -44,9 +43,9 @@ export class NewGameDialogComponent {
   public selectedPlayers: string[] = [];
   public otherPlayers: string[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: NewGameDialogData,
-              @Optional() private gamesService: GamesService,
-  ) {
+  constructor() {
+    const data = this.data;
+
     data.recentPlayers.forEach(rp => {
       if (rp.wasLatest) {
         this.selectedPlayers.push(rp.name);
@@ -66,7 +65,7 @@ export class NewGameDialogComponent {
     };
   }
 
-  public drop(event: CdkDragDrop<string[]>) {
+  public drop(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -74,17 +73,17 @@ export class NewGameDialogComponent {
     }
   }
 
-  public addPlayerName() {
+  public addPlayerName(): void {
     this.selectedPlayers = [...this.selectedPlayers.filter(n => n !== this.playerName.value), this.playerName.value];
     this.playerName.setValue('');
   }
 
-  public excludePlayer(playerName: string) {
+  public excludePlayer(playerName: string): void {
     this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
     this.otherPlayers = [playerName, ...this.otherPlayers.filter(n => n !== playerName)];
   }
 
-  public forgetPlayer(playerName: string) {
+  public forgetPlayer(playerName: string): void {
     this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
     this.otherPlayers = this.otherPlayers.filter(n => n !== playerName);
     this.gamesService?.forgetPlayer(playerName);

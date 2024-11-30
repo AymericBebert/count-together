@@ -1,4 +1,5 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ApiErrorService} from '../api-error/api-error.service';
@@ -11,7 +12,6 @@ import {GamesService} from './games.service';
 describe('GameSettingsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      HttpClientTestingModule,
       MatSnackBarModule,
       ConfigTestingModule,
     ],
@@ -21,6 +21,8 @@ describe('GameSettingsService', () => {
       ApiErrorService,
       SocketService,
       StorageService,
+      provideHttpClient(withInterceptorsFromDi()),
+      provideHttpClientTesting(),
     ],
   }));
 

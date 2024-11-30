@@ -9,7 +9,9 @@
     <mat-form-field>
       <mat-label>{{ 'new-game.dialog.game-name.label' | translate }}</mat-label>
       <input matInput name="game" [formControl]="gameName" [autofocus]="true">
-      <mat-error *ngIf="gameName.invalid">{{ 'new-game.dialog.game-name.invalid' | translate }}</mat-error>
+      @if (gameName.invalid) {
+        <mat-error>{{ 'new-game.dialog.game-name.invalid' | translate }}</mat-error>
+      }
     </mat-form-field>
   </div>
 
@@ -30,7 +32,7 @@
     </mat-form-field>
   </div>
 
-  <div *ngIf="data.recentPlayers.length > 0">
+  @if (data.recentPlayers.length > 0) {
     <div class="player-dnd-container">
       <h4>{{ 'new-game.dialog.players.selected' | translate }}</h4>
       <div cdkDropList
@@ -39,23 +41,27 @@
            [cdkDropListData]="selectedPlayers"
            [cdkDropListConnectedTo]="[otherPlayersElement]"
            (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let item of selectedPlayers" class="player-dnd-box" cdkDrag>
-          <span style="flex-grow: 1">{{ item }}</span>
-          <button mat-icon-button color="primary" aria-label="Exclude player" (click)="excludePlayer(item)">
-            <mat-icon>arrow_downward</mat-icon>
-          </button>
-          <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
-        </div>
+        @for (item of selectedPlayers; track item) {
+          <div class="player-dnd-box" cdkDrag>
+            <span style="flex-grow: 1">{{ item }}</span>
+            <button mat-icon-button aria-label="Exclude player" (click)="excludePlayer(item)">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
+          </div>
+        }
       </div>
     </div>
 
     <form style="display: flex; margin-top: 12px">
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>{{ 'new-game.dialog.players.new' | translate }}</mat-label>
         <input matInput name="game" [formControl]="playerName">
-        <mat-error *ngIf="playerName.invalid">{{ 'new-game.dialog.players.invalid' | translate }}</mat-error>
+        @if (playerName.invalid) {
+          <mat-error>{{ 'new-game.dialog.players.invalid' | translate }}</mat-error>
+        }
       </mat-form-field>
-      <button mat-icon-button type="submit" color="primary" aria-label="Add player" style="margin-top: 4px"
+      <button mat-icon-button type="submit" aria-label="Add player" style="margin-top: 4px"
               [disabled]="playerName.invalid || !playerName.value"
               (click)="addPlayerName()"
       >
@@ -63,7 +69,7 @@
       </button>
     </form>
 
-    <div class="player-dnd-container">
+    <div class="player-dnd-container" style="margin-top: 24px">
       <h4>{{ 'new-game.dialog.players.others' | translate }}</h4>
       <div cdkDropList
            #otherPlayersElement="cdkDropList"
@@ -71,23 +77,25 @@
            [cdkDropListData]="otherPlayers"
            [cdkDropListConnectedTo]="[selectedPlayersElement]"
            (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let item of otherPlayers" class="player-dnd-box" cdkDrag>
-          <span style="flex-grow: 1">{{ item }}</span>
-          <button mat-icon-button color="warn" aria-label="Forget player" (click)="forgetPlayer(item)">
-            <mat-icon>clear</mat-icon>
-          </button>
-          <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
-        </div>
+        @for (item of otherPlayers; track item) {
+          <div class="player-dnd-box" cdkDrag>
+            <span style="flex-grow: 1">{{ item }}</span>
+            <button mat-icon-button class="color-warn" aria-label="Forget player" (click)="forgetPlayer(item)">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>
 
-<div mat-dialog-actions style="display: flex; justify-content: space-between">
-  <button mat-button color="primary" [mat-dialog-close]="undefined">
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-button color="primary" [mat-dialog-close]="exportGame()" [disabled]="gameName.invalid">
+  <button mat-flat-button [mat-dialog-close]="exportGame()" [disabled]="gameName.invalid">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

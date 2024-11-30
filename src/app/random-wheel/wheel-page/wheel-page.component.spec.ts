@@ -1,12 +1,10 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {EMPTY} from 'rxjs';
-import {SettingsService} from '../../service/settings.service';
-import {TranslateTestingModule} from '../../testing/translate-testing-module';
-import {WheelComponent} from '../wheel/wheel.component';
+import {translateTestingModule} from '../../testing/translate-testing-module';
 import {WheelPageComponent} from './wheel-page.component';
 
 describe('WheelPageComponent', () => {
@@ -16,18 +14,14 @@ describe('WheelPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
-        TranslateTestingModule,
+        translateTestingModule,
         RouterTestingModule,
-        MatSliderModule,
-      ],
-      declarations: [
         WheelPageComponent,
-        WheelComponent,
       ],
       providers: [
         {provide: ActivatedRoute, useValue: {queryParams: EMPTY}},
-        SettingsService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     })
       .compileComponents();

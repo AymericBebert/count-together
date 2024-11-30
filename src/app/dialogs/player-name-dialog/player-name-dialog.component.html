@@ -5,18 +5,20 @@
 </div>
 
 <form mat-dialog-content (ngSubmit)="ref.close(name.value)">
-  <mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
     <mat-label>{{ 'edit.player-name.label' | translate }}</mat-label>
     <input matInput name="player" [formControl]="name" [autofocus]="true">
-    <mat-error *ngIf="name.invalid">{{ 'edit.player-name.invalid' | translate }}</mat-error>
+    @if (name.invalid) {
+      <mat-error>{{ 'edit.player-name.invalid' | translate }}</mat-error>
+    }
   </mat-form-field>
 </form>
 
-<div mat-dialog-actions style="display: flex; justify-content: space-between">
-  <button mat-button color="primary" [mat-dialog-close]="undefined">
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-button color="primary" [mat-dialog-close]="name.value" [disabled]="name.invalid">
+  <button mat-flat-button [mat-dialog-close]="name.value" [disabled]="name.invalid">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

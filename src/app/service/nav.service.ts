@@ -1,75 +1,79 @@
-import {Injectable} from '@angular/core';
+import {effect, inject, Injectable, signal} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {BehaviorSubject, from} from 'rxjs';
-import {filter, switchMap, tap} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
+import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {StorageService} from '../storage/storage.service';
 import {UpdaterService} from '../updater/updater.service';
 import {DeviceService} from './device.service';
 import {NavButtonsService} from './nav-buttons.service';
-import {SettingsService} from './settings.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavService {
-  public mainTitle$ = new BehaviorSubject<string>('');
-  public pinSideNav$ = new BehaviorSubject<boolean>(false);
-  public showBackButton$ = new BehaviorSubject<boolean>(false);
-  public navButtons$ = new BehaviorSubject<string[]>([]);
-  public navTools$ = new BehaviorSubject<{ name: string, icon: string }[]>([]);
+  private readonly navButtonsService = inject(NavButtonsService);
+  private readonly deviceService = inject(DeviceService);
+  private readonly translateService = inject(TranslateService);
+  private readonly storageService = inject(StorageService);
+  private readonly updater = inject(UpdaterService);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
-  public notificationBadge = '';
-  public displayUpdatesAvailable = false;
-  public displayUpdatesActivated = false;
+  public readonly mainTitle = signal<string>('');
+  public readonly pinSideNav = signal<boolean>(false);
+  public readonly showBackButton = signal<boolean>(false);
+  public readonly navButtons = signal<string[]>([]);
+  public readonly navTools = signal<{ name: string, icon: string }[]>([]);
 
-  public language$ = new BehaviorSubject<string>('');
+  public readonly notificationBadge = signal<string>('');
+  public readonly displayUpdatesAvailable = signal<boolean>(false);
+  public readonly displayUpdatesActivated = signal<boolean>(false);
 
-  constructor(private navButtonsService: NavButtonsService,
-              private settingsService: SettingsService,
-              private deviceService: DeviceService,
-              private translateService: TranslateService,
-              private storageService: StorageService,
-              private updater: UpdaterService,
-  ) {
-    this.deviceService.isHandset$.pipe(filter(h => h)).subscribe(() => this.setPinSideNav(false));
+  public readonly language = signal<string>('');
+
+  constructor() {
+    effect(() => {
+      if (this.deviceService.isHandset()) {
+        this.setPinSideNav(false);
+      }
+    });
 
     this.updater.updatesAvailable$.pipe(filter(a => a)).subscribe(() => {
-      this.notificationBadge = '1';
-      this.displayUpdatesAvailable = true;
+      this.notificationBadge.set('1');
+      this.displayUpdatesAvailable.set(true);
     });
 
     this.updater.updatesActivated$.pipe(filter(a => a)).subscribe(() => {
-      this.notificationBadge = '1';
-      this.displayUpdatesActivated = true;
+      this.notificationBadge.set('1');
+      this.displayUpdatesActivated.set(true);
     });
   }
 
-  public setBackRouterLink(backRouterNavigate: string) {
+  public setBackRouterLink(backRouterNavigate: string): void {
     this.navButtonsService.setBackRouterLink(backRouterNavigate);
   }
 
-  public backClicked() {
+  public backClicked(): void {
     this.navButtonsService.backClicked();
   }
 
-  public navButtonClicked(buttonId: string) {
+  public navButtonClicked(buttonId: string): void {
     this.navButtonsService.navButtonClicked(buttonId);
   }
 
-  public navToolClicked(toolId: string) {
+  public navToolClicked(toolId: string): void {
     this.navButtonsService.navButtonClicked(toolId);
   }
 
-  public setLanguage(lang: string) {
+  public setLanguage(lang: string): void {
     if (lang === this.translateService.currentLang) {
       return;
     }
     this.translateService.use(lang);
-    this.language$.next(lang);
+    this.language.set(lang);
     this.storageService.setItem('language', lang);
   }
 
-  public applyStoredLanguage() {
+  public applyStoredLanguage(): void {
     const languageFromStorage = this.storageService.getItem('language');
     const languageFromBrowser = this.translateService.getBrowserLang();
     if (languageFromStorage) {
@@ -81,53 +85,50 @@ export class NavService {
     }
   }
 
-  public setDarkMode(b: boolean) {
-    this.storageService.setItem('darkMode', JSON.stringify(b));
-    this.settingsService.darkMode = b;
-  }
-
-  public applyStoredDarkMode() {
-    const darkModeFromStorage = this.storageService.getItem('darkMode');
-    if (darkModeFromStorage && JSON.parse(darkModeFromStorage)) {
-      this.setDarkMode(true);
+  public setPinSideNav(b: boolean): void {
+    this.storageService.setItem('pinSideNav', JSON.stringify(b));
+    this.pinSideNav.set(b);
+    if (b) {
+      document.getElementsByTagName('html').item(0)?.setAttribute('sidenav', 'pinned');
+    } else {
+      document.getElementsByTagName('html').item(0)?.removeAttribute('sidenav');
     }
   }
 
-  public setPinSideNav(b: boolean) {
-    this.storageService.setItem('pinSideNav', JSON.stringify(b));
-    this.pinSideNav$.next(b);
-  }
-
-  public applyPinSideNav() {
+  public applyStoredPinSideNav(): void {
     const pinSideNavFromStorage = this.storageService.getItem('pinSideNav');
     if (pinSideNavFromStorage && JSON.parse(pinSideNavFromStorage)) {
       this.setPinSideNav(true);
     }
   }
 
-  public update() {
+  public update(): void {
     this.updater.update();
   }
 
-  public checkForUpdates() {
+  public checkForUpdates(): void {
     console.log('checkForUpdates clicked');
-    this.clearRefreshPage(false);
+    console.log(`Current version: ${this.config.version}`);
+    void this.clearRefreshPage(false);
   }
 
-  public clearRefreshPage(alwaysRefresh: boolean = true) {
+  public async clearRefreshPage(alwaysRefresh = true): Promise<void> {
     console.log('checkForUpdates clicked');
-    from(window.caches.keys())
-      .pipe(
-        tap(keys => console.log('Cache keys:', keys)),
-        filter(keys => alwaysRefresh || keys.length > 0),
-        switchMap(keys => Promise.all(keys.map(key => caches.delete(key)))),
-        tap(deleted => console.log('Deleted?:', deleted)),
-        filter(deleted => alwaysRefresh || deleted.some(d => d)),
-      )
-      .subscribe(() => this.refreshPage());
+
+    const keys = await window.caches.keys();
+    console.log('Cache keys:', keys);
+
+    if (alwaysRefresh || keys.length > 0) {
+      const deleted = await Promise.all(keys.map(key => caches.delete(key)));
+      console.log('Deleted?:', deleted);
+
+      if (alwaysRefresh || deleted.some(d => d)) {
+        this.refreshPage();
+      }
+    }
   }
 
-  public refreshPage() {
+  public refreshPage(): void {
     console.log('Refreshing page...');
     location.reload();
   }

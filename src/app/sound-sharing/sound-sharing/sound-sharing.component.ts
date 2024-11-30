@@ -1,5 +1,9 @@
-import {Component} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {AsyncPipe} from '@angular/common';
+import {Component, inject} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import {firstValueFrom, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
@@ -14,24 +18,31 @@ import {SoundSharingService} from '../sound-sharing.service';
     RecordService,
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
+  imports: [
+    AsyncPipe,
+    RouterLink,
+    TranslateModule,
+    MatIcon,
+    MatButton,
+  ],
 })
 export class SoundSharingComponent {
-  public gameShareData$: Observable<{ gameId: string; gamePayload: string } | null> = this.route.parent
+  public readonly soundSharing = inject(SoundSharingService);
+  private readonly recordService = inject(RecordService);
+  private readonly route = inject(ActivatedRoute);
+
+  public readonly gameShareData$: Observable<{ gameId: string; gamePayload: string } | null> = this.route.parent
     ? this.route.parent.paramMap.pipe(map(params => {
       const gameId = params.get('gameId');
-      return gameId ? {gameId, gamePayload: SoundSharingService.cutBytes(SoundSharingService.stringToBinary(gameId))} : null;
+      return gameId
+        ? {gameId, gamePayload: SoundSharingService.cutBytes(SoundSharingService.stringToBinary(gameId))}
+        : null;
     }))
     : of(null);
 
-  private frequencyDiff = this.soundSharing.FFT_INDEX_1 - this.soundSharing.FFT_INDEX_0;
+  private frequencyDiff = this.soundSharing.fftIndex1 - this.soundSharing.fftIndex0;
   public analyseRange = Array(Math.round(this.frequencyDiff * 3 / 2)).fill(0)
-    .map((x, i) => i + Math.round(this.soundSharing.FFT_INDEX_0 - this.frequencyDiff / 4));
-
-  constructor(public readonly soundSharing: SoundSharingService,
-              private readonly recordService: RecordService,
-              private route: ActivatedRoute,
-  ) {
-  }
+    .map((x, i) => i + Math.round(this.soundSharing.fftIndex0 - this.frequencyDiff / 4));
 
   shareSound(payload: string) {
     this.soundSharing.soundShare(payload).then(() => console.log('shared')).catch(() => console.log('error'));
@@ -39,8 +50,7 @@ export class SoundSharingComponent {
 
   async analyse(): Promise<void> {
     await this.askUserPermission();
-
-    this.soundSharing.soundAnalyse().then(() => console.log('analysed')).catch(() => console.log('error'));
+    this.soundSharing.soundAnalyse();
   }
 
   stopAnalysing(): void {

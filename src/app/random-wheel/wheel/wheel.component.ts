@@ -1,25 +1,43 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  HostListener,
+  input,
+  viewChild
+} from '@angular/core';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 import {interpolateString} from 'd3-interpolate';
 import {scaleLinear} from 'd3-scale';
 import {select, Selection} from 'd3-selection';
 import {curveLinearClosed, line, lineRadial} from 'd3-shape';
 import 'd3-transition';
 import {of, Subject} from 'rxjs';
-import {debounceTime, delay, takeUntil} from 'rxjs/operators';
+import {debounceTime, delay, filter, skip, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-wheel',
   templateUrl: './wheel.component.html',
-  styleUrls: ['./wheel.component.scss']
+  styleUrls: ['./wheel.component.scss'],
+  imports: [],
 })
-export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
+export class WheelComponent implements AfterViewInit {
 
-  @Input() public names: string[] = [];
-  @Input() public nb = 5;
-  @Input() public dark = false;
-  @Input() public reset = 0;
+  public readonly names = input<string[] | null>(null);
+  public readonly nb = input<number | null>(5);
+  public readonly dark = input(false);
+  public readonly reset = input(0);
 
-  @ViewChild('svgRef', {static: true}) public svgRef!: ElementRef<SVGElement>;
+  private readonly computedNb = computed<number>(() => {
+    return this.names()?.length || this.nb() || 0;
+  });
+  private readonly computedNames = computed<string[]>(() => {
+    return this.names() || new Array(this.nb() || 0).fill('').map((_, i) => '' + (i + 1));
+  });
+
+  private readonly svgRef = viewChild.required<ElementRef<SVGElement>>('svgRef');
 
   private oldNb = 5;
   private oldAngle = 180;
@@ -42,9 +60,8 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
   private arrowRotate!: Selection<any, unknown, null, undefined>;
   private arrowInner!: Selection<any, unknown, null, undefined>;
 
-  private reset$ = new Subject<void>();
+  private reset$ = toObservable(this.reset).pipe(skip(1));
   private resize$ = new Subject<void>();
-  private destroy$ = new Subject<void>();
 
   private arrowPathData: [number, number][] = [
     [0, -0.2], [-0.3, -0.4], [0, 0.8], [0.3, -0.4],
@@ -54,29 +71,57 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
     .x(d => d[0])
     .y(d => d[1]);
 
+  constructor(private readonly destroyRef: DestroyRef) {
+    toObservable(this.computedNb).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
+      this.onNbChanged();
+      this.adjustZones();
+    });
+
+    toObservable(this.computedNames).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
+      this.adjustZones();
+    });
+
+    toObservable(this.dark).pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
+      this.adjustZones();
+      this.adjustArrowColor();
+    });
+
+    this.reset$.pipe(
+      filter(() => this.arrowPrepared),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => {
+      this.adjustArrowReset();
+      this.adjustCrownReset();
+    });
+  }
+
   @HostListener('window:resize')
-  public onResize() {
+  public onResize(): void {
     this.resize$.next();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   ngAfterViewInit(): void {
-    if (this.names.length > 0) {
-      this.nb = this.names.length;
-      this.onNbChanged();
-    } else {
-      this.names = new Array(this.nb).fill('').map((_, i) => '' + (i + 1));
-    }
-
-    this.prepareArrow();
-    this.prepareCrown();
+    setTimeout(() => {
+      this.updateSizes();
+      this.prepareArrow();
+      this.prepareCrown();
+      this.adjustZones();
+      this.adjustArrowPosition();
+      this.adjustCrownPosition();
+      this.arrowPrepared = true;
+    }, 50);
 
     this.resize$
-      .pipe(debounceTime(100), takeUntil(this.destroy$))
+      .pipe(debounceTime(100), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.updateSizes();
         this.adjustZones();
@@ -85,36 +130,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.arrowPrepared) {
-      this.updateSizes();
-      this.arrowPrepared = true;
-    }
-    if (changes.reset?.currentValue) {
-      this.reset$.next();
-      this.adjustArrowReset();
-      this.adjustCrownReset();
-    }
-    if (changes.names?.currentValue) {
-      this.nb = this.names.length;
-      this.onNbChanged();
-      this.adjustZones();
-      return;
-    }
-    if (changes.nb?.currentValue) {
-      this.onNbChanged();
-      this.names = new Array(this.nb).fill('').map((_, i) => '' + (i + 1));
-      this.adjustZones();
-      return;
-    }
-    if (changes.dark) {
-      this.adjustZones();
-      this.adjustArrowColor();
-      return;
-    }
-  }
-
-  public spin() {
+  public spin(): void {
     if (this.spinning) {
       return;
     }
@@ -122,37 +138,37 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
     this.spinning = true;
     this.adjustArrowRotate(this.spinDuration);
     this.adjustCrownReset();
-    of({nb: this.nb, angle: this.angle}).pipe(
+    of({nb: this.computedNb(), angle: this.angle}).pipe(
       delay(this.spinDuration),
       takeUntil(this.reset$),
-      takeUntil(this.destroy$),
+      takeUntilDestroyed(this.destroyRef),
     ).subscribe(data => {
       this.oldAngle = this.angle;
       this.spinning = false;
-      this.giveCrown(Math.floor((data.angle % 360) * this.nb / 360 + 0.5) % data.nb);
+      this.giveCrown(Math.floor((data.angle % 360) * this.computedNb() / 360 + 0.5) % data.nb);
     });
   }
 
   private onNbChanged(): void {
-    if (this.nb !== this.oldNb) {
-      this.oldNb = this.nb;
+    const nb = this.computedNb();
+    if (nb !== this.oldNb) {
+      this.oldNb = nb;
       this.adjustCrownReset();
     }
   }
 
-  private updateSizes() {
-    this.width = this.svgRef.nativeElement.getBoundingClientRect().width;
+  private updateSizes(): void {
+    this.width = this.svgRef().nativeElement.getBoundingClientRect().width;
 
     this.middle = this.width / 2;
     this.far = this.middle - this.outerRadiusMargin;
 
-    select(this.svgRef.nativeElement)
-      .attr('height', this.width);
+    select(this.svgRef().nativeElement).attr('height', this.width);
   }
 
-  private adjustZones() {
+  private adjustZones(): void {
     const radianAngleScale = scaleLinear<number, number>()
-      .domain([0, this.names.length])
+      .domain([0, this.computedNames().length || 0])
       .range([-Math.PI, Math.PI]);
 
     const radiusScale = scaleLinear<number, number>()
@@ -168,9 +184,9 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 
     // ----- SEPARATIONS -----
 
-    const labels = select(this.svgRef.nativeElement).select('.labels')
+    const labels = select(this.svgRef().nativeElement).select('.labels')
       .selectAll<SVGGElement, string>('.label')
-      .data(this.names);
+      .data(this.computedNames());
 
     const labelsEnter = labels.enter()
       .append('g')
@@ -179,7 +195,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .style('opacity', 1);
 
     const labelPathDFn = (_: string, i: number) => radarLine([[0, 0], [1, i + 0.5]]);
-    const labelColorFn = this.dark ? '#cccccc' : '#444444';
+    const labelColorFn = this.dark() ? '#ffb2bf' : '#444444';
 
     labelsEnter.append('path')
       .attr('d', labelPathDFn)
@@ -187,8 +203,8 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .attr('opacity', 0.25)
       .attr('stroke-width', 2);
 
-    const labelTextXFn = (_: string, i: number) => Math.sin((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
-    const labelTextYFn = (_: string, i: number) => -Math.cos((i / this.nb - 0.5) * 2 * Math.PI) * this.far;
+    const labelTextXFn = (_: string, i: number) => Math.sin((i / this.computedNb() - 0.5) * 2 * Math.PI) * this.far;
+    const labelTextYFn = (_: string, i: number) => -Math.cos((i / this.computedNb() - 0.5) * 2 * Math.PI) * this.far;
 
     labelsEnter.append('text')
       .attr('x', labelTextXFn)
@@ -226,10 +242,10 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .remove();
   }
 
-  private prepareArrow() {
-    this.arrowWrapper = select(this.svgRef.nativeElement).select('.arrow-wrapper');
-    this.arrowRotate = select(this.svgRef.nativeElement).select('.arrow-rotate');
-    this.arrowInner = select(this.svgRef.nativeElement).select('.arrow-inner');
+  private prepareArrow(): void {
+    this.arrowWrapper = select(this.svgRef().nativeElement).select('.arrow-wrapper');
+    this.arrowRotate = select(this.svgRef().nativeElement).select('.arrow-rotate');
+    this.arrowInner = select(this.svgRef().nativeElement).select('.arrow-inner');
 
     this.arrowWrapper
       .attr('transform', `translate(${this.middle} ${this.middle}) scale(${this.far})`);
@@ -239,17 +255,17 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
 
     this.arrowInner
       .attr('d', this.arrowPathDFn(this.arrowPathData))
-      .attr('fill', this.dark ? '#6648be' : '#2b1963');
+      .attr('fill', this.dark() ? '#6648be' : '#2b1963');
   }
 
-  private adjustArrowPosition() {
+  private adjustArrowPosition(): void {
     this.arrowWrapper
       .transition()
       .duration(this.redrawDuration)
       .attr('transform', `translate(${this.middle} ${this.middle}) scale(${this.far})`);
   }
 
-  private adjustArrowReset() {
+  private adjustArrowReset(): void {
     this.arrowWrapper
       .transition()
       .duration(this.redrawDuration / 2)
@@ -271,7 +287,7 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       this.redrawDuration / 2);
   }
 
-  private adjustArrowRotate(duration: number) {
+  private adjustArrowRotate(duration: number): void {
     this.arrowRotate
       .transition()
       .duration(duration)
@@ -281,39 +297,39 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       ));
   }
 
-  private adjustArrowColor() {
+  private adjustArrowColor(): void {
     this.arrowInner
       .transition()
       .duration(this.redrawDuration)
-      .attr('fill', this.dark ? '#6648be' : '#2b1963');
+      .attr('fill', this.dark() ? '#6648be' : '#2b1963');
   }
 
-  private prepareCrown() {
-    select(this.svgRef.nativeElement).select('.crown-wrapper')
+  private prepareCrown(): void {
+    select(this.svgRef().nativeElement).select('.crown-wrapper')
       .attr('transform', `translate(${this.middle} ${this.middle})`);
 
-    select(this.svgRef.nativeElement).select('.crown')
+    select(this.svgRef().nativeElement).select('.crown')
       .attr('x', this.middle)
       .attr('y', this.middle)
       .style('opacity', 0);
   }
 
   private crownXFn(index: number): number {
-    return -Math.sin((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
+    return -Math.sin((index / this.computedNb() - 1) * 2 * Math.PI) * this.far - this.crownSize / 2;
   }
 
   private crownYFn(index: number): number {
-    return Math.cos((index / this.nb - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
+    return Math.cos((index / this.computedNb() - 1) * 2 * Math.PI) * this.far - this.crownSize - 6;
   }
 
-  private adjustCrownPosition() {
-    select(this.svgRef.nativeElement).select('.crown-wrapper')
+  private adjustCrownPosition(): void {
+    select(this.svgRef().nativeElement).select('.crown-wrapper')
       .transition()
       .duration(this.redrawDuration)
       .attr('transform', `translate(${this.middle} ${this.middle})`);
 
     if (this.lastCrown >= 0) {
-      select(this.svgRef.nativeElement).select('.crown')
+      select(this.svgRef().nativeElement).select('.crown')
         .transition()
         .duration(this.redrawDuration)
         .attr('x', () => this.crownXFn(this.lastCrown))
@@ -321,10 +337,10 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
     }
   }
 
-  private giveCrown(index: number) {
+  private giveCrown(index: number): void {
     this.lastCrown = index;
 
-    select(this.svgRef.nativeElement).select('.crown')
+    select(this.svgRef().nativeElement).select('.crown')
       .attr('x', -this.crownSize / 2)
       .attr('y', -this.crownSize / 2)
       .style('opacity', 0)
@@ -335,10 +351,10 @@ export class WheelComponent implements OnDestroy, OnChanges, AfterViewInit {
       .style('opacity', 1);
   }
 
-  private adjustCrownReset() {
+  private adjustCrownReset(): void {
     this.lastCrown = -1;
 
-    select(this.svgRef.nativeElement).select('.crown')
+    select(this.svgRef().nativeElement).select('.crown')
       .transition()
       .duration(this.redrawDuration / 2)
       .attr('x', -this.crownSize / 2)

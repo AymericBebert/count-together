@@ -1,189 +1,47 @@
 @use '@angular/material' as mat;
+@use 'theme-colors' as tc;
+@use 'theming';
+@use 'fonts';
 
-@include mat.core();
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: (
+      primary: tc.$primary-palette,
+      tertiary: tc.$tertiary-palette,
+    ),
+    typography: Roboto,
+  ));
 
-@import '_fonts.scss';
-@import './custom-component-themes.scss';
+  &:not([dark-theme=true]) {
+    @include theming.theme-overrides(light);
+  }
 
-$dark-primary-text: rgba(black, 0.87);
-$light-primary-text: white;
+  &[dark-theme=true] {
+    color-scheme: dark;
+    @include theming.theme-overrides(dark);
+  }
 
-$mat-myrtille: (
-  50: #e9e5f6,
-  100: #c9bfe8,
-  200: #a594d9,
-  300: #8169c9,
-  400: #6648be,
-  500: #4b28b2,
-  600: #4424ab,
-  700: #3b1ea2,
-  800: #331899,
-  900: #230f8a,
-  A100: #c4bbff,
-  A200: #9888ff,
-  A400: #6c55ff,
-  A700: #563bff,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  ),
-);
+  .mat-drawer-content {
+    display: flex;
+    flex-direction: column;
 
-$mat-raspberry: (
-  50 : #fae3ec,
-  100 : #f3b8ce,
-  200 : #eb89ae,
-  300 : #e2598e,
-  400 : #dc3675,
-  500 : #d6125d,
-  600 : #d11055,
-  700 : #cc0d4b,
-  800 : #c60a41,
-  900 : #bc0530,
-  A100 : #f090b8,
-  A200 : #e64585,
-  A400 : #d4205f,
-  A700 : #ff0055,
-  contrast: (
-    50 : $dark-primary-text,
-    100 : $dark-primary-text,
-    200 : $dark-primary-text,
-    300 : $dark-primary-text,
-    400 : $light-primary-text,
-    500 : $light-primary-text,
-    600 : $light-primary-text,
-    700 : $light-primary-text,
-    800 : $light-primary-text,
-    900 : $light-primary-text,
-    A100 : $dark-primary-text,
-    A200 : $dark-primary-text,
-    A400 : $dark-primary-text,
-    A700 : $dark-primary-text,
-  ),
-);
+    > mat-toolbar {
+      flex-shrink: 0;
+    }
 
-$light-primary: mat.define-palette($mat-myrtille);
-$light-accent: mat.define-palette($mat-raspberry, A200, A100, A400);
-$light-warn: mat.define-palette(mat.$red-palette);
+    > router-outlet + * {
+      flex-grow: 1;
+    }
+  }
 
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $light-primary,
-    accent: $light-accent,
-    warn: $light-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
-
-@include mat.all-component-themes($light-theme);
-
-@include custom-components-theme($light-theme);
-
-// Defines an alternate dark theme.
-$mat-myrtille-dark: (
-  50 : #e6e3ec,
-  100 : #bfbad0,
-  200 : #958cb1,
-  300 : #6b5e92,
-  400 : #4b3c7a,
-  500 : #2b1963,
-  600 : #26165b,
-  700 : #201251,
-  800 : #1a0e47,
-  900 : #100835,
-  A100 : #836eff,
-  A200 : #573bff,
-  A400 : #2b08ff,
-  A700 : #2100ee,
-  contrast: (
-    50 : $dark-primary-text,
-    100 : $dark-primary-text,
-    200 : $dark-primary-text,
-    300 : $light-primary-text,
-    400 : $light-primary-text,
-    500 : $light-primary-text,
-    600 : $light-primary-text,
-    700 : $light-primary-text,
-    800 : $light-primary-text,
-    900 : $light-primary-text,
-    A100 : $dark-primary-text,
-    A200 : $light-primary-text,
-    A400 : $light-primary-text,
-    A700 : $light-primary-text,
-  ),
-);
-
-$mat-raspberry-dark: (
-  50 : #eae2e5,
-  100 : #cbb7bf,
-  200 : #a98794,
-  300 : #875669,
-  400 : #6d3249,
-  500 : #530e29,
-  600 : #4c0c24,
-  700 : #420a1f,
-  800 : #390819,
-  900 : #29040f,
-  A100 : #ff6386,
-  A200 : #ff305e,
-  A400 : #fc0038,
-  A700 : #e30032,
-  contrast: (
-    50 : $dark-primary-text,
-    100 : $dark-primary-text,
-    200 : $dark-primary-text,
-    300 : $light-primary-text,
-    400 : $light-primary-text,
-    500 : $light-primary-text,
-    600 : $light-primary-text,
-    700 : $light-primary-text,
-    800 : $light-primary-text,
-    900 : $light-primary-text,
-    A100 : $dark-primary-text,
-    A200 : $light-primary-text,
-    A400 : $light-primary-text,
-    A700 : $light-primary-text,
-  ),
-);
-
-$dark-primary: mat.define-palette($mat-myrtille-dark);
-$dark-accent: mat.define-palette($mat-raspberry-dark, A200, A100, A400);
-$dark-warn: mat.define-palette(mat.$deep-orange-palette);
-
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $dark-primary,
-    accent: $dark-accent,
-    warn: $dark-warn,
-  ),
-));
-
-// Insert custom background color
-$dark-background: map-get($dark-theme, background);
-$dark-background: map_merge($dark-background, (app-bar: #101010, background: #202020));
-$dark-theme: map_merge($dark-theme, (background: $dark-background));
-
-.myrtille-dark-theme {
-  @include mat.all-component-colors($dark-theme);
-
-  @include custom-components-theme($dark-theme);
-  @include custom-components-dark-theme($dark-theme);
+  &[sidenav=pinned] {
+    .mat-drawer-content > router-outlet + * {
+      border-top-right-radius: 24px;
+    }
+  }
 }
 
-// CSS
 html, body {
   height: 100%;
 }
@@ -198,33 +56,12 @@ body {
 }
 
 .very-light-text {
-  color: #cccccc;
+  font-size: 14px;
+  opacity: 0.2;
 }
 
-.myrtille-dark-theme {
-  .mat-mdc-button.mat-primary, .mat-mdc-icon-button.mat-primary {
-    color: mat.get-color-from-palette($light-primary, 100);
-  }
-
-  .mat-mdc-progress-spinner circle {
-    stroke: mat.get-color-from-palette($light-primary, 100);
-  }
-
-  .mat-mdc-form-field.mat-focused {
-    .mat-mdc-floating-label {
-      color: mat.get-color-from-palette($light-primary, 100);
-    }
-
-    .mdc-line-ripple::after {
-      border-bottom-color: mat.get-color-from-palette($light-primary, 300);
-    }
-  }
-
-  .mat-mdc-input-element {
-    caret-color: mat.get-color-from-palette($light-primary, 100);
-  }
-
-  .very-light-text {
-    color: #666666;
-  }
+:root {
+  @include mat.sidenav-overrides((
+    container-width: 220px,
+  ));
 }

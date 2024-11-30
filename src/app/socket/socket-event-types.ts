@@ -9,6 +9,8 @@ import {
   IGameRemoveScore
 } from '../model/game';
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 export interface ReceivedEventTypes {
   'connect': void;
   'disconnect': void;

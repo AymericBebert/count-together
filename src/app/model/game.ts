@@ -26,7 +26,7 @@ export interface IRecentPlayer {
   wasLatest: boolean;
 }
 
-export type IKnownPlayers = { [name: string]: number };
+export type IKnownPlayers = Record<string, number>;
 
 export interface IGameEditName {
   gameId: string;

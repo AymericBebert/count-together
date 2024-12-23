@@ -1,13 +1,20 @@
-.sidenav-container {
+mat-sidenav-container {
   height: 100%;
   min-height: 100vh;
 }
 
-.sidenav {
-  width: 220px;
+mat-nav-list {
+  padding-left: 8px;
+  padding-right: 8px;
 
-  mat-nav-list {
-    padding: 8px;
+  .mdc-list-item {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .mdc-list-group__subheader {
+    margin-left: 8px;
+    margin-right: 8px;
   }
 }
 
@@ -34,10 +41,6 @@ img.main-icon {
   .main-title {
     font-size: 16px;
   }
-}
-
-#sidenav-toolbar {
-  padding: 0 16px;
 }
 
 .mat-mdc-list-item {

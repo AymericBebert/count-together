@@ -1,15 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     class="wheel" #svgRef (click)="spin()">
-  <g class="labels"></g>
-  <g class="arrow-wrapper">
-    <g class="arrow-rotate">
-      <path class="arrow-inner" d=""></path>
-    </g>
-  </g>
-  <g class="crown-wrapper">
+import {Component, input} from '@angular/core';
+
+/* eslint-disable max-len */
+@Component({
+  selector: 'app-icon-crown',
+  template: `
     <!-- eslint-disable max-len -->
-    <svg class="crown" width="30" height="30" opacity="0" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"
-         style="color: #f6c900">
+    <svg id="crown" [attr.width]="size()" [attr.height]="size()" viewBox="0 0 512 512"
+         xmlns="http://www.w3.org/2000/svg">
       <path id="bottom" fill="currentColor"
             d="m 258.4,410.7 c -50,0 -93.4,3.3 -120.5,11.6 -23.2,7.1 -26.1,14.3 -26.1,14.3 l 4.8,14.1 c 0,0 5.3,5.4 20.6,9.2 15.3,3.8 53.5,9.7 121.5,9.7 65.3,0 101.6,-6.8 117.5,-10.7 19,-4.6 20.6,-9.5 20.6,-9.5 l 5.4,-15.1 c 0,0 -0.3,-3.7 -23.8,-12.3 -29.1,-10.7 -71.4,-11.4 -120,-11.4 z m -1.8,18.4 a 129.7,15 0 0 1 129.7,15 129.7,15 0 0 1 -129.7,15 129.7,15 0 0 1 -129.7,-15 129.7,15 0 0 1 129.7,-15 z"/>
       <path id="main" fill="currentColor"
@@ -24,5 +21,11 @@
       <circle id="ball4" fill="currentColor" cy="153" cx="367" r="15"/>
       <circle id="ball5" fill="currentColor" cy="169" cx="492" r="18"/>
     </svg>
-  </g>
-</svg>
+  `,
+  host: {
+    style: 'line-height: 0;',
+  }
+})
+export class IconCrownComponent {
+  public readonly size = input(24);
+}

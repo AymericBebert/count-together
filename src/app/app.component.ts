@@ -11,6 +11,7 @@ import {ActivatedRoute, NavigationEnd, Router, RouterModule} from '@angular/rout
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../config/app.config';
+import {IconCrownComponent} from './icons/icon-crown.component';
 import {ChangeLanguageComponent} from './nav/change-language.component';
 import {DeviceService} from './service/device.service';
 import {GameSettingsService} from './service/game-settings.service';
@@ -25,6 +26,7 @@ import {SettingsService} from './service/settings.service';
     AsyncPipe,
     RouterModule,
     TranslateModule,
+    IconCrownComponent,
     ChangeLanguageComponent,
     MatBadgeModule,
     MatButtonModule,

@@ -9,10 +9,10 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
     <div (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
       <mat-icon style="margin-right: 5px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
       <span>{{ 'misc.language' | translate }}&ensp;
-        <span class="lang-flag">{{ langToFlag(translateService.currentLang) }}</span>{{ translateService.currentLang }}
+        <span class="lang-flag">{{ langToFlag(translate.currentLang) }}</span>{{ translate.currentLang }}
       </span>
       <mat-menu #menu="matMenu">
-        @for (lang of translateService.langs; track lang) {
+        @for (lang of translate.langs; track lang) {
           <button mat-menu-item (click)="langClicked(lang)">
             <span class="lang-flag">{{ langToFlag(lang) }}</span>{{ lang }}
           </button>
@@ -27,7 +27,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
   ],
 })
 export class ChangeLanguageComponent {
-  public readonly translateService = inject(TranslateService);
+  public readonly translate = inject(TranslateService);
 
   public readonly langSet = output<string>();
 

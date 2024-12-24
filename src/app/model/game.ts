@@ -26,6 +26,7 @@ export interface IRecentPlayer {
   wasLatest: boolean;
 }
 
+/** Record of player names and the timestamp of their last game */
 export type IKnownPlayers = Record<string, number>;
 
 export interface IGameEditName {
@@ -47,6 +48,16 @@ export interface IGameEditPlayer {
   gameId: string;
   playerId: number;
   playerName: string;
+}
+
+export interface PlayerEdition {
+  oldPlayerId: number;
+  playerName: string;
+}
+
+export interface IGameEditPlayers {
+  gameId: string;
+  players: PlayerEdition[];
 }
 
 export interface IGameRemovePlayer {

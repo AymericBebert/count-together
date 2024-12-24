@@ -4,7 +4,7 @@
 
 .player-dnd-container {
   h4 {
-    margin: 10px 0 5px 0;
+    margin: 16px 0 5px 0;
   }
 }
 
@@ -18,31 +18,35 @@
 
 .player-dnd-box {
   min-height: 40px;
-  padding: 0 8px;
+  padding-left: 8px;
   border: 1px solid var(--mat-sys-on-surface);
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  cursor: move;
   background: var(--mat-sys-surface);
   font-size: 14px;
   margin-top: -1px;
 
   &:first-child {
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
     margin-top: 0;
   }
 
   &:last-child {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  > .cdk-drag-handle {
+    cursor: move;
+    padding: 8px;
   }
 }
 
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 4px;
+  border-radius: 8px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
   0 8px 10px 1px rgba(0, 0, 0, 0.14),
   0 3px 14px 2px rgba(0, 0, 0, 0.12);

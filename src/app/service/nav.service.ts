@@ -13,7 +13,7 @@ import {NavButtonsService} from './nav-buttons.service';
 export class NavService {
   private readonly navButtonsService = inject(NavButtonsService);
   private readonly deviceService = inject(DeviceService);
-  private readonly translateService = inject(TranslateService);
+  private readonly translate = inject(TranslateService);
   private readonly storageService = inject(StorageService);
   private readonly updater = inject(UpdaterService);
   private readonly config = inject<AppConfig>(APP_CONFIG);
@@ -65,17 +65,17 @@ export class NavService {
   }
 
   public setLanguage(lang: string): void {
-    if (lang === this.translateService.currentLang) {
+    if (lang === this.translate.currentLang) {
       return;
     }
-    this.translateService.use(lang);
+    this.translate.use(lang);
     this.language.set(lang);
     this.storageService.setItem('language', lang);
   }
 
   public applyStoredLanguage(): void {
     const languageFromStorage = this.storageService.getItem('language');
-    const languageFromBrowser = this.translateService.getBrowserLang();
+    const languageFromBrowser = this.translate.getBrowserLang();
     if (languageFromStorage) {
       this.setLanguage(languageFromStorage);
     } else if (languageFromBrowser && ['en', 'fr'].includes(languageFromBrowser)) {

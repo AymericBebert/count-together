@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container>
 
   <mat-sidenav #drawer class="sidenav" fixedInViewport position="end"
                [attr.role]="navService.pinSideNav() ? 'navigation' : 'dialog'"
@@ -7,7 +7,7 @@
                [autoFocus]="false"
                (click)="closeDrawer()">
 
-    <mat-toolbar id="sidenav-toolbar">
+    <mat-toolbar style="padding: 0 16px">
       <span style="flex-grow: 1">{{ 'nav.menu-title' | translate }}</span>
       @if (navService.pinSideNav()) {
         <button mat-icon-button type="button" aria-label="Close sidenav" (click)="navService.setPinSideNav(false)">
@@ -22,15 +22,15 @@
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
                        class="selectable even"
                        [class.selected]="!gameSettings.lowerScoreWins">
-          <span class="crown-icon-bw"></span>
-          <mat-icon>arrow_drop_up</mat-icon>
+          <app-icon-crown style="vertical-align: sub"></app-icon-crown>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_up</mat-icon>
           <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
                        class="selectable even"
                        [class.selected]="gameSettings.lowerScoreWins">
-          <span class="crown-icon-bw"></span>
-          <mat-icon>arrow_drop_down</mat-icon>
+          <app-icon-crown style="vertical-align: sub"></app-icon-crown>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_down</mat-icon>
           <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
         </mat-list-item>
         <div style="height: 10px"></div>
@@ -52,6 +52,11 @@
           <mat-icon style="margin-right: 5px">flaky</mat-icon>
           <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
         </mat-list-item>
+        <div style="height: 10px"></div>
+        <mat-list-item (click)="gameSettingsService.editPlayers(); closeDrawer()">
+          <mat-icon style="margin-right: 5px">edit</mat-icon>
+          <span>{{ 'nav.game-settings.edit-players' | translate }}</span>
+        </mat-list-item>
       }
 
       @if (navService.navTools().length > 0) {
@@ -68,7 +73,7 @@
 
       <mat-list-item>
         <mat-slide-toggle [checked]="settingsService.darkMode()"
-                          (change)="settingsService.setDarkMode($event.checked)">
+                          (change)="settingsService.setDarkMode($event.checked, true)">
           {{ 'misc.dark-mode' | translate }}
         </mat-slide-toggle>
       </mat-list-item>
@@ -110,11 +115,9 @@
         </button>
       }
 
-      @if (settingsService.darkMode()) {
-        <img routerLink="/" [src]="'assets/icons/crown-white-64.png'" alt="icon" class="main-icon hide-focus"/>
-      } @else {
-        <img routerLink="/" [src]="'assets/icons/crown-black-64.png'" alt="icon" class="main-icon hide-focus"/>
-      }
+      <app-icon-crown routerLink="/" class="main-icon hide-focus"
+                      [size]="deviceService.slimToolbar() ? 30 : 36"
+      ></app-icon-crown>
       <span routerLink="/" class="main-title hide-focus">
         {{ navService.mainTitle() ? (navService.mainTitle() | translate) : ('app-name' | translate) }}
       </span>

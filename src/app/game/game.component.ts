@@ -17,7 +17,7 @@ import {
   PlayerNameDialogResult
 } from '../dialogs/player-name-dialog/player-name-dialog.component';
 import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
-import {GameType, IGame} from '../model/game';
+import {GameType, IGame, PlayerEdition} from '../model/game';
 import {EnrichedPlayer} from '../model/player';
 import {RankIconComponent} from '../rank-icon/rank-icon.component';
 import {GameSettingsService} from '../service/game-settings.service';
@@ -44,7 +44,7 @@ export class GameComponent implements OnInit {
   private readonly navButtonsService = inject(NavButtonsService);
   private readonly gameSettingsService = inject(GameSettingsService);
   private readonly shareService = inject(ShareService);
-  private readonly translateService = inject(TranslateService);
+  private readonly translate = inject(TranslateService);
   private readonly gamesService = inject(GamesService);
   private readonly socket = inject(SocketService);
   private readonly dialog = inject(MatDialog);
@@ -137,6 +137,10 @@ export class GameComponent implements OnInit {
     this.gameSettingsService.gameType$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(gameType => this.setGameTypeOpen(gameType));
+
+    this.gameSettingsService.playerEdition$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerEdition => this.editPlayers(playerEdition));
   }
 
   public editGameOpen(): void {
@@ -190,10 +194,10 @@ export class GameComponent implements OnInit {
         ConfirmDialogComponent,
         {
           data: {
-            title: this.translateService.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
-            message: this.translateService.instant('game.remove-player-dialog.message'),
-            confirm: this.translateService.instant('game.remove-player-dialog.confirm'),
-            dismiss: this.translateService.instant('game.remove-player-dialog.dismiss'),
+            title: this.translate.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
+            message: this.translate.instant('game.remove-player-dialog.message'),
+            confirm: this.translate.instant('game.remove-player-dialog.confirm'),
+            dismiss: this.translate.instant('game.remove-player-dialog.dismiss'),
           },
         },
       )
@@ -247,10 +251,10 @@ export class GameComponent implements OnInit {
         ConfirmDialogComponent,
         {
           data: {
-            title: this.translateService.instant('game.remove-score-dialog.title', {player: player.name}),
-            message: this.translateService.instant('game.remove-score-dialog.message'),
-            confirm: this.translateService.instant('game.remove-score-dialog.confirm'),
-            dismiss: this.translateService.instant('game.remove-score-dialog.dismiss'),
+            title: this.translate.instant('game.remove-score-dialog.title', {player: player.name}),
+            message: this.translate.instant('game.remove-score-dialog.message'),
+            confirm: this.translate.instant('game.remove-score-dialog.confirm'),
+            dismiss: this.translate.instant('game.remove-score-dialog.dismiss'),
           },
         },
       )
@@ -287,10 +291,10 @@ export class GameComponent implements OnInit {
         ConfirmDialogComponent,
         {
           data: {
-            title: this.translateService.instant('game.remove-score-line-dialog.title'),
-            message: this.translateService.instant('game.remove-score-line-dialog.message'),
-            confirm: this.translateService.instant('game.remove-score-line-dialog.confirm'),
-            dismiss: this.translateService.instant('game.remove-score-line-dialog.dismiss'),
+            title: this.translate.instant('game.remove-score-line-dialog.title'),
+            message: this.translate.instant('game.remove-score-line-dialog.message'),
+            confirm: this.translate.instant('game.remove-score-line-dialog.confirm'),
+            dismiss: this.translate.instant('game.remove-score-line-dialog.dismiss'),
           },
         },
       )
@@ -340,10 +344,10 @@ export class GameComponent implements OnInit {
         ConfirmDialogComponent,
         {
           data: {
-            title: this.translateService.instant('game.change-game-type-dialog.title'),
-            message: this.translateService.instant('game.change-game-type-dialog.message'),
-            confirm: this.translateService.instant('game.change-game-type-dialog.confirm'),
-            dismiss: this.translateService.instant('game.change-game-type-dialog.dismiss'),
+            title: this.translate.instant('game.change-game-type-dialog.title'),
+            message: this.translate.instant('game.change-game-type-dialog.message'),
+            confirm: this.translate.instant('game.change-game-type-dialog.confirm'),
+            dismiss: this.translate.instant('game.change-game-type-dialog.dismiss'),
           },
         },
       )
@@ -369,9 +373,28 @@ export class GameComponent implements OnInit {
     this.gamesService.updateSavedGame(currentGame);
   }
 
+  private editPlayers(players: PlayerEdition[]): void {
+    const currentGame = this.gameOrThrow;
+    const oldScores = currentGame.players.map(p => p.scores);
+    currentGame.players = players.map(e => e.oldPlayerId >= 0 && oldScores[e.oldPlayerId]
+      ? {name: e.playerName, scores: oldScores[e.oldPlayerId]}
+      : {name: e.playerName, scores: []}
+    );
+    if (currentGame.gameType === 'smallScores' || currentGame.gameType === 'winOrLose') {
+      const maxScoreLength = Math.max(...currentGame.players.map(p => p.scores.length));
+      for (const player of currentGame.players) {
+        if (player.scores.length < maxScoreLength) {
+          player.scores.push(...new Array<number>(maxScoreLength - player.scores.length).fill(0));
+        }
+      }
+    }
+    this.gamesService.gameEditPlayers(currentGame.gameId, players);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
   private shareGame(game: IGame | null): void {
-    const shareTitle = this.translateService.instant('game.share.title');
-    const shareText = this.translateService.instant('game.share.text');
+    const shareTitle = this.translate.instant('game.share.title');
+    const shareText = this.translate.instant('game.share.text');
     if (game === null) {
       console.error('Trying to share but game is null?');
     } else if (game.gameId === 'offline') {

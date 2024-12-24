@@ -13,16 +13,6 @@
       }
       <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
     </div>
-    <div class="actions-top">
-      <button mat-button (click)="removePlayer()">
-        <mat-icon style="margin-right: 5px">remove_circle_outline</mat-icon>
-        <span>{{ 'game.remove-player' | translate }}</span>
-      </button>
-      <button mat-button (click)="addPlayer()">
-        <mat-icon style="margin-right: 5px">add_circle_outline</mat-icon>
-        <span>{{ 'game.add-player' | translate }}</span>
-      </button>
-    </div>
     <div class="score-box mat-elevation-z2">
       @for (player of players$ | async; track playerTrackByFn(player); let p = $index) {
         <div class="player-column-wrapper" style="flex: 1 1 auto">

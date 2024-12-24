@@ -1,10 +1,19 @@
 @if (isLast()) {
-  <img [src]="'assets/icons/tp-64.png'" alt="rank-icon"/>
-}
-@if (!isLast() && rank() < 4) {
-  <img [src]="'assets/icons/crown-' + rank() + '-64.png'" alt="rank-icon"/>
-}
-@if (!isLast() && rank() > 3) {
-  <img [src]="'assets/icons/crown-2-64.png'" alt="rank-icon" style="opacity: 0.1"/>
+  <app-icon-tp [size]="size()"></app-icon-tp>
+} @else {
+  @switch (rank()) {
+    @case (1) {
+      <app-icon-crown [size]="size()" style="color: #f6c900"></app-icon-crown>
+    }
+    @case (2) {
+      <app-icon-crown [size]="size()" style="color: #898989"></app-icon-crown>
+    }
+    @case (3) {
+      <app-icon-crown [size]="size()" style="color: #955730"></app-icon-crown>
+    }
+    @default {
+      <app-icon-crown [size]="size()" style="color: #898989; opacity: 0.1"></app-icon-crown>
+    }
+  }
 }
 <span>{{ rank() }}</span>

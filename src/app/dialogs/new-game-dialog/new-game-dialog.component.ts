@@ -1,18 +1,26 @@
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, inject} from '@angular/core';
-import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {TranslateModule} from '@ngx-translate/core';
-import {GameType, IGame, IRecentPlayer} from '../../model/game';
+import {IconCrownComponent} from '../../icons/icon-crown.component';
+import {GameType, IGame, IRecentPlayer, PlayerEdition} from '../../model/game';
 import {GamesService} from '../../service/games.service';
 
 export interface NewGameDialogData {
   recentPlayers: IRecentPlayer[];
+  fromGame?: IGame;
+}
+
+export interface NewGameDialogResult {
+  game: IGame;
+  playerEdition: PlayerEdition[];
 }
 
 @Component({
@@ -29,43 +37,64 @@ export interface NewGameDialogData {
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatMenuModule,
+    IconCrownComponent,
   ],
 })
 export class NewGameDialogComponent {
-  public readonly data = inject<NewGameDialogData>(MAT_DIALOG_DATA);
+  private readonly data = inject<NewGameDialogData>(MAT_DIALOG_DATA);
+  protected readonly fromGame = this.data.fromGame;
   private readonly gamesService = inject(GamesService, {optional: true});
 
-  public readonly gameName = new FormControl<string>('', {nonNullable: true, validators: [Validators.required]});
-  public readonly gameType = new FormControl<GameType>('free', {nonNullable: true});
-  public readonly lowerScoreWins = new FormControl<boolean>(false, {nonNullable: true});
+  public readonly gameSettings = new FormGroup({
+    gameName: new FormControl<string>(
+      this.data.fromGame?.name || '',
+      {nonNullable: true, validators: [Validators.required]},
+    ),
+    gameType: new FormControl<GameType>(this.data.fromGame?.gameType || 'free', {nonNullable: true}),
+    lowerScoreWins: new FormControl<boolean>(this.data.fromGame?.lowerScoreWins || false, {nonNullable: true}),
+  });
+
   public readonly playerName = new FormControl<string>('', {nonNullable: true});
 
-  public selectedPlayers: string[] = [];
-  public otherPlayers: string[] = [];
+  public selectedPlayers: PlayerEdition[] = [];
+  public otherPlayers: PlayerEdition[] = [];
 
   constructor() {
-    const data = this.data;
-
-    data.recentPlayers.forEach(rp => {
-      if (rp.wasLatest) {
-        this.selectedPlayers.push(rp.name);
-      } else {
-        this.otherPlayers.push(rp.name);
-      }
-    });
+    if (this.data.fromGame) {
+      const gamePlayers = this.data.fromGame.players.map(player => player.name);
+      this.selectedPlayers = gamePlayers.map(((playerName, i) => ({playerName, oldPlayerId: i})));
+      this.otherPlayers = this.data.recentPlayers
+        .filter(rp => !gamePlayers.includes(rp.name))
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
+    } else {
+      this.selectedPlayers = this.data.recentPlayers
+        .filter(rp => rp.wasLatest)
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
+      this.otherPlayers = this.data.recentPlayers
+        .filter(rp => !rp.wasLatest)
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
+    }
   }
 
-  public exportGame(): IGame {
+  public exportGame(): NewGameDialogResult {
+    const gameSettings = this.gameSettings.getRawValue();
     return {
-      gameId: 'new',
-      name: this.gameName.value,
-      gameType: this.gameType.value,
-      lowerScoreWins: this.lowerScoreWins.value,
-      players: this.selectedPlayers.map(name => ({name, scores: []})),
+      game: {
+        gameId: 'new',
+        name: gameSettings.gameName,
+        gameType: gameSettings.gameType,
+        lowerScoreWins: gameSettings.lowerScoreWins,
+        players: this.selectedPlayers.map(player => ({
+          name: player.playerName,
+          scores: [],
+        })),
+      },
+      playerEdition: this.selectedPlayers,
     };
   }
 
-  public drop(event: CdkDragDrop<string[]>): void {
+  public drop(event: CdkDragDrop<PlayerEdition[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -74,18 +103,32 @@ export class NewGameDialogComponent {
   }
 
   public addPlayerName(): void {
-    this.selectedPlayers = [...this.selectedPlayers.filter(n => n !== this.playerName.value), this.playerName.value];
+    this.selectedPlayers = [
+      ...this.selectedPlayers.filter(p => p.playerName !== this.playerName.value),
+      {playerName: this.playerName.value, oldPlayerId: -1},
+    ];
     this.playerName.setValue('');
   }
 
-  public excludePlayer(playerName: string): void {
-    this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
-    this.otherPlayers = [playerName, ...this.otherPlayers.filter(n => n !== playerName)];
+  public includePlayer(player: PlayerEdition): void {
+    this.selectedPlayers = [
+      ...this.selectedPlayers.filter(p => p.playerName !== player.playerName),
+      player,
+    ];
+    this.otherPlayers = this.otherPlayers.filter(p => p.playerName !== player.playerName);
   }
 
-  public forgetPlayer(playerName: string): void {
-    this.selectedPlayers = this.selectedPlayers.filter(n => n !== playerName);
-    this.otherPlayers = this.otherPlayers.filter(n => n !== playerName);
-    this.gamesService?.forgetPlayer(playerName);
+  public excludePlayer(player: PlayerEdition): void {
+    this.selectedPlayers = this.selectedPlayers.filter(n => n.playerName !== player.playerName);
+    this.otherPlayers = [
+      player,
+      ...this.otherPlayers.filter(n => n.playerName !== player.playerName),
+    ];
+  }
+
+  public forgetPlayer(player: PlayerEdition): void {
+    this.selectedPlayers = this.selectedPlayers.filter(n => n.playerName !== player.playerName);
+    this.otherPlayers = this.otherPlayers.filter(n => n.playerName !== player.playerName);
+    this.gamesService?.forgetPlayer(player.playerName);
   }
 }

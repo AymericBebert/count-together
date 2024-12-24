@@ -21,7 +21,6 @@
     }
   },
   "game": {
-    "add-player": "Joueur",
     "add-row": "Ligne",
     "change-game-type-dialog": {
       "confirm": "Oui",
@@ -29,7 +28,6 @@
       "message": "Les scores des joueurs peuvent en être affectés",
       "title": "Changer le type de partie ?"
     },
-    "remove-player": "Joueur",
     "remove-player-dialog": {
       "confirm": "Oui",
       "dismiss": "Annuler",
@@ -89,6 +87,7 @@
   },
   "nav": {
     "game-settings": {
+      "edit-players": "Modifier joueurs",
       "free": "Points libres",
       "max-wins": "Max gagne",
       "min-wins": "Min gagne",
@@ -108,14 +107,13 @@
         "invalid": "Nom de partie invalide",
         "label": "Nom de partie"
       },
-      "game-type": "Type de partie",
       "header": "Nouvelle partie",
-      "lower-score-wins": "Plus petit score gagne",
+      "header-edit": "Modifier la partie",
       "players": {
         "invalid": "Nom de joueur invalide",
         "new": "Nouveau joueur",
         "others": "Autres joueurs",
-        "selected": "Joueurs à ajouter"
+        "selected": "Joueurs"
       }
     }
   },

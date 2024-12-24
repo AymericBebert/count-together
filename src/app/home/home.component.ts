@@ -10,8 +10,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {filter, switchMap} from 'rxjs/operators';
-import {NewGameDialogComponent, NewGameDialogData} from '../dialogs/new-game-dialog/new-game-dialog.component';
-import {IGame, IStoredGame} from '../model/game';
+import {
+  NewGameDialogComponent,
+  NewGameDialogData,
+  NewGameDialogResult
+} from '../dialogs/new-game-dialog/new-game-dialog.component';
+import {IStoredGame} from '../model/game';
 import {GamesService} from '../service/games.service';
 import {NavButtonsService} from '../service/nav-buttons.service';
 import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
@@ -79,14 +83,14 @@ export class HomeComponent implements OnInit {
 
   public newGameOpen() {
     const recentPlayers = this.gamesService.getRegisteredPlayers();
-    this.dialog.open<NewGameDialogComponent, NewGameDialogData, IGame>(
+    this.dialog.open<NewGameDialogComponent, NewGameDialogData, NewGameDialogResult>(
       NewGameDialogComponent,
       {data: {recentPlayers}},
     )
       .afterClosed()
       .pipe(
         filter(res => res !== undefined),
-        switchMap(res => this.gamesService.postNewGame$(res)),
+        switchMap(res => this.gamesService.postNewGame$(res.game)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(newGame => this.router.navigate(['game', newGame.gameId]));

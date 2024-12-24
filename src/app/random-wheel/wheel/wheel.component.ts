@@ -60,8 +60,8 @@ export class WheelComponent implements AfterViewInit {
   private arrowRotate!: Selection<any, unknown, null, undefined>;
   private arrowInner!: Selection<any, unknown, null, undefined>;
 
-  private reset$ = toObservable(this.reset).pipe(skip(1));
-  private resize$ = new Subject<void>();
+  private readonly reset$ = toObservable(this.reset).pipe(skip(1));
+  private readonly resize$ = new Subject<void>();
 
   private arrowPathData: [number, number][] = [
     [0, -0.2], [-0.3, -0.4], [0, 0.8], [0.3, -0.4],

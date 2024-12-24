@@ -60,6 +60,11 @@ body {
   opacity: 0.2;
 }
 
+.mdc-button.label-align-center > span.mdc-button__label {
+  display: flex;
+  align-items: center;
+}
+
 :root {
   @include mat.sidenav-overrides((
     container-width: 220px,

@@ -21,7 +21,6 @@
     }
   },
   "game": {
-    "add-player": "Add player",
     "add-row": "Add row",
     "change-game-type-dialog": {
       "confirm": "Yes",
@@ -29,7 +28,6 @@
       "message": "Player scores can be altered",
       "title": "Change game type?"
     },
-    "remove-player": "Remove player",
     "remove-player-dialog": {
       "confirm": "Yes",
       "dismiss": "Cancel",
@@ -89,6 +87,7 @@
   },
   "nav": {
     "game-settings": {
+      "edit-players": "Edit players",
       "free": "Free points",
       "max-wins": "Max score wins",
       "min-wins": "Min score wins",
@@ -108,14 +107,13 @@
         "invalid": "Invalid game name",
         "label": "Game name"
       },
-      "game-type": "Game type",
       "header": "New game",
-      "lower-score-wins": "Lower score wins",
+      "header-edit": "Edit game",
       "players": {
         "invalid": "Invalid player name",
         "new": "New player",
         "others": "Other players",
-        "selected": "Selected players"
+        "selected": "Game players"
       }
     }
   },

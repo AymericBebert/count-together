@@ -4,8 +4,7 @@ mat-sidenav-container {
 }
 
 mat-nav-list {
-  padding-left: 8px;
-  padding-right: 8px;
+  padding: 0 8px;
 
   .mdc-list-item {
     padding-left: 8px;
@@ -30,11 +29,9 @@ mat-nav-list {
   cursor: pointer;
 }
 
-img.main-icon {
+app-icon-crown.main-icon {
   cursor: pointer;
-  height: 40px;
-  width: 40px;
-  padding: 0 8px 6px;
+  padding: 0 10px 6px;
 }
 
 @media (max-width: 340px) {
@@ -64,22 +61,6 @@ img.main-icon {
   }
 }
 
-.crown-icon-bw {
-  display: inline-block;
-  background-image: url('/assets/icons/crown-black-64.png');
-  background-size: contain;
-  height: 24px;
-  width: 24px;
-  margin-right: -4px;
-  vertical-align: sub;
-}
-
-:host-context(html[dark-theme=true]) {
-  .crown-icon-bw {
-    background-image: url('/assets/icons/crown-white-64.png');
-  }
-}
-
 @media (max-width: 599px) {
   .mat-toolbar-row, .mat-toolbar-single-row {
     padding: 0 4px;
@@ -91,9 +72,7 @@ img.main-icon {
     height: 48px;
   }
 
-  img.main-icon {
-    padding: 0 8px 4px;
-    height: 32px;
-    width: 32px;
+  app-icon-crown.main-icon {
+    padding: 0 9px 4px;
   }
 }

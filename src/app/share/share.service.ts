@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ShareService {
   private readonly snackBar = inject(MatSnackBar);
-  private readonly translateService = inject(TranslateService);
+  private readonly translate = inject(TranslateService);
 
   private readonly canShare = window.navigator !== null && window.navigator.share !== undefined;
 
@@ -16,7 +16,7 @@ export class ShareService {
       void window.navigator.share({title, text, url});
     } else {
       navigator.clipboard.writeText(url).then(() => {
-        this.snackBar.open(`${this.translateService.instant('share.copied')} ${url}`, '', {duration: 3000});
+        this.snackBar.open(`${this.translate.instant('share.copied')} ${url}`, '', {duration: 3000});
       });
     }
   }

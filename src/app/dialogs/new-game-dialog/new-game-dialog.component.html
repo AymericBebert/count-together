@@ -1,99 +1,154 @@
-<h1 mat-dialog-title>{{ 'new-game.dialog.header' | translate }}</h1>
+<h1 mat-dialog-title>{{
+    fromGame ? ('new-game.dialog.header-edit' | translate) : ('new-game.dialog.header' | translate)
+  }}</h1>
 
 <div mat-dialog-content>
-  <div style="margin-bottom: 5px">
+
+  <div style="display: flex; flex-direction: column; gap: 4px">
     <mat-form-field>
       <mat-label>{{ 'new-game.dialog.game-name.label' | translate }}</mat-label>
-      <input matInput name="game" [formControl]="gameName" [autofocus]="true">
-      @if (gameName.invalid) {
+      <input matInput name="game" [formControl]="gameSettings.controls.gameName" [autofocus]="true">
+      @if (gameSettings.controls.gameName.invalid) {
         <mat-error>{{ 'new-game.dialog.game-name.invalid' | translate }}</mat-error>
       }
     </mat-form-field>
-  </div>
 
-  <div style="margin-bottom: 20px">
-    <mat-checkbox [formControl]="lowerScoreWins">
-      {{ 'new-game.dialog.lower-score-wins' | translate }}
-    </mat-checkbox>
-  </div>
-
-  <div>
-    <mat-form-field>
-      <mat-label>{{ 'new-game.dialog.game-type' | translate }}</mat-label>
-      <mat-select [formControl]="gameType">
-        <mat-option [value]="'free'">{{ 'nav.game-settings.free' | translate }}</mat-option>
-        <mat-option [value]="'smallScores'">{{ 'nav.game-settings.small-scores' | translate }}</mat-option>
-        <mat-option [value]="'winOrLose'">{{ 'nav.game-settings.win-or-lose' | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  @if (data.recentPlayers.length > 0) {
-    <div class="player-dnd-container">
-      <h4>{{ 'new-game.dialog.players.selected' | translate }}</h4>
-      <div cdkDropList
-           #selectedPlayersElement="cdkDropList"
-           class="player-dnd-list"
-           [cdkDropListData]="selectedPlayers"
-           [cdkDropListConnectedTo]="[otherPlayersElement]"
-           (cdkDropListDropped)="drop($event)">
-        @for (item of selectedPlayers; track item) {
-          <div class="player-dnd-box" cdkDrag>
-            <span style="flex-grow: 1">{{ item }}</span>
-            <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Exclude player"
-                    (click)="excludePlayer(item)">
-              <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
-          </div>
-        }
-      </div>
-    </div>
-
-    <form style="display: flex; margin-top: 12px">
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>{{ 'new-game.dialog.players.new' | translate }}</mat-label>
-        <input matInput name="game" [formControl]="playerName">
-        @if (playerName.invalid) {
-          <mat-error>{{ 'new-game.dialog.players.invalid' | translate }}</mat-error>
-        }
-      </mat-form-field>
-      <button mat-icon-button type="submit" aria-label="Add player" style="margin-top: 4px"
-              [disabled]="playerName.invalid || !playerName.value"
-              (click)="addPlayerName()"
-      >
-        <mat-icon>add</mat-icon>
+    <button mat-stroked-button [matMenuTriggerFor]="lowerScoreWinsMenu" class="label-align-center">
+      <app-icon-crown></app-icon-crown>
+      @if (gameSettings.controls.lowerScoreWins.value) {
+        <ng-container>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_down</mat-icon>
+          <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
+        </ng-container>
+      } @else {
+        <ng-container>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_up</mat-icon>
+          <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
+        </ng-container>
+      }
+    </button>
+    <mat-menu #lowerScoreWinsMenu="matMenu">
+      <button mat-menu-item (click)="gameSettings.controls.lowerScoreWins.setValue(false)">
+        <div style="display: flex; align-items: center">
+          <app-icon-crown></app-icon-crown>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_up</mat-icon>
+          <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
+        </div>
       </button>
-    </form>
+      <button mat-menu-item (click)="gameSettings.controls.lowerScoreWins.setValue(true)">
+        <div style="display: flex; align-items: center">
+          <app-icon-crown></app-icon-crown>
+          <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_down</mat-icon>
+          <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
+        </div>
+      </button>
+    </mat-menu>
 
-    <div class="player-dnd-container" style="margin-top: 24px">
-      <h4>{{ 'new-game.dialog.players.others' | translate }}</h4>
-      <div cdkDropList
-           #otherPlayersElement="cdkDropList"
-           class="player-dnd-list"
-           [cdkDropListData]="otherPlayers"
-           [cdkDropListConnectedTo]="[selectedPlayersElement]"
-           (cdkDropListDropped)="drop($event)">
-        @for (item of otherPlayers; track item) {
-          <div class="player-dnd-box" cdkDrag>
-            <span style="flex-grow: 1">{{ item }}</span>
-            <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Forget player"
-                    (click)="forgetPlayer(item)">
-              <mat-icon>clear</mat-icon>
-            </button>
-            <mat-icon cdkDragHandle style="margin-left: 8px">drag_indicator</mat-icon>
-          </div>
+    <button mat-stroked-button [matMenuTriggerFor]="gameTypeMenu" class="label-align-center" style="margin-top: 12px">
+      @switch (gameSettings.controls.gameType.value) {
+        @case ('free') {
+          <ng-container>
+            <mat-icon>leaderboard</mat-icon>
+            <span>{{ 'nav.game-settings.free' | translate }}</span>
+          </ng-container>
         }
-      </div>
+        @case ('smallScores') {
+          <ng-container>
+            <mat-icon>exposure</mat-icon>
+            <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
+          </ng-container>
+        }
+        @case ('winOrLose') {
+          <ng-container>
+            <mat-icon>flaky</mat-icon>
+            <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
+          </ng-container>
+        }
+      }
+    </button>
+    <mat-menu #gameTypeMenu="matMenu">
+      <button mat-menu-item (click)="gameSettings.controls.gameType.setValue('free')">
+        <mat-icon>leaderboard</mat-icon>
+        <span>{{ 'nav.game-settings.free' | translate }}</span>
+      </button>
+      <button mat-menu-item (click)="gameSettings.controls.gameType.setValue('smallScores')">
+        <mat-icon>exposure</mat-icon>
+        <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
+      </button>
+      <button mat-menu-item (click)="gameSettings.controls.gameType.setValue('winOrLose')">
+        <mat-icon>flaky</mat-icon>
+        <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <div class="player-dnd-container">
+    <h4>{{ 'new-game.dialog.players.selected' | translate }}</h4>
+    <div cdkDropList
+         #selectedPlayersElement="cdkDropList"
+         class="player-dnd-list"
+         [cdkDropListData]="selectedPlayers"
+         [cdkDropListConnectedTo]="[otherPlayersElement]"
+         (cdkDropListDropped)="drop($event)">
+      @for (item of selectedPlayers; track item.playerName) {
+        <div class="player-dnd-box" cdkDrag>
+          <span style="flex-grow: 1">{{ item.playerName }}</span>
+          <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Exclude player"
+                  (click)="excludePlayer(item)">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+          <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+        </div>
+      }
     </div>
-  }
+  </div>
+
+  <form style="display: flex; margin-top: 12px">
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'new-game.dialog.players.new' | translate }}</mat-label>
+      <input matInput name="game" [formControl]="playerName">
+      @if (playerName.invalid) {
+        <mat-error>{{ 'new-game.dialog.players.invalid' | translate }}</mat-error>
+      }
+    </mat-form-field>
+    <button mat-icon-button type="submit" aria-label="Add player" style="margin-top: 4px"
+            [disabled]="playerName.invalid || !playerName.value"
+            (click)="addPlayerName()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </form>
+
+  <div class="player-dnd-container" style="margin-top: 24px">
+    <h4>{{ 'new-game.dialog.players.others' | translate }}</h4>
+    <div cdkDropList
+         #otherPlayersElement="cdkDropList"
+         class="player-dnd-list"
+         [cdkDropListData]="otherPlayers"
+         [cdkDropListConnectedTo]="[selectedPlayersElement]"
+         (cdkDropListDropped)="drop($event)">
+      @for (item of otherPlayers; track item.playerName) {
+        <div class="player-dnd-box" cdkDrag>
+          <span style="flex-grow: 1">{{ item.playerName }}</span>
+          <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Forget player"
+                  (click)="forgetPlayer(item)">
+            <mat-icon>clear</mat-icon>
+          </button>
+          <button mat-icon-button style="overflow: hidden" aria-label="Include player" (click)="includePlayer(item)">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+        </div>
+      }
+    </div>
+  </div>
 </div>
 
 <div mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-flat-button [mat-dialog-close]="exportGame()" [disabled]="gameName.invalid">
+  <button mat-flat-button [mat-dialog-close]="exportGame()" [disabled]="gameSettings.invalid">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

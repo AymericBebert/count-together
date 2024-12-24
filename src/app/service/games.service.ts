@@ -16,7 +16,7 @@ import {
 } from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ApiErrorService} from '../api-error/api-error.service';
-import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame} from '../model/game';
+import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame, PlayerEdition} from '../model/game';
 import {SocketService} from '../socket/socket.service';
 import {StorageService} from '../storage/storage.service';
 
@@ -137,6 +137,13 @@ export class GamesService {
       return;
     }
     this.socket.emit('game edit player', {gameId, playerId, playerName});
+  }
+
+  public gameEditPlayers(gameId: string, players: PlayerEdition[]): void {
+    if (gameId === 'offline') {
+      return;
+    }
+    this.socket.emit('game edit players', {gameId, players});
   }
 
   public gameRemovePlayer(gameId: string, playerId: number): void {

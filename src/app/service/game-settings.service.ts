@@ -55,6 +55,7 @@ export class GameSettingsService {
           recentPlayers,
           fromGame: currentGame,
         },
+        autoFocus: 'first-header',
       },
     )
       .afterClosed()

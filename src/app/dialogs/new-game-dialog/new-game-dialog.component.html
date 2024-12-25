@@ -48,19 +48,19 @@
       @switch (gameSettings.controls.gameType.value) {
         @case ('free') {
           <ng-container>
-            <mat-icon>leaderboard</mat-icon>
+            <mat-icon style="margin-right: 8px">leaderboard</mat-icon>
             <span>{{ 'nav.game-settings.free' | translate }}</span>
           </ng-container>
         }
         @case ('smallScores') {
           <ng-container>
-            <mat-icon>exposure</mat-icon>
+            <mat-icon style="margin-right: 8px">exposure</mat-icon>
             <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
           </ng-container>
         }
         @case ('winOrLose') {
           <ng-container>
-            <mat-icon>flaky</mat-icon>
+            <mat-icon style="margin-right: 8px">flaky</mat-icon>
             <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
           </ng-container>
         }

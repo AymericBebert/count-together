@@ -1,6 +1,7 @@
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfigTestingModule} from '../../testing/config-testing.module';
@@ -11,7 +12,7 @@ describe('NewGameDialogComponent', () => {
   let component: NewGameDialogComponent;
   let fixture: ComponentFixture<NewGameDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [
@@ -21,6 +22,7 @@ describe('NewGameDialogComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
+        provideExperimentalZonelessChangeDetection(),
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
@@ -30,9 +32,12 @@ describe('NewGameDialogComponent', () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    })
-      .compileComponents();
-  }));
+    });
+
+    fixture = TestBed.createComponent(NewGameDialogComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewGameDialogComponent);

@@ -87,10 +87,10 @@
     <div cdkDropList
          #selectedPlayersElement="cdkDropList"
          class="player-dnd-list"
-         [cdkDropListData]="selectedPlayers"
+         [cdkDropListData]="selectedPlayers()"
          [cdkDropListConnectedTo]="[otherPlayersElement]"
          (cdkDropListDropped)="drop($event)">
-      @for (item of selectedPlayers; track item.playerName) {
+      @for (item of selectedPlayers(); track item.playerName) {
         <div class="player-dnd-box" cdkDrag>
           <span style="flex-grow: 1">{{ item.playerName }}</span>
           <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Exclude player"
@@ -113,7 +113,7 @@
     </mat-form-field>
     <button mat-icon-button type="submit" aria-label="Add player" style="margin-top: 4px"
             [disabled]="playerName.invalid || !playerName.value"
-            (click)="addPlayerName()"
+            (click)="addPlayerName(); $event.preventDefault(); $event.stopPropagation()"
     >
       <mat-icon>add</mat-icon>
     </button>
@@ -124,10 +124,10 @@
     <div cdkDropList
          #otherPlayersElement="cdkDropList"
          class="player-dnd-list"
-         [cdkDropListData]="otherPlayers"
+         [cdkDropListData]="otherPlayers()"
          [cdkDropListConnectedTo]="[selectedPlayersElement]"
          (cdkDropListDropped)="drop($event)">
-      @for (item of otherPlayers; track item.playerName) {
+      @for (item of otherPlayers(); track item.playerName) {
         <div class="player-dnd-box" cdkDrag>
           <span style="flex-grow: 1">{{ item.playerName }}</span>
           <button mat-icon-button class="color-warn" style="overflow: hidden" aria-label="Forget player"

@@ -1,5 +1,5 @@
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -57,23 +57,23 @@ export class NewGameDialogComponent {
 
   public readonly playerName = new FormControl<string>('', {nonNullable: true});
 
-  public selectedPlayers: PlayerEdition[] = [];
-  public otherPlayers: PlayerEdition[] = [];
+  public readonly selectedPlayers = signal<PlayerEdition[]>([]);
+  public readonly otherPlayers = signal<PlayerEdition[]>([]);
 
   constructor() {
     if (this.data.fromGame) {
       const gamePlayers = this.data.fromGame.players.map(player => player.name);
-      this.selectedPlayers = gamePlayers.map(((playerName, i) => ({playerName, oldPlayerId: i})));
-      this.otherPlayers = this.data.recentPlayers
+      this.selectedPlayers.set(gamePlayers.map(((playerName, i) => ({playerName, oldPlayerId: i}))));
+      this.otherPlayers.set(this.data.recentPlayers
         .filter(rp => !gamePlayers.includes(rp.name))
-        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1})));
     } else {
-      this.selectedPlayers = this.data.recentPlayers
+      this.selectedPlayers.set(this.data.recentPlayers
         .filter(rp => rp.wasLatest)
-        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
-      this.otherPlayers = this.data.recentPlayers
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1})));
+      this.otherPlayers.set(this.data.recentPlayers
         .filter(rp => !rp.wasLatest)
-        .map(rp => ({playerName: rp.name, oldPlayerId: -1}));
+        .map(rp => ({playerName: rp.name, oldPlayerId: -1})));
     }
   }
 
@@ -85,12 +85,12 @@ export class NewGameDialogComponent {
         name: gameSettings.gameName,
         gameType: gameSettings.gameType,
         lowerScoreWins: gameSettings.lowerScoreWins,
-        players: this.selectedPlayers.map(player => ({
+        players: this.selectedPlayers().map(player => ({
           name: player.playerName,
           scores: [],
         })),
       },
-      playerEdition: this.selectedPlayers,
+      playerEdition: this.selectedPlayers(),
     };
   }
 
@@ -103,32 +103,32 @@ export class NewGameDialogComponent {
   }
 
   public addPlayerName(): void {
-    this.selectedPlayers = [
-      ...this.selectedPlayers.filter(p => p.playerName !== this.playerName.value),
+    this.selectedPlayers.update(players => [
+      ...players.filter(p => p.playerName !== this.playerName.value),
       {playerName: this.playerName.value, oldPlayerId: -1},
-    ];
+    ]);
     this.playerName.setValue('');
   }
 
   public includePlayer(player: PlayerEdition): void {
-    this.selectedPlayers = [
-      ...this.selectedPlayers.filter(p => p.playerName !== player.playerName),
+    this.selectedPlayers.update(players => [
+      ...players.filter(p => p.playerName !== player.playerName),
       player,
-    ];
-    this.otherPlayers = this.otherPlayers.filter(p => p.playerName !== player.playerName);
+    ]);
+    this.otherPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
   }
 
   public excludePlayer(player: PlayerEdition): void {
-    this.selectedPlayers = this.selectedPlayers.filter(n => n.playerName !== player.playerName);
-    this.otherPlayers = [
+    this.selectedPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
+    this.otherPlayers.update(players => [
       player,
-      ...this.otherPlayers.filter(n => n.playerName !== player.playerName),
-    ];
+      ...players.filter(p => p.playerName !== player.playerName),
+    ]);
   }
 
   public forgetPlayer(player: PlayerEdition): void {
-    this.selectedPlayers = this.selectedPlayers.filter(n => n.playerName !== player.playerName);
-    this.otherPlayers = this.otherPlayers.filter(n => n.playerName !== player.playerName);
+    this.selectedPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
+    this.otherPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
     this.gamesService?.forgetPlayer(player.playerName);
   }
 }

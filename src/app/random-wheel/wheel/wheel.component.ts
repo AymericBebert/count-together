@@ -24,7 +24,6 @@ import {debounceTime, delay, filter, skip, takeUntil} from 'rxjs/operators';
   imports: [],
 })
 export class WheelComponent implements AfterViewInit {
-
   public readonly names = input<string[] | null>(null);
   public readonly nb = input<number | null>(5);
   public readonly dark = input(false);

@@ -1,5 +1,6 @@
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ApiErrorService} from '../api-error/api-error.service';
@@ -16,6 +17,7 @@ describe('GameSettingsService', () => {
       ConfigTestingModule,
     ],
     providers: [
+      provideExperimentalZonelessChangeDetection(),
       GameSettingsService,
       GamesService,
       ApiErrorService,

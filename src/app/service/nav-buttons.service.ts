@@ -12,7 +12,7 @@ export class NavButtonsService {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
 
-  public backRouterNavigate = '';
+  private backRouterNavigate = '';
 
   private readonly _navButtonClicked$ = new Subject<string>();
 

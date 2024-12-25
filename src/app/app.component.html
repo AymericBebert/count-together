@@ -4,6 +4,7 @@
                [attr.role]="navService.pinSideNav() ? 'navigation' : 'dialog'"
                [mode]="navService.pinSideNav() ? 'side' : 'over'"
                [opened]="navService.pinSideNav()"
+               [disableClose]="navService.pinSideNav()"
                [autoFocus]="false"
                (click)="closeDrawer()">
 

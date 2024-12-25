@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -29,5 +29,5 @@ export class ScoreDialogComponent {
   private readonly data = inject<EditScoreDialogData>(MAT_DIALOG_DATA);
 
   public readonly isNew = this.data.isNew;
-  public score: number | null = this.data.score;
+  public readonly score = signal<number | null>(this.data.score);
 }

@@ -35,11 +35,11 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
   ],
 })
 export class HomeComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private gamesService = inject(GamesService);
-  private navButtonsService = inject(NavButtonsService);
-  private dialog = inject(MatDialog);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly gamesService = inject(GamesService);
+  private readonly navButtonsService = inject(NavButtonsService);
+  private readonly dialog = inject(MatDialog);
 
   public readonly gameFormControl = new FormControl('', {
     nonNullable: true,

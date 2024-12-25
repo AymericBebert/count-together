@@ -1,5 +1,5 @@
 /// <reference types="@types/dom-mediacapture-record" />
-import {inject, Injectable, InjectionToken, NgZone, OnDestroy} from '@angular/core';
+import {inject, Injectable, InjectionToken, OnDestroy} from '@angular/core';
 import {BehaviorSubject, from, Observable, of, OperatorFunction, Subject} from 'rxjs';
 import {catchError, filter, first, take, tap, timeout} from 'rxjs/operators';
 import {BrowserCompatibilityService} from './browser-compatibility.service';
@@ -30,7 +30,7 @@ export const RECORDER_CONFIG = new InjectionToken<Partial<RecorderConfig>>('reco
 export class RecordService implements OnDestroy {
   private readonly recorderConfig = inject<Partial<RecorderConfig> | null>(RECORDER_CONFIG, {optional: true});
   private readonly browserCompatibilityService = inject(BrowserCompatibilityService);
-  private readonly ngZone = inject(NgZone);
+  // private readonly ngZone = inject(NgZone);
 
   public error?: string;
   public status: RecorderStatus = 'notStarted';
@@ -149,14 +149,14 @@ export class RecordService implements OnDestroy {
     const mediaRecorder = new MediaRecorder(stream, options);
     mediaRecorder.onstart = () => this.onRecordStart();
     mediaRecorder.ondataavailable = (chunk) => {
-      this.ngZone.run(() => {
-        if (!this.recordStartTimestamp) {
-          this.recordStartTimestamp = chunk.timeStamp - this.chunkDurationMs;
-        }
-        if (this.config.maxDurationMs) {
-          this.recordProgress$.next((chunk.timeStamp - this.recordStartTimestamp) / this.config.maxDurationMs);
-        }
-      });
+      // this.ngZone.run(() => {
+      if (!this.recordStartTimestamp) {
+        this.recordStartTimestamp = chunk.timeStamp - this.chunkDurationMs;
+      }
+      if (this.config.maxDurationMs) {
+        this.recordProgress$.next((chunk.timeStamp - this.recordStartTimestamp) / this.config.maxDurationMs);
+      }
+      // });
       this.recordChunks.push(chunk.data);
     };
     mediaRecorder.onstop = () => this.onRecordStop();
@@ -165,7 +165,9 @@ export class RecordService implements OnDestroy {
 
   private onRecordStart(): void {
     this.recordChunks = [];
-    this.ngZone.run(() => this.status = 'recording');
+    // this.ngZone.run(() => {
+    this.status = 'recording';
+    // });
     if (!this.stream$.getValue()) {
       console.error('Stream not available');
       return;
@@ -200,7 +202,9 @@ export class RecordService implements OnDestroy {
     }
     this.record$.next(new Blob(this.recordChunks, options));
 
-    this.ngZone.run(() => this.status = 'ready');
+    // this.ngZone.run(() => {
+    this.status = 'ready';
+    // });
 
     console.log('recordChunks:', this.recordChunks);
   }

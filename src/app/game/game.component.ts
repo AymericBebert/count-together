@@ -156,20 +156,6 @@ export class GameComponent implements OnInit {
       });
   }
 
-  public addPlayer(): void {
-    const currentGame = this.gameOrThrow;
-    const newPlayerIndex = currentGame.players.length;
-    const newPlayerName = `P${newPlayerIndex + 1}`;
-    currentGame.players.push({name: newPlayerName, scores: []});
-    if (currentGame.gameType === 'smallScores' || currentGame.gameType === 'winOrLose') {
-      const maxScoreLength = Math.max(...currentGame.players.map(p => p.scores.length));
-      currentGame.players[currentGame.players.length - 1].scores.push(...new Array(maxScoreLength).fill(0));
-    }
-    this.gamesService.gameEditPlayer(currentGame.gameId, newPlayerIndex, newPlayerName);
-    this.gamesService.updateSavedGame(currentGame);
-    this.editPlayerNameOpen(currentGame.players.length - 1, true);
-  }
-
   public editPlayerNameOpen(p: number, isNew = false): void {
     this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(
       PlayerNameDialogComponent,
@@ -180,39 +166,6 @@ export class GameComponent implements OnInit {
       .subscribe(res => {
         this.editPlayerName(p, res);
       });
-  }
-
-  public removePlayer(): void {
-    const currentGame = this.gameOrThrow;
-    const currentNbPlayers = currentGame.players.length;
-    if (currentNbPlayers === 0) {
-      return;
-    }
-    const lastPlayer = currentGame.players[currentNbPlayers - 1];
-    if (lastPlayer.scores.filter(s => s !== null).length > 0) {
-      this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
-        ConfirmDialogComponent,
-        {
-          data: {
-            title: this.translate.instant('game.remove-player-dialog.title', {player: lastPlayer.name}),
-            message: this.translate.instant('game.remove-player-dialog.message'),
-            confirm: this.translate.instant('game.remove-player-dialog.confirm'),
-            dismiss: this.translate.instant('game.remove-player-dialog.dismiss'),
-          },
-        },
-      )
-        .afterClosed()
-        .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-          currentGame.players.pop();
-          this.gamesService.gameRemovePlayer(currentGame.gameId, currentNbPlayers - 1);
-          this.gamesService.updateSavedGame(currentGame);
-        });
-    } else {
-      currentGame.players.pop();
-      this.gamesService.gameRemovePlayer(currentGame.gameId, currentNbPlayers - 1);
-      this.gamesService.updateSavedGame(currentGame);
-    }
   }
 
   public addScore(p: number): void {

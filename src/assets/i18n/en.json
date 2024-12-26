@@ -28,12 +28,6 @@
       "message": "Player scores can be altered",
       "title": "Change game type?"
     },
-    "remove-player-dialog": {
-      "confirm": "Yes",
-      "dismiss": "Cancel",
-      "message": "The scores for this player will be lost.",
-      "title": "Remove player {{player}}?"
-    },
     "remove-row": "Remove row",
     "remove-score-dialog": {
       "confirm": "Yes",

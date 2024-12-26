@@ -4,7 +4,7 @@
       : ('edit.score.header' | translate)
   }}</h1>
 
-<form mat-dialog-content style="display: flex; align-items: center" (ngSubmit)="ref.close(score)">
+<form mat-dialog-content style="display: flex; align-items: center" (ngSubmit)="ref.close(score())">
   <mat-form-field subscriptSizing="dynamic" style="flex: 1 1 120px">
     <mat-label>{{ 'edit.score.label' | translate }}</mat-label>
     <input matInput type="number" autocomplete="off" name="score" [(ngModel)]="score" [autofocus]="true">
@@ -18,7 +18,7 @@
   <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-flat-button [mat-dialog-close]="score" type="submit">
+  <button mat-flat-button [mat-dialog-close]="score()" type="submit">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

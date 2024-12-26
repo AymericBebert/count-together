@@ -35,14 +35,10 @@ export class SoundSharingComponent {
     ? this.route.parent.paramMap.pipe(map(params => {
       const gameId = params.get('gameId');
       return gameId
-        ? {gameId, gamePayload: SoundSharingService.cutBytes(SoundSharingService.stringToBinary(gameId))}
+        ? {gameId, gamePayload: SoundSharingService.cutChar(SoundSharingService.stringToDtmf(gameId))}
         : null;
     }))
     : of(null);
-
-  private frequencyDiff = this.soundSharing.fftIndex1 - this.soundSharing.fftIndex0;
-  public analyseRange = Array(Math.round(this.frequencyDiff * 3 / 2)).fill(0)
-    .map((x, i) => i + Math.round(this.soundSharing.fftIndex0 - this.frequencyDiff / 4));
 
   shareSound(payload: string) {
     this.soundSharing.soundShare(payload).then(() => console.log('shared')).catch(() => console.log('error'));

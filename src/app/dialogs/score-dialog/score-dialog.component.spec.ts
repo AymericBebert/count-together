@@ -1,6 +1,7 @@
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {translateTestingModule} from '../../testing/translate-testing-module';
@@ -10,7 +11,7 @@ describe('ScoreDialogComponent', () => {
   let component: ScoreDialogComponent;
   let fixture: ComponentFixture<ScoreDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [
         ScoreDialogComponent,
@@ -18,6 +19,7 @@ describe('ScoreDialogComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
+        provideExperimentalZonelessChangeDetection(),
         {provide: MatDialogRef, useValue: {close: () => void 0}},
         {
           provide: MAT_DIALOG_DATA,
@@ -28,9 +30,12 @@ describe('ScoreDialogComponent', () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    })
-      .compileComponents();
-  }));
+    });
+
+    fixture = TestBed.createComponent(ScoreDialogComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ScoreDialogComponent);

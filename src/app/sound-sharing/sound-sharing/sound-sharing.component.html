@@ -8,7 +8,7 @@
   </div>
 }
 
-@if (soundSharing.dataArray(); as dataArray) {
+@if (soundSharing.analysing()) {
   <div style="margin-bottom: 20px">
     <button mat-flat-button class="color-tertiary" (click)="stopAnalysing()">
       <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
@@ -17,12 +17,8 @@
   </div>
 
   <div class="frequency-bars">
-    @for (i of analyseRange; track i) {
-      <div
-        class="frequency-bar"
-        [style.transform]="'scaleX(' + dataArray[i] * 100 / 256 + ')'"
-        [style.background-color]="i === soundSharing.fftIndex0 || i === soundSharing.fftIndex1 ? '#a21e6d' : '#3b1ea2'"
-      ></div>
+    @for (f of soundSharing.freqGraph(); track $index) {
+      <div class="frequency-bar" [style.transform]="'scaleX(' + f * 100 / 256 + ')'"></div>
     }
   </div>
 } @else {
@@ -55,6 +51,7 @@
       <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
       {{ 'sound-sharing.share-test' | translate }}
     </button>
+    <p class="binary-payload">* 10 34 22 03 27 18 12 05 #</p>
   </div>
 }
 

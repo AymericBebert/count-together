@@ -1,144 +1,217 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {RecordService} from './record.service';
 
+const dtmfFrequencies = [
+  [697, 770, 852, 941],
+  [1209, 1336, 1477],
+];
+
+const dtmfFrequencies_ = dtmfFrequencies.flat();
+
+const dtmfChars = [
+  ['1', '2', '3'],
+  ['4', '5', '6'],
+  ['7', '8', '9'],
+  ['*', '0', '#'],
+];
+
+function findDtmfIndex(data: Uint8Array, dtmfFreqs: number[], binWidthInHz: number): number {
+  let max = 128; // threshold
+  let index = -1;
+  for (let i = 0; i < dtmfFreqs.length; i++) {
+    const bin = Math.round(dtmfFreqs[i] / binWidthInHz);
+    if (data[bin] > max) {
+      max = data[bin];
+      index = i;
+    }
+  }
+  return index;
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+const dtmfCharToFrequencies: Record<string, { f1: number; f2: number }> = {
+  '1': {f1: 697, f2: 1209},
+  '2': {f1: 697, f2: 1336},
+  '3': {f1: 697, f2: 1477},
+  '4': {f1: 770, f2: 1209},
+  '5': {f1: 770, f2: 1336},
+  '6': {f1: 770, f2: 1477},
+  '7': {f1: 852, f2: 1209},
+  '8': {f1: 852, f2: 1336},
+  '9': {f1: 852, f2: 1477},
+  '*': {f1: 941, f2: 1209},
+  '0': {f1: 941, f2: 1336},
+  '#': {f1: 941, f2: 1477},
+};
+
+const charToDtmfMap: Record<string, string> = {
+  '0': '00', '1': '01', '2': '02', '3': '03', '4': '04', '5': '05',
+  '6': '06', '7': '07', '8': '08', '9': '09',
+  'a': '10', 'b': '11', 'c': '12', 'd': '13', 'e': '14', 'f': '15',
+  'g': '16', 'h': '17', 'i': '18', 'j': '19', 'k': '20', 'l': '21',
+  'm': '22', 'n': '23', 'o': '24', 'p': '25', 'q': '26', 'r': '27',
+  's': '28', 't': '29', 'u': '30', 'v': '31', 'w': '32', 'x': '33',
+  'y': '34', 'z': '35',
+  'A': '36', 'B': '37', 'C': '38', 'D': '39', 'E': '40', 'F': '41',
+  'G': '42', 'H': '43', 'I': '44', 'J': '45', 'K': '46', 'L': '47',
+  'M': '48', 'N': '49', 'O': '50', 'P': '51', 'Q': '52', 'R': '53',
+  'S': '54', 'T': '55', 'U': '56', 'V': '57', 'W': '58', 'X': '59',
+  'Y': '60', 'Z': '61',
+};
+/* eslint-enable @typescript-eslint/naming-convention */
+
+const dtmfToCharMap = Object.entries(charToDtmfMap).reduce<Record<string, string>>(
+  (acc, [k, v]) => ({...acc, [v]: k}),
+  {},
+);
+
 @Injectable()
 export class SoundSharingService {
   private readonly recordService = inject(RecordService);
+  public readonly fftSize = 1024;
 
-  public readonly fftSize = 4096;
-
-  public readonly gain0 = 1;
-  public readonly gain1 = 1;
-
-  public readonly frequency0 = 3800;
-  public readonly frequency1 = 4000;
-
-  public readonly fftIndex0 = Math.round(this.frequency0 / 11.72);
-  public readonly fftIndex1 = Math.round(this.frequency1 / 11.72);
+  public readonly freqGraph = signal<number[]>(dtmfFrequencies_.map(() => 0));
 
   public readonly receivedPayload = signal<string>('');
   public readonly receivedCode = signal<string>('');
 
-  public readonly dataArray = signal<Uint8Array | undefined>(undefined);
+  private readonly playTime = 120;
+  private readonly pauseTime = 20;
+  private readonly sampleTime = 10;
 
-  private readonly timeStep = 160;
+  private readonly comboToRegister = Math.round(0.75 * this.playTime / this.sampleTime);
 
-  private audioCtx!: AudioContext;
-  private analyser!: AnalyserNode;
-  private hearing = '';
+  public readonly analysing = signal<boolean>(false);
+  private analysingInterval: number | undefined;
 
-  private analysing = false;
-  private swapStatus = false;
-  private swapTime = performance.now();
-
-  public static stringToBinary(payload: string): string {
-    return [...atob(payload)].reduce((acc, cur) => acc + cur.charCodeAt(0).toString(2).padStart(8, '0'), '');
+  public static stringToDtmf(payload: string): string {
+    return [...payload].reduce((acc, cur) => acc + charToDtmfMap[cur], '');
   }
 
-  public static cutBytes(data: string): string {
-    return [...data].reduce((acc, cur, i) => acc && i % 8 === 0 ? acc + ' ' + cur : acc + cur, '');
+  public static cutChar(data: string): string {
+    return [...data].reduce((acc, cur, i) => acc && i % 2 === 0 ? acc + ' ' + cur : acc + cur, '');
   }
 
-  private static soundEncode(payload: string): string {
-    return '001' + SoundSharingService.stringToBinary(payload) + '100';
+  public static soundEncode(payload: string): string {
+    return '**' + SoundSharingService.stringToDtmf(payload) + '#';
   }
 
-  private static soundDecode(data: string): { cut: string; decoded: string } {
-    const cut = SoundSharingService.cutBytes(data.substring(1, data.length - 1));
-    const decoded = btoa(cut.split(' ').reduce(
-      (acc, cur) => acc + String.fromCharCode(parseInt(cur, 2)),
+  public static soundDecode(data: string): { cut: string; decoded: string } {
+    const cut = SoundSharingService.cutChar(data.replace(/^\*+/g, '').replace(/#+$/g, ''));
+    const decoded = cut.split(' ').reduce(
+      (acc, cur) => acc + (dtmfToCharMap[cur] || '?'),
       '',
-    ));
+    );
     return {cut, decoded};
   }
 
   public async soundShare(payload: string) {
-    console.log('Sound sharing', payload);
-
-    // const data = '1001110100101010';
-    // const data = '101010101010101010101010';
     const data = SoundSharingService.soundEncode(payload);
+    console.log('Sound sharing', payload, '->', data);
 
     const audioCtx = new (window.AudioContext)();
 
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    osc1.frequency.value = dtmfCharToFrequencies['*'].f1;
+    osc2.frequency.value = dtmfCharToFrequencies['*'].f2;
 
-    oscillator.connect(gainNode);
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = 1;
+
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+
     gainNode.connect(audioCtx.destination);
 
-    gainNode.gain.value = this.gain0;
-    oscillator.frequency.value = this.frequency0;
-    oscillator.type = 'sine';
-    oscillator.start();
+    osc1.start();
+    osc2.start();
 
     for (const x of data) {
-      oscillator.frequency.value = x === '1' ? this.frequency1 : this.frequency0;
-      gainNode.gain.value = x === '1' ? this.gain1 : this.gain0;
-      await new Promise(r => setTimeout(r, this.timeStep));
+      gainNode.gain.value = 1;
+      osc1.frequency.value = dtmfCharToFrequencies[x].f1;
+      osc2.frequency.value = dtmfCharToFrequencies[x].f2;
+      await new Promise(r => setTimeout(r, this.playTime));
+      gainNode.gain.value = 0;
+      await new Promise(r => setTimeout(r, this.pauseTime));
     }
 
-    oscillator.stop();
+    osc1.stop();
+    osc2.stop();
   }
 
   public stopAnalysing() {
-    this.analysing = false;
-    this.dataArray.set(undefined);
+    this.analysing.set(false);
+    this.freqGraph.set(dtmfFrequencies_.map(() => 0));
+    if (this.analysingInterval) {
+      clearInterval(this.analysingInterval);
+    }
     this.recordService.stopStream();
   }
 
   public soundAnalyse(): void {
     const stream = this.recordService.stream$.getValue();
     if (!stream) {
+      console.error('No audio stream available.');
       return;
     }
 
-    this.audioCtx = new (window.AudioContext)();
-    this.analyser = this.audioCtx.createAnalyser();
-    this.analyser.fftSize = this.fftSize;
-    const bufferLength = this.analyser.frequencyBinCount;
-    this.dataArray.set(new Uint8Array(bufferLength));
+    const audioCtx = new (window.AudioContext)();
 
-    const source = this.audioCtx.createMediaStreamSource(stream);
-    source.connect(this.analyser);
+    // Create source from the stream
+    const source = audioCtx.createMediaStreamSource(stream);
 
-    this.analysing = true;
-    this.runActiveListening();
+    // Create an analyser node
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = this.fftSize;
+    analyser.smoothingTimeConstant = 0.1;
+
+    source.connect(analyser);
+
+    // Frequency data buffer
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const binWidthInHz = audioCtx.sampleRate / this.fftSize;
+
+    this.receivedPayload.set('');
+    this.receivedCode.set('');
+    this.analysing.set(true);
+
+    let last: string;
+    let counter = 0;
+
+    this.analysingInterval = setInterval(() => {
+      analyser.getByteFrequencyData(dataArray);
+
+      this.freqGraph.set(dtmfFrequencies_.map((_, i) => dataArray[Math.round(dtmfFrequencies_[i] / binWidthInHz)]));
+
+      const x = findDtmfIndex(dataArray, dtmfFrequencies[0], binWidthInHz);
+      const y = findDtmfIndex(dataArray, dtmfFrequencies[1], binWidthInHz);
+      if (x >= 0 && y >= 0) {
+        const c = dtmfChars[x][y];
+        if (last == c) {
+          counter++;
+          if (counter > this.comboToRegister) {
+            this.onCharReceived(c);
+            counter = 0;
+          }
+        } else {
+          counter = 0;
+        }
+        last = c;
+      }
+    }, this.sampleTime) as unknown as number;
   }
 
-  public runActiveListening() {
-    if (this.analysing) {
-      requestAnimationFrame(this.runActiveListening.bind(this));
-    } else {
-      return;
+  public onCharReceived(c: string): void {
+    this.receivedPayload.update(p => p + c);
+    if (c === '*') {
+      this.receivedPayload.set('*');
     }
-
-    const dataArray = this.dataArray();
-    if (!dataArray) {
-      throw new Error('No dataArray');
-    }
-    this.analyser.getByteFrequencyData(dataArray);
-    const f0 = dataArray[this.fftIndex0];
-    const f1 = dataArray[this.fftIndex1];
-
-    if (f0 > 128 && f1 > 128 && (this.swapStatus && f1 >= f0 || !this.swapStatus && f1 < f0)) {
-      this.swapStatus = f1 < f0;
-      const newSwapTime = performance.now();
-      const swapDelta = newSwapTime - this.swapTime;
-      this.swapTime = newSwapTime;
-      const steps = Math.round(swapDelta / this.timeStep);
-      if (steps <= 10) {
-        new Array(steps).fill(1).forEach(() => this.hearing += this.swapStatus ? '1' : '0');
-        this.receivedPayload.set(SoundSharingService.cutBytes(this.hearing.substring(1)));
-      }
-      console.log(this.swapStatus ? '1' : '0', steps, swapDelta);
-    }
-
-    if (this.hearing && (performance.now() - this.swapTime > this.timeStep * 10)) {
-      const {cut, decoded} = SoundSharingService.soundDecode(this.hearing);
-      this.receivedPayload.set(cut);
-      this.receivedCode.set(decoded);
-      this.hearing = '';
+    if (c === '#') {
+      const result = SoundSharingService.soundDecode(this.receivedPayload());
+      this.receivedCode.set(result.decoded);
+      this.stopAnalysing();
     }
   }
 }

@@ -1,6 +1,7 @@
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from './app.component';
@@ -12,7 +13,7 @@ describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [
         AppComponent,
@@ -22,17 +23,16 @@ describe('AppComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
+        provideExperimentalZonelessChangeDetection(),
         {provide: ActivatedRoute, useValue: {outlet: 'primary', data: {}}},
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    }).compileComponents();
-  }));
+    });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

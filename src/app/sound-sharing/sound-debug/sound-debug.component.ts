@@ -1,4 +1,4 @@
-import {Component, DestroyRef, ElementRef, inject, OnInit, viewChild} from '@angular/core';
+import {Component, DestroyRef, ElementRef, inject, OnInit, signal, viewChild} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -6,14 +6,12 @@ import {TranslateModule} from '@ngx-translate/core';
 import {first} from 'rxjs/operators';
 import {DebugItemComponent} from '../debug-item/debug-item.component';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
-import {SoundSharingService} from '../sound-sharing.service';
 
 @Component({
   selector: 'app-sound-sharing',
   templateUrl: './sound-debug.component.html',
   styleUrls: ['./sound-debug.component.scss'],
   providers: [
-    SoundSharingService,
     RecordService,
     {provide: RECORDER_CONFIG, useValue: {audioOnly: true}},
   ],
@@ -27,12 +25,12 @@ import {SoundSharingService} from '../sound-sharing.service';
 export class SoundDebugComponent implements OnInit {
   public readonly recordService = inject(RecordService);
 
-  readonly replayAudioElement = viewChild.required<ElementRef<HTMLAudioElement>>('replayAudio');
-  public replayAvailable = false;
+  private readonly replayAudioElement = viewChild.required<ElementRef<HTMLAudioElement>>('replayAudio');
+  public readonly replayAvailable = signal<boolean>(false);
   // public micPermission: PermissionState | null = null;
-  public mediaDevices = navigator.mediaDevices;
-  public userMedia = navigator.mediaDevices?.getUserMedia({audio: true});
-  public mediaRecorderType = typeof MediaRecorder;
+  public readonly mediaDevices = navigator.mediaDevices;
+  public readonly userMedia = navigator.mediaDevices?.getUserMedia({audio: true});
+  public readonly mediaRecorderType = typeof MediaRecorder;
 
   private recordBlob: Blob | undefined = undefined;
 
@@ -45,7 +43,7 @@ export class SoundDebugComponent implements OnInit {
       .subscribe(recordBlob => {
         this.recordBlob = recordBlob;
         this.replayAudioElement().nativeElement.src = URL.createObjectURL(recordBlob);
-        this.replayAvailable = true;
+        this.replayAvailable.set(true);
       });
 
     // this.askUserPermission();

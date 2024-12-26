@@ -1,18 +1,25 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {RankIconComponent} from './rank-icon.component';
 
 describe('RankIconComponent', () => {
   let component: RankIconComponent;
   let fixture: ComponentFixture<RankIconComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [
         RankIconComponent,
       ],
-    })
-      .compileComponents();
-  }));
+      providers: [
+        provideExperimentalZonelessChangeDetection(),
+      ],
+    });
+
+    fixture = TestBed.createComponent(RankIconComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RankIconComponent);

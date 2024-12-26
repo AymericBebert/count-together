@@ -1,6 +1,7 @@
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {EMPTY} from 'rxjs';
@@ -13,7 +14,7 @@ describe('GameComponent', () => {
   let component: GameComponent;
   let fixture: ComponentFixture<GameComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [
         GameComponent,
@@ -23,13 +24,17 @@ describe('GameComponent', () => {
         ConfigTestingModule,
       ],
       providers: [
+        provideExperimentalZonelessChangeDetection(),
         {provide: ActivatedRoute, useValue: {paramMap: EMPTY}},
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    })
-      .compileComponents();
-  }));
+    });
+
+    fixture = TestBed.createComponent(GameComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GameComponent);

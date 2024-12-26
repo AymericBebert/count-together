@@ -22,4 +22,11 @@ describe('SoundSharingService', () => {
     const service: SoundSharingService = TestBed.inject(SoundSharingService);
     expect(service).toBeTruthy();
   });
+
+  it('should encode and decode the same string', () => {
+    const payload = 'test123';
+    const encoded = SoundSharingService.soundEncode(payload);
+    const decoded = SoundSharingService.soundDecode(encoded);
+    expect(decoded.decoded).toEqual(payload);
+  });
 });

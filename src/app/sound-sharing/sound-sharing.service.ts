@@ -15,13 +15,13 @@ const dtmfChars = [
   ['*', '0', '#'],
 ];
 
-function findDtmfIndex(data: Uint8Array, dtmfFreqs: number[], binWidthInHz: number): number {
-  let max = 128; // threshold
+function findDtmfIndex(data: Uint8Array, freqIndices: number[]): number {
+  let max = 64; // threshold
   let index = -1;
-  for (let i = 0; i < dtmfFreqs.length; i++) {
-    const bin = Math.round(dtmfFreqs[i] / binWidthInHz);
-    if (data[bin] > max) {
-      max = data[bin];
+  for (let i = 0; i < freqIndices.length; i++) {
+    const amplitudeAtFrequency = data[freqIndices[i]];
+    if (amplitudeAtFrequency > max) {
+      max = amplitudeAtFrequency;
       index = i;
     }
   }
@@ -158,35 +158,41 @@ export class SoundSharingService {
 
     const audioCtx = new (window.AudioContext)();
 
+    // Calculate DTMF frequency indices
+    const binWidthInHz = audioCtx.sampleRate / this.fftSize;
+    const freqIndices = dtmfFrequencies_.map(f => Math.round(f / binWidthInHz));
+    const freqIndices0 = dtmfFrequencies[0].map(f => Math.round(f / binWidthInHz));
+    const freqIndices1 = dtmfFrequencies[1].map(f => Math.round(f / binWidthInHz));
+
     // Create source from the stream
     const source = audioCtx.createMediaStreamSource(stream);
 
     // Create an analyser node
     const analyser = audioCtx.createAnalyser();
     analyser.fftSize = this.fftSize;
-    analyser.smoothingTimeConstant = 0.1;
+    analyser.smoothingTimeConstant = 0;
 
     source.connect(analyser);
 
     // Frequency data buffer
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    const binWidthInHz = audioCtx.sampleRate / this.fftSize;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
+    // Reset received data
     this.receivedPayload.set('');
     this.receivedCode.set('');
     this.analysing.set(true);
 
+    // Start analysing
     let last: string;
     let counter = 0;
 
     this.analysingInterval = setInterval(() => {
       analyser.getByteFrequencyData(dataArray);
 
-      this.freqGraph.set(dtmfFrequencies_.map((_, i) => dataArray[Math.round(dtmfFrequencies_[i] / binWidthInHz)]));
+      this.freqGraph.set(freqIndices.map(fi => dataArray[fi]));
 
-      const x = findDtmfIndex(dataArray, dtmfFrequencies[0], binWidthInHz);
-      const y = findDtmfIndex(dataArray, dtmfFrequencies[1], binWidthInHz);
+      const x = findDtmfIndex(dataArray, freqIndices0);
+      const y = findDtmfIndex(dataArray, freqIndices1);
       if (x >= 0 && y >= 0) {
         const c = dtmfChars[x][y];
         if (last == c) {
@@ -203,7 +209,7 @@ export class SoundSharingService {
     }, this.sampleTime) as unknown as number;
   }
 
-  public onCharReceived(c: string): void {
+  private onCharReceived(c: string): void {
     this.receivedPayload.update(p => p + c);
     if (c === '*') {
       this.receivedPayload.set('*');

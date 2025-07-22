@@ -46,6 +46,13 @@ export class SoundDebugComponent implements OnInit {
 
     // this.askUserPermission();
     // this.checkMicAccessPermission();
+
+    this.destroyRef.onDestroy(async () => {
+      if (this.userMedia) {
+        const stream = await this.userMedia;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    });
   }
 
   askUserPermission(): void {

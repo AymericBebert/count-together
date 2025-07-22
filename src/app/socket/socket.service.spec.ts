@@ -1,4 +1,4 @@
-import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {provideZonelessChangeDetection} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SocketTestingModule} from '../testing/socket-testing.module';
@@ -11,7 +11,7 @@ describe('SocketService', () => {
       SocketTestingModule,
     ],
     providers: [
-      provideExperimentalZonelessChangeDetection(),
+      provideZonelessChangeDetection(),
     ],
   }));
 

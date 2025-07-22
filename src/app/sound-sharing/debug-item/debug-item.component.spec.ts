@@ -1,4 +1,4 @@
-import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {DebugItemComponent} from './debug-item.component';
 
@@ -12,7 +12,7 @@ describe('DebugItemComponent', () => {
         DebugItemComponent,
       ],
       providers: [
-        provideExperimentalZonelessChangeDetection(),
+        provideZonelessChangeDetection(),
       ],
     })
       .compileComponents();

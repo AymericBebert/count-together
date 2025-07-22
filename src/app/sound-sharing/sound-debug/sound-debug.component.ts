@@ -24,6 +24,7 @@ import {RECORDER_CONFIG, RecordService} from '../record.service';
 })
 export class SoundDebugComponent implements OnInit {
   public readonly recordService = inject(RecordService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly replayAudioElement = viewChild.required<ElementRef<HTMLAudioElement>>('replayAudio');
   public readonly replayAvailable = signal<boolean>(false);
@@ -33,9 +34,6 @@ export class SoundDebugComponent implements OnInit {
   public readonly mediaRecorderType = typeof MediaRecorder;
 
   private recordBlob: Blob | undefined = undefined;
-
-  constructor(private readonly destroyRef: DestroyRef) {
-  }
 
   ngOnInit(): void {
     this.recordService.record$
@@ -48,6 +46,13 @@ export class SoundDebugComponent implements OnInit {
 
     // this.askUserPermission();
     // this.checkMicAccessPermission();
+
+    this.destroyRef.onDestroy(async () => {
+      if (this.userMedia) {
+        const stream = await this.userMedia;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    });
   }
 
   askUserPermission(): void {

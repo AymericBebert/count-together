@@ -1,4 +1,4 @@
-import {provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {provideZonelessChangeDetection} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ApiErrorService} from './api-error.service';
@@ -9,7 +9,7 @@ describe('ApiErrorService', () => {
       MatSnackBarModule,
     ],
     providers: [
-      provideExperimentalZonelessChangeDetection(),
+      provideZonelessChangeDetection(),
       ApiErrorService,
     ],
   }));

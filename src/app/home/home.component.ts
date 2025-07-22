@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   private readonly gamesService = inject(GamesService);
   private readonly navButtonsService = inject(NavButtonsService);
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
   public readonly gameFormControl = new FormControl('', {
     nonNullable: true,
@@ -52,7 +53,7 @@ export class HomeComponent implements OnInit {
 
   public readonly visitedGames = signal<IStoredGame[]>([]);
 
-  constructor(private readonly destroyRef: DestroyRef) {
+  constructor() {
     this.getVisitedGames();
 
     this.navButtonsService.navButtonClicked$('nav-tool.wheel')

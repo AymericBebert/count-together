@@ -49,6 +49,7 @@ export class GameComponent implements OnInit {
   private readonly socket = inject(SocketService);
   private readonly dialog = inject(MatDialog);
   private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly destroyRef = inject(DestroyRef);
 
   public readonly game$ = this.gamesService.currentGame$;
 
@@ -88,7 +89,7 @@ export class GameComponent implements OnInit {
     );
   }
 
-  constructor(private readonly destroyRef: DestroyRef) {
+  constructor() {
     this.destroyRef.onDestroy(() => this.gamesService.setCurrentGameId(null));
   }
 

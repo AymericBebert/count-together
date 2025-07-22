@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   HostListener,
+  inject,
   input,
   viewChild
 } from '@angular/core';
@@ -24,6 +25,8 @@ import {debounceTime, delay, filter, skip, takeUntil} from 'rxjs/operators';
   imports: [],
 })
 export class WheelComponent implements AfterViewInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public readonly names = input<string[] | null>(null);
   public readonly nb = input<number | null>(5);
   public readonly dark = input(false);
@@ -70,7 +73,7 @@ export class WheelComponent implements AfterViewInit {
     .x(d => d[0])
     .y(d => d[1]);
 
-  constructor(private readonly destroyRef: DestroyRef) {
+  constructor() {
     toObservable(this.computedNb).pipe(
       filter(() => this.arrowPrepared),
       takeUntilDestroyed(this.destroyRef),

@@ -65,7 +65,7 @@ export class NavService {
   }
 
   public setLanguage(lang: string): void {
-    if (lang === this.translate.currentLang) {
+    if (lang === this.translate.getCurrentLang()) {
       return;
     }
     this.translate.use(lang);

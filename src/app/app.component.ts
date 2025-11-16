@@ -54,7 +54,7 @@ export class AppComponent {
     const route = inject(ActivatedRoute);
 
     translate.addLangs(['fr', 'en']);
-    translate.setDefaultLang('fr');
+    translate.setFallbackLang('fr');
     this.navService.applyStoredLanguage();
     this.navService.applyStoredPinSideNav();
 

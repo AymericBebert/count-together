@@ -1,10 +1,9 @@
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch} from '@angular/common/http';
 import {isDevMode, provideZonelessChangeDetection} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideRouter} from '@angular/router';
 import {provideServiceWorker} from '@angular/service-worker';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {provideTranslateLoader, provideTranslateService, TranslateLoader} from '@ngx-translate/core';
 import {from, Observable} from 'rxjs';
 import {AppComponent} from './app/app.component';
 import {routes} from './app/app.routes';
@@ -28,12 +27,8 @@ bootstrapApplication(AppComponent, {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: BundledTranslateLoader,
-      },
-    }).providers!,
-    provideAnimations(),
+    provideTranslateService({
+      loader: provideTranslateLoader(BundledTranslateLoader),
+    }),
   ],
 }).catch((err) => console.error(err));

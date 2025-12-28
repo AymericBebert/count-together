@@ -5,7 +5,6 @@ export interface AppConfig {
   backendUrl: string;
   websiteUrl: string;
   debugSocket: boolean;
-  debugHttp: boolean;
   tokenLength: number;
 }
 
@@ -17,7 +16,6 @@ export function appConfigFactory(): AppConfig {
     backendUrl: appConstants.backendUrl || 'http://localhost:4050',
     websiteUrl: appConstants.websiteUrl || 'http://localhost:4500',
     debugSocket: appConstants.debugSocket || false,
-    debugHttp: appConstants.debugHttp || false,
     tokenLength: appConstants.tokenLength || 8,
   };
 }

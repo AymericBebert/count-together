@@ -1,6 +1,6 @@
-import {simplifyURL} from './utils';
+import {simplifyURL} from './simplify-url';
 
-describe('Utils', () => {
+describe('simplifyUrl', () => {
 
   it('simple case', () => {
     expect(simplifyURL(['a', 'b', 'c'])).toEqual(['a', 'b', 'c']);

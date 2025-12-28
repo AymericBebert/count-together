@@ -1,18 +1,22 @@
-<mat-sidenav-container>
+<mat-sidenav-container (backdropClick)="closeDrawer()">
 
   <mat-sidenav #drawer class="sidenav" fixedInViewport position="end"
                [attr.role]="navService.pinSideNav() ? 'navigation' : 'dialog'"
                [mode]="navService.pinSideNav() ? 'side' : 'over'"
                [opened]="navService.pinSideNav()"
                [disableClose]="navService.pinSideNav()"
-               [autoFocus]="false"
-               (click)="closeDrawer()">
+               [autoFocus]="false">
 
     <mat-toolbar style="padding: 0 16px">
       <span style="flex-grow: 1">{{ 'nav.menu-title' | translate }}</span>
       @if (navService.pinSideNav()) {
-        <button mat-icon-button type="button" aria-label="Close sidenav" (click)="navService.setPinSideNav(false)">
-          <mat-icon>menu</mat-icon>
+        <button mat-icon-button type="button" aria-label="Close sidenav"
+                (click)="$event.stopPropagation(); navService.setPinSideNav(false)">
+          <mat-icon aria-label="Side nav close icon"
+                    aria-hidden="false"
+                    [matBadge]="navService.notificationBadge()">
+            menu
+          </mat-icon>
         </button>
       }
     </mat-toolbar>
@@ -23,14 +27,14 @@
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(false)"
                        class="selectable even"
                        [class.selected]="!gameSettings.lowerScoreWins">
-          <app-icon-crown style="vertical-align: sub"></app-icon-crown>
+          <app-icon-crown></app-icon-crown>
           <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_up</mat-icon>
           <span>{{ 'nav.game-settings.max-wins' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setLowerScoreWins(true)"
                        class="selectable even"
                        [class.selected]="gameSettings.lowerScoreWins">
-          <app-icon-crown style="vertical-align: sub"></app-icon-crown>
+          <app-icon-crown></app-icon-crown>
           <mat-icon style="margin: 0 5px 0 -4px">arrow_drop_down</mat-icon>
           <span>{{ 'nav.game-settings.min-wins' | translate }}</span>
         </mat-list-item>
@@ -38,24 +42,24 @@
         <mat-list-item (click)="gameSettingsService.setGameType('free')"
                        class="selectable odd"
                        [class.selected]="gameSettings.gameType === 'free'">
-          <mat-icon style="margin-right: 5px">leaderboard</mat-icon>
+          <mat-icon>leaderboard</mat-icon>
           <span>{{ 'nav.game-settings.free' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('smallScores')"
                        class="selectable odd"
                        [class.selected]="gameSettings.gameType === 'smallScores'">
-          <mat-icon style="margin-right: 5px">exposure</mat-icon>
+          <mat-icon>exposure</mat-icon>
           <span>{{ 'nav.game-settings.small-scores' | translate }}</span>
         </mat-list-item>
         <mat-list-item (click)="gameSettingsService.setGameType('winOrLose')"
                        class="selectable odd"
                        [class.selected]="gameSettings.gameType === 'winOrLose'">
-          <mat-icon style="margin-right: 5px">flaky</mat-icon>
+          <mat-icon>flaky</mat-icon>
           <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
         </mat-list-item>
         <div style="height: 10px"></div>
-        <mat-list-item (click)="gameSettingsService.editPlayers(); closeDrawer()">
-          <mat-icon style="margin-right: 5px">edit</mat-icon>
+        <mat-list-item (click)="closeDrawer(); gameSettingsService.editPlayers()">
+          <mat-icon>edit</mat-icon>
           <span>{{ 'nav.game-settings.edit-players' | translate }}</span>
         </mat-list-item>
       }
@@ -63,8 +67,8 @@
       @if (navService.navTools().length > 0) {
         <h3 matSubheader>{{ 'nav.tools' | translate }}</h3>
         @for (tool of navService.navTools(); track tool.name) {
-          <mat-list-item (click)="navService.navToolClicked(tool.name); closeDrawer()">
-            <mat-icon style="margin-right: 5px">{{ tool.icon }}</mat-icon>
+          <mat-list-item (click)="drawerToolClicked(tool)">
+            <mat-icon>{{ tool.icon }}</mat-icon>
             <span>{{ tool.name | translate }}</span>
           </mat-list-item>
         }
@@ -80,20 +84,18 @@
       </mat-list-item>
 
       <mat-list-item>
-        <app-change-language (langSet)="navService.setLanguage($event); closeDrawer()"></app-change-language>
+        <app-change-language (langSet)="closeDrawer(); navService.setLanguage($event)"></app-change-language>
       </mat-list-item>
 
-      @if (navService.displayUpdatesAvailable()) {
-        <mat-list-item (click)="navService.update()">
-          <mat-icon class="color-warn" style="margin-right: 5px">update</mat-icon>
-          <span>{{ 'nav.update-available' | translate }}</span>
-        </mat-list-item>
-      }
-
       @if (navService.displayUpdatesActivated()) {
-        <mat-list-item>
-          <mat-icon style="margin-right: 5px">sync</mat-icon>
+        <mat-list-item (click)="navService.refreshPage()">
+          <mat-icon>sync</mat-icon>
           <span>{{ 'nav.update-activated' | translate }}</span>
+        </mat-list-item>
+      } @else if (navService.displayUpdatesAvailable()) {
+        <mat-list-item (click)="navService.update()">
+          <mat-icon class="color-warn">update</mat-icon>
+          <span>{{ 'nav.update-available' | translate }}</span>
         </mat-list-item>
       }
 
@@ -108,25 +110,26 @@
   <mat-sidenav-content>
 
     <!-- Toolbar on top -->
-    <mat-toolbar>
+    <mat-toolbar [class.slim]="deviceService.slimToolbar()">
 
       @if (navService.showBackButton()) {
-        <button type="button" aria-label="Back button" mat-icon-button (click)="navService.backClicked()">
+        <button type="button" aria-label="Back button" mat-icon-button (click)="navButtonsService.backClicked()">
           <mat-icon aria-label="Back arrow icon">arrow_back</mat-icon>
         </button>
+      } @else {
+        <app-icon-crown routerLink="/" class="main-icon hide-focus"
+                        [size]="deviceService.slimToolbar() ? 30 : 36"
+        ></app-icon-crown>
       }
 
-      <app-icon-crown routerLink="/" class="main-icon hide-focus"
-                      [size]="deviceService.slimToolbar() ? 30 : 36"
-      ></app-icon-crown>
-      <span routerLink="/" class="main-title hide-focus">
-        {{ navService.mainTitle() ? (navService.mainTitle() | translate) : ('app-name' | translate) }}
-      </span>
+      <span routerLink="/" class="main-title hide-focus">{{
+          navService.mainTitle() ? (navService.mainTitle() | translate) : ('app-name' | translate)
+        }}</span>
 
-      @for (buttonId of navService.navButtons(); track buttonId) {
+      @for (buttonId of navService.navButtons(); track $index) {
         <button type="button" mat-icon-button
                 [attr.aria-label]="'Button' + buttonId"
-                (click)="navService.navButtonClicked(buttonId)">
+                (click)="navButtonsService.navButtonClicked(buttonId)">
           <mat-icon>{{ buttonId }}</mat-icon>
         </button>
       }
@@ -135,8 +138,7 @@
         <button mat-icon-button type="button" aria-label="Open sidenav" (click)="openDrawer()">
           <mat-icon aria-label="Side nav toggle icon"
                     aria-hidden="false"
-                    [matBadge]="navService.notificationBadge()"
-                    matBadgeColor="warn">
+                    [matBadge]="navService.notificationBadge()">
             menu
           </mat-icon>
         </button>

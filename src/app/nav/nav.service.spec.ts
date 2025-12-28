@@ -2,26 +2,27 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {RouterTestingModule} from '@angular/router/testing';
+import {ConfigTestingModule} from '../testing/config-testing.module';
 import {translateTestingModule} from '../testing/translate-testing-module';
-import {NavButtonsService} from './nav-buttons.service';
+import {UpdaterTestingModule} from '../testing/updater-testing.module';
+import {NavService} from './nav.service';
 
-describe('NavButtonsService', () => {
+describe('NavService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       translateTestingModule,
-      RouterTestingModule,
+      ConfigTestingModule,
+      UpdaterTestingModule,
     ],
     providers: [
       provideZonelessChangeDetection(),
-      NavButtonsService,
       provideHttpClient(withInterceptorsFromDi()),
       provideHttpClientTesting(),
     ],
   }));
 
   it('should be created', () => {
-    const service: NavButtonsService = TestBed.inject(NavButtonsService);
+    const service = TestBed.inject(NavService);
     expect(service).toBeTruthy();
   });
 });

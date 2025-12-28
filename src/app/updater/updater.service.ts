@@ -1,6 +1,6 @@
 import {ApplicationRef, inject, Injectable} from '@angular/core';
 import {SwUpdate} from '@angular/service-worker';
-import {BehaviorSubject, concat, interval} from 'rxjs';
+import {BehaviorSubject, concat, interval, switchMap} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 @Injectable({
@@ -42,13 +42,11 @@ export class UpdaterService {
     const checkInterval$ = interval(5 * 60 * 1000);
     const everyCheckIntervalOnceAppIsStable$ = concat(appIsStable$, checkInterval$);
 
-    everyCheckIntervalOnceAppIsStable$.subscribe(async () => {
-      try {
-        const updateFound = await swUpdate.checkForUpdate();
-        console.log(updateFound ? 'A new version is available.' : 'Already on the latest version.');
-      } catch (err) {
-        console.error('Failed to check for updates:', err);
-      }
+    everyCheckIntervalOnceAppIsStable$.pipe(
+      switchMap(() => swUpdate.checkForUpdate())
+    ).subscribe({
+      next: updateFound => console.log(updateFound ? 'A new version is available.' : 'Already on the latest version.'),
+      error: err => console.error('Failed to check for updates:', err),
     });
   }
 
@@ -56,6 +54,6 @@ export class UpdaterService {
     if (!this.swUpdate.isEnabled) {
       return;
     }
-    this.swUpdate.activateUpdate().then(() => document.location.reload());
+    void this.swUpdate.activateUpdate().then(() => document.location.reload());
   }
 }

@@ -4,6 +4,7 @@ import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
+import {EMPTY} from 'rxjs';
 import {AppComponent} from './app.component';
 import {ConfigTestingModule} from './testing/config-testing.module';
 import {translateTestingModule} from './testing/translate-testing-module';
@@ -24,7 +25,7 @@ describe('AppComponent', () => {
       ],
       providers: [
         provideZonelessChangeDetection(),
-        {provide: ActivatedRoute, useValue: {outlet: 'primary', data: {}}},
+        {provide: ActivatedRoute, useValue: {queryParamMap: EMPTY, outlet: 'primary', data: {}}},
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],

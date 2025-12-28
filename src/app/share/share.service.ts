@@ -13,7 +13,13 @@ export class ShareService {
 
   public shareOrCopy(title: string, text: string, url: string): void {
     if (this.canShare) {
-      void window.navigator.share({title, text, url});
+      window.navigator.share({title, text, url}).catch(err => {
+        if (err instanceof Error && err.name === 'AbortError') {
+          console.log('Share aborted');
+          return;
+        }
+        console.error(err);
+      });
     } else {
       navigator.clipboard.writeText(url).then(() => {
         this.snackBar.open(`${this.translate.instant('share.copied')} ${url}`, '', {duration: 3000});

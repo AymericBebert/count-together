@@ -17,7 +17,7 @@ export class SettingsService {
     this.setDarkMode(!!JSON.parse(darkModeFromStorage || 'false'), false);
   }
 
-  public setDarkMode(isDark: boolean, register: boolean): void {
+  public setDarkMode(isDark: boolean, register = true): void {
     if (register) {
       this.storageService.setItem('darkMode', JSON.stringify(isDark));
     }

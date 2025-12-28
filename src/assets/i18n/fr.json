@@ -49,16 +49,15 @@
   "home": {
     "form": {
       "game-not-found": "Partie non trouvée",
-      "label": "Code de partie",
+      "label": "Rejoindre une partie",
       "placeholder": "8 caractères"
     },
-    "new-game": "Nouveau jeu",
-    "offline": "Hors-ligne",
-    "sound-share": "Recevoir un code",
+    "new-game": "Nouvelle partie",
+    "offline": "Mode hors-ligne",
     "visited-games": {
       "delete": "Supprimer des parties",
       "delete-stop": "Arrêter la suppression",
-      "title": "Jeux visités"
+      "title": "Parties précédentes"
     },
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
@@ -77,6 +76,7 @@
     "duplicate": "Dupliquer",
     "save-offline": "Passer hors ligne",
     "sound-share": "Partage sonore",
+    "sound-share-receive": "Recevoir un code",
     "wheel": "Roue Aléatoire"
   },
   "nav": {

@@ -1,16 +1,16 @@
 <p style="margin: 0 0 24px">{{ 'home.welcome' | translate }}</p>
 
-<button mat-flat-button [routerLink]="['game', 'offline']">
-  {{ 'home.offline' | translate }}
+<button mat-flat-button (click)="newGameOpen()">
+  {{ 'home.new-game' | translate }}
 </button>
 <br>
-<button mat-flat-button (click)="newGameOpen()" style="margin-top: 16px">
-  {{ 'home.new-game' | translate }}
+<button mat-button [routerLink]="['game', 'offline']" style="margin-top: 16px">
+  {{ 'home.offline' | translate }}
 </button>
 
 <form style="display: flex; justify-content: center; margin-top: 16px">
   <div style="width: 24px"></div>
-  <mat-form-field style="width: 150px; margin: 0 12px">
+  <mat-form-field style="width: 184px; margin: 0 12px">
     <mat-label>{{ 'home.form.label' | translate }}</mat-label>
     <input matInput
            type="text"
@@ -29,11 +29,6 @@
     }
   </div>
 </form>
-
-<button mat-button [routerLink]="'sound-share'">
-  <mat-icon>mic</mat-icon>
-  {{ 'home.sound-share' | translate }}
-</button>
 
 @if (visitedGames().length > 0) {
   <h3 style="margin-top: 48px">{{ 'home.visited-games.title' | translate }}</h3>

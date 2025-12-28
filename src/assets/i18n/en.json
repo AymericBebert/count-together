@@ -49,12 +49,11 @@
   "home": {
     "form": {
       "game-not-found": "Game not found",
-      "label": "Game token",
+      "label": "Join a game",
       "placeholder": "8 characters"
     },
     "new-game": "New game",
     "offline": "Offline mode",
-    "sound-share": "Receive a code",
     "visited-games": {
       "delete": "Delete entries",
       "delete-stop": "Stop deleting",
@@ -77,6 +76,7 @@
     "duplicate": "Duplicate",
     "save-offline": "Save offline",
     "sound-share": "Sound share",
+    "sound-share-receive": "Receive a code",
     "wheel": "Random Wheel"
   },
   "nav": {

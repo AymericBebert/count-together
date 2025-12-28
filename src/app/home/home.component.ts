@@ -56,10 +56,17 @@ export class HomeComponent implements OnInit {
   constructor() {
     this.getVisitedGames();
 
-    this.navButtonsService.navButtonClicked$('nav-tool.wheel')
+    this.navButtonsService.navButtonClicked$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(btn => {
-        void this.router.navigate(['wheel'], {...btn.navigationExtras, relativeTo: this.route});
+        switch (btn.id) {
+          case 'nav-tool.wheel':
+            void this.router.navigate(['wheel'], {...btn.navigationExtras, relativeTo: this.route});
+            break;
+          case 'nav-tool.sound-share-receive':
+            void this.router.navigate(['sound-share'], {...btn.navigationExtras, relativeTo: this.route});
+            break;
+        }
       });
   }
 

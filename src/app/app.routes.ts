@@ -15,6 +15,7 @@ export const routes: Routes = [
         data: {
           navTools: [
             {name: marker('nav-tool.wheel'), icon: 'near_me'},
+            {name: marker('nav-tool.sound-share-receive'), icon: 'mic'},
           ],
         },
       },

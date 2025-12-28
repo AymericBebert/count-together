@@ -1,9 +1,10 @@
-const eslint = require('@eslint/js');
-const tsEslint = require('typescript-eslint');
-const angularEslint = require('angular-eslint');
-const stylistic = require('@stylistic/eslint-plugin');
+import eslint from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
+import angularEslint from 'angular-eslint';
+import {defineConfig} from 'eslint/config';
+import tsEslint from 'typescript-eslint';
 
-module.exports = tsEslint.config(
+export default defineConfig(
   {
     ignores: [
       '**/node_modules',
@@ -24,11 +25,8 @@ module.exports = tsEslint.config(
     processor: angularEslint.processInlineTemplates,
 
     languageOptions: {
-      ecmaVersion: 5,
-      sourceType: 'script',
-
       parserOptions: {
-        project: ['tsconfig.json'],
+        project: ['tsconfig.spec.json'],
         createDefaultProgram: true,
       },
     },

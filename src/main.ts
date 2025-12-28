@@ -1,7 +1,7 @@
 import {provideHttpClient, withFetch} from '@angular/common/http';
 import {isDevMode, provideZonelessChangeDetection} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideRouter, withDebugTracing, withRouterConfig} from '@angular/router';
+import {provideRouter, withRouterConfig} from '@angular/router';
 import {provideServiceWorker} from '@angular/service-worker';
 import {provideTranslateLoader, provideTranslateService, TranslateLoader} from '@ngx-translate/core';
 import {from, Observable} from 'rxjs';
@@ -18,7 +18,7 @@ export class BundledTranslateLoader implements TranslateLoader {
 bootstrapApplication(AppComponent, {
   providers: [
     provideZonelessChangeDetection(),
-    provideRouter(routes, withRouterConfig({canceledNavigationResolution: 'computed'}), withDebugTracing()),
+    provideRouter(routes, withRouterConfig({canceledNavigationResolution: 'computed'})),
     provideHttpClient(withFetch()),
     {provide: APP_CONFIG, useFactory: appConfigFactory},
     provideServiceWorker('ngsw-worker.js', {

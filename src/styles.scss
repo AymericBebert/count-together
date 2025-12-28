@@ -3,6 +3,9 @@
 @use 'theming';
 @use 'fonts';
 
+$main-font: "Roboto";
+$main-fonts: $main-font, "Helvetica Neue", sans-serif;
+
 html {
   color-scheme: light;
   @include mat.theme((
@@ -10,7 +13,7 @@ html {
       primary: tc.$primary-palette,
       tertiary: tc.$tertiary-palette,
     ),
-    typography: Roboto,
+    typography: $main-font,
   ));
 
   &:not([dark-theme=true]) {
@@ -31,7 +34,9 @@ html {
     }
 
     > router-outlet + * {
-      flex-grow: 1;
+      height: calc(100vh - var(--mat-toolbar-standard-height));
+      box-sizing: border-box;
+      overflow: hidden auto;
     }
   }
 
@@ -39,6 +44,12 @@ html {
     .mat-drawer-content > router-outlet + * {
       border-top-right-radius: 24px;
     }
+  }
+
+  .mat-badge-content,
+  .mat-mdc-menu-content,
+  .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+    font-family: $main-fonts;
   }
 }
 
@@ -48,7 +59,7 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: $main-fonts;
 }
 
 .hide-focus:focus {
@@ -65,8 +76,41 @@ body {
   align-items: center;
 }
 
+.mat-mdc-list-item-unscoped-content {
+  & > mat-icon, & > app-icon-crown {
+    vertical-align: middle;
+
+    & + span {
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+  }
+}
+
 :root {
+  --mat-toolbar-standard-height: 64px;
+
   @include mat.sidenav-overrides((
     container-width: 220px,
   ));
+}
+
+@media (max-width: 599px) {
+  :root {
+    --mat-toolbar-standard-height: 56px;
+  }
+
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    padding: 0 12px;
+  }
+}
+
+@media (min-width: 600px) and (max-height: 599px) {
+  :root {
+    --mat-toolbar-standard-height: 48px;
+  }
+
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    height: 48px;
+  }
 }

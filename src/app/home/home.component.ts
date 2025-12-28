@@ -16,8 +16,8 @@ import {
   NewGameDialogResult
 } from '../dialogs/new-game-dialog/new-game-dialog.component';
 import {IStoredGame} from '../model/game';
+import {NavButtonsService} from '../nav/nav-buttons.service';
 import {GamesService} from '../service/games.service';
-import {NavButtonsService} from '../service/nav-buttons.service';
 import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
 
 @Component({
@@ -58,8 +58,8 @@ export class HomeComponent implements OnInit {
 
     this.navButtonsService.navButtonClicked$('nav-tool.wheel')
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.router.navigate(['wheel'], {relativeTo: this.route}).catch(err => console.error('Navigation error', err));
+      .subscribe(btn => {
+        void this.router.navigate(['wheel'], {...btn.navigationExtras, relativeTo: this.route});
       });
   }
 
@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(game => {
-        this.router.navigate(['..', 'game', game.gameId]).catch(err => console.error('Navigation error', err));
+        void this.router.navigate(['game', game.gameId]);
       });
   }
 
@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
     if (this.deletion()) {
       this.deleteVisitedGame(gameId);
     } else {
-      this.router.navigate(['..', 'game', gameId]).catch(err => console.error('Navigation error', err));
+      void this.router.navigate(['game', gameId]);
     }
   }
 
@@ -86,7 +86,10 @@ export class HomeComponent implements OnInit {
     const recentPlayers = this.gamesService.getRegisteredPlayers();
     this.dialog.open<NewGameDialogComponent, NewGameDialogData, NewGameDialogResult>(
       NewGameDialogComponent,
-      {data: {recentPlayers}},
+      {
+        data: {recentPlayers},
+        closeOnNavigation: false,
+      },
     )
       .afterClosed()
       .pipe(

@@ -4,7 +4,7 @@ import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {Observable} from 'rxjs';
 import {filter, map, withLatestFrom} from 'rxjs/operators';
@@ -19,10 +19,10 @@ import {
 import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
 import {GameType, IGame, PlayerEdition} from '../model/game';
 import {EnrichedPlayer} from '../model/player';
+import {NavButtonsService} from '../nav/nav-buttons.service';
 import {RankIconComponent} from '../rank-icon/rank-icon.component';
 import {GameSettingsService} from '../service/game-settings.service';
 import {GamesService} from '../service/games.service';
-import {NavButtonsService} from '../service/nav-buttons.service';
 import {ShareService} from '../share/share.service';
 import {SocketService} from '../socket/socket.service';
 
@@ -103,26 +103,28 @@ export class GameComponent implements OnInit {
         if (!game) {
           throw new Error('Trying to click nav button but game is null?');
         }
-        switch (btn) {
+        switch (btn.id) {
           case 'share':
             this.shareGame(game);
             break;
           case 'nav-tool.wheel':
-            this.router.navigate(['wheel'], {
+            void this.router.navigate(['wheel'], {
+              ...btn.navigationExtras,
               relativeTo: this.route,
-              queryParams: {names: game.players.map(p => p.name).join(',')},
-            }).catch(err => console.error('Navigation error', err));
+              queryParams: {...btn.navigationExtras?.queryParams, names: game.players.map(p => p.name).join(',')},
+            });
             break;
           case 'nav-tool.sound-share':
-            this.router.navigate(['sound-share'], {
+            void this.router.navigate(['sound-share'], {
+              ...btn.navigationExtras,
               relativeTo: this.route,
-            }).catch(err => console.error('Navigation error', err));
+            });
             break;
           case 'nav-tool.duplicate':
-            this.duplicateGame(game);
+            this.duplicateGame(game, btn.navigationExtras);
             break;
           case 'nav-tool.save-offline':
-            this.saveOffline(game);
+            this.saveOffline(game, btn.navigationExtras);
             break;
         }
       });
@@ -148,7 +150,10 @@ export class GameComponent implements OnInit {
     const currentGame = this.gameOrThrow;
     this.dialog.open<GameNameDialogComponent, GameNameDialogData, string>(
       GameNameDialogComponent,
-      {data: {name: currentGame.name}},
+      {
+        data: {name: currentGame.name},
+        closeOnNavigation: false,
+      },
     )
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntilDestroyed(this.destroyRef))
@@ -160,7 +165,10 @@ export class GameComponent implements OnInit {
   public editPlayerNameOpen(p: number, isNew = false): void {
     this.dialog.open<PlayerNameDialogComponent, PlayerNameDialogData, PlayerNameDialogResult>(
       PlayerNameDialogComponent,
-      {data: {name: this.gameOrThrow.players[p].name, isNew}},
+      {
+        data: {name: this.gameOrThrow.players[p].name, isNew},
+        closeOnNavigation: false,
+      },
     )
       .afterClosed()
       .pipe(filter((res): res is string => !!res), takeUntilDestroyed(this.destroyRef))
@@ -177,7 +185,10 @@ export class GameComponent implements OnInit {
   public editScoreOpen(p: number, i: number, isNew = false): void {
     this.dialog.open<ScoreDialogComponent, EditScoreDialogData, number | null>(
       ScoreDialogComponent,
-      {data: {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew}},
+      {
+        data: {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew},
+        closeOnNavigation: false,
+      },
     )
       .afterClosed()
       .pipe(filter(res => res !== undefined), takeUntilDestroyed(this.destroyRef))
@@ -210,6 +221,7 @@ export class GameComponent implements OnInit {
             confirm: this.translate.instant('game.remove-score-dialog.confirm'),
             dismiss: this.translate.instant('game.remove-score-dialog.dismiss'),
           },
+          closeOnNavigation: false,
         },
       )
         .afterClosed()
@@ -250,6 +262,7 @@ export class GameComponent implements OnInit {
             confirm: this.translate.instant('game.remove-score-line-dialog.confirm'),
             dismiss: this.translate.instant('game.remove-score-line-dialog.dismiss'),
           },
+          closeOnNavigation: false,
         },
       )
         .afterClosed()
@@ -303,6 +316,7 @@ export class GameComponent implements OnInit {
             confirm: this.translate.instant('game.change-game-type-dialog.confirm'),
             dismiss: this.translate.instant('game.change-game-type-dialog.dismiss'),
           },
+          closeOnNavigation: false,
         },
       )
         .afterClosed()
@@ -364,7 +378,7 @@ export class GameComponent implements OnInit {
     }
   }
 
-  private duplicateGame(game: IGame | null): void {
+  private duplicateGame(game: IGame | null, navigationExtras?: NavigationExtras): void {
     if (game === null) {
       console.error('Trying to duplicate but game is null?');
     } else if (game.gameId === 'offline') {
@@ -373,13 +387,12 @@ export class GameComponent implements OnInit {
       this.gamesService.duplicateGame$(game.gameId)
         .pipe(filter(newGame => !!newGame), map(newGame => newGame.gameId), takeUntilDestroyed(this.destroyRef))
         .subscribe(newGameId => {
-          this.router.navigate(['game', newGameId])
-            .catch(err => console.error('Could not navigate after duplication?', err));
+          void this.router.navigate(['game', newGameId], {...navigationExtras});
         });
     }
   }
 
-  private saveOffline(game: IGame | null): void {
+  private saveOffline(game: IGame | null, navigationExtras?: NavigationExtras): void {
     if (game === null) {
       console.error('Trying to save offline but game is null?');
     } else if (game.gameId === 'offline') {
@@ -387,8 +400,7 @@ export class GameComponent implements OnInit {
     } else {
       game.gameId = 'offline';
       this.gamesService.saveOfflineGameToStorage(game);
-      this.router.navigate(['game', 'offline'])
-        .catch(err => console.error('Could not navigate after save offline?', err));
+      void this.router.navigate(['game', 'offline'], {...navigationExtras});
     }
   }
 }

@@ -16,7 +16,7 @@ export class StorageService {
         return;
       }
     } catch (e) {
-      console.warn('Could not access localStorage, trying sessionStorage');
+      console.warn('Could not access localStorage, trying sessionStorage', e);
     }
 
     try {
@@ -25,7 +25,7 @@ export class StorageService {
         return;
       }
     } catch (e) {
-      console.warn('Could not access sessionStorage');
+      console.warn('Could not access sessionStorage', e);
     }
 
     if (this._storage === null) {

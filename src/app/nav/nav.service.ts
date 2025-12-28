@@ -2,16 +2,19 @@ import {effect, inject, Injectable, signal} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {filter} from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
+import {DeviceService} from '../service/device.service';
 import {StorageService} from '../storage/storage.service';
 import {UpdaterService} from '../updater/updater.service';
-import {DeviceService} from './device.service';
-import {NavButtonsService} from './nav-buttons.service';
+
+export interface NavTool {
+  name: string;
+  icon: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavService {
-  private readonly navButtonsService = inject(NavButtonsService);
   private readonly deviceService = inject(DeviceService);
   private readonly translate = inject(TranslateService);
   private readonly storageService = inject(StorageService);
@@ -22,7 +25,7 @@ export class NavService {
   public readonly pinSideNav = signal<boolean>(false);
   public readonly showBackButton = signal<boolean>(false);
   public readonly navButtons = signal<string[]>([]);
-  public readonly navTools = signal<{ name: string, icon: string }[]>([]);
+  public readonly navTools = signal<NavTool[]>([]);
 
   public readonly notificationBadge = signal<string>('');
   public readonly displayUpdatesAvailable = signal<boolean>(false);
@@ -46,22 +49,6 @@ export class NavService {
       this.notificationBadge.set('1');
       this.displayUpdatesActivated.set(true);
     });
-  }
-
-  public setBackRouterLink(backRouterNavigate: string): void {
-    this.navButtonsService.setBackRouterLink(backRouterNavigate);
-  }
-
-  public backClicked(): void {
-    this.navButtonsService.backClicked();
-  }
-
-  public navButtonClicked(buttonId: string): void {
-    this.navButtonsService.navButtonClicked(buttonId);
-  }
-
-  public navToolClicked(toolId: string): void {
-    this.navButtonsService.navButtonClicked(toolId);
   }
 
   public setLanguage(lang: string): void {

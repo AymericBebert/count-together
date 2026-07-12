@@ -3,7 +3,7 @@ import {Component, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
@@ -42,11 +42,12 @@ export interface NewGameDialogResult {
   ],
 })
 export class NewGameDialogComponent {
+  private readonly ref = inject<MatDialogRef<NewGameDialogComponent, NewGameDialogResult>>(MatDialogRef);
   private readonly data = inject<NewGameDialogData>(MAT_DIALOG_DATA);
   protected readonly fromGame = this.data.fromGame;
   private readonly gamesService = inject(GamesService, {optional: true});
 
-  public readonly gameSettings = new FormGroup({
+  protected readonly gameSettings = new FormGroup({
     gameName: new FormControl<string>(
       this.data.fromGame?.name || '',
       {nonNullable: true, validators: [Validators.required]},
@@ -55,10 +56,10 @@ export class NewGameDialogComponent {
     lowerScoreWins: new FormControl<boolean>(this.data.fromGame?.lowerScoreWins || false, {nonNullable: true}),
   });
 
-  public readonly playerName = new FormControl<string>('', {nonNullable: true});
+  protected readonly playerName = new FormControl<string>('', {nonNullable: true});
 
-  public readonly selectedPlayers = signal<PlayerEdition[]>([]);
-  public readonly otherPlayers = signal<PlayerEdition[]>([]);
+  protected readonly selectedPlayers = signal<PlayerEdition[]>([]);
+  protected readonly otherPlayers = signal<PlayerEdition[]>([]);
 
   constructor() {
     if (this.data.fromGame) {
@@ -77,9 +78,12 @@ export class NewGameDialogComponent {
     }
   }
 
-  public exportGame(): NewGameDialogResult {
+  protected exportGame(): void {
+    if (this.playerName.value && this.playerName.valid) {
+      this.addPlayerName();
+    }
     const gameSettings = this.gameSettings.getRawValue();
-    return {
+    this.ref.close({
       game: {
         gameId: 'new',
         name: gameSettings.gameName,
@@ -91,10 +95,10 @@ export class NewGameDialogComponent {
         })),
       },
       playerEdition: this.selectedPlayers(),
-    };
+    });
   }
 
-  public drop(event: CdkDragDrop<PlayerEdition[]>): void {
+  protected drop(event: CdkDragDrop<PlayerEdition[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -102,7 +106,7 @@ export class NewGameDialogComponent {
     }
   }
 
-  public addPlayerName(): void {
+  protected addPlayerName(): void {
     this.selectedPlayers.update(players => [
       ...players.filter(p => p.playerName !== this.playerName.value),
       {playerName: this.playerName.value, oldPlayerId: -1},
@@ -110,7 +114,7 @@ export class NewGameDialogComponent {
     this.playerName.setValue('');
   }
 
-  public includePlayer(player: PlayerEdition): void {
+  protected includePlayer(player: PlayerEdition): void {
     this.selectedPlayers.update(players => [
       ...players.filter(p => p.playerName !== player.playerName),
       player,
@@ -118,7 +122,7 @@ export class NewGameDialogComponent {
     this.otherPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
   }
 
-  public excludePlayer(player: PlayerEdition): void {
+  protected excludePlayer(player: PlayerEdition): void {
     this.selectedPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
     this.otherPlayers.update(players => [
       player,
@@ -126,7 +130,7 @@ export class NewGameDialogComponent {
     ]);
   }
 
-  public forgetPlayer(player: PlayerEdition): void {
+  protected forgetPlayer(player: PlayerEdition): void {
     this.selectedPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
     this.otherPlayers.update(players => players.filter(p => p.playerName !== player.playerName));
     this.gamesService?.forgetPlayer(player.playerName);

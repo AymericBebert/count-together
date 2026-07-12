@@ -1,4 +1,4 @@
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
@@ -15,7 +15,7 @@ describe('GamesService', () => {
     providers: [
       provideZonelessChangeDetection(),
       GamesService,
-      provideHttpClient(withInterceptorsFromDi()),
+      provideHttpClient(withXhr(), withInterceptorsFromDi()),
       provideHttpClientTesting(),
     ],
   }));

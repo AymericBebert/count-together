@@ -6,17 +6,17 @@
   app-game {
     @if $light-or-dark == light {
       @include game-component-theme(
-          map.get(tc.$secondary-palette, 100),
-          map.get(tc.$primary-palette, 50),
-          map.get(tc.$primary-palette, 50),
-          map.get(tc.$tertiary-palette, 50),
+        map.get(tc.$secondary-palette, 100),
+        map.get(tc.$primary-palette, 50),
+        map.get(tc.$primary-palette, 50),
+        map.get(tc.$tertiary-palette, 50),
       );
     } @else {
       @include game-component-theme(
-          map.get(tc.$neutral-palette, 10),
-          map.get(tc.$primary-palette, 50),
-          map.get(tc.$primary-palette, 50),
-          map.get(tc.$tertiary-palette, 50),
+        map.get(tc.$neutral-palette, 10),
+        map.get(tc.$primary-palette, 50),
+        map.get(tc.$primary-palette, 50),
+        map.get(tc.$tertiary-palette, 50),
       );
     }
   }

@@ -206,7 +206,7 @@ export class SoundSharingService {
         }
         last = c;
       }
-    }, this.sampleTime) as unknown as number;
+    }, this.sampleTime);
   }
 
   private onCharReceived(c: string): void {

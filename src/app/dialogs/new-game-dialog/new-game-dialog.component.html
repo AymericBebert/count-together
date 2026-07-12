@@ -148,7 +148,7 @@
   <button mat-button [mat-dialog-close]="undefined">
     {{ 'edit.cancel' | translate }}
   </button>
-  <button mat-flat-button [mat-dialog-close]="exportGame()" [disabled]="gameSettings.invalid">
+  <button mat-flat-button (click)="exportGame()" [disabled]="gameSettings.invalid">
     {{ 'edit.confirm' | translate }}
   </button>
 </div>

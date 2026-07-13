@@ -244,9 +244,11 @@ export class GameComponent implements OnInit {
 
   public addScoreLine(): void {
     const currentGame = this.gameOrThrow;
-    this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, null);
+    const fillWith = currentGame.gameType === 'free' ? null : 0;
+    this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, fillWith);
     const increasedScoreLength = Math.max(...currentGame.players.map(p => p.scores.length)) + 1;
-    currentGame.players.forEach(p => p.scores.push(...new Array(increasedScoreLength - p.scores.length).fill(0)));
+    currentGame.players
+      .forEach(p => p.scores.push(...new Array(increasedScoreLength - p.scores.length).fill(fillWith)));
     this.gamesService.updateSavedGame(currentGame);
   }
 

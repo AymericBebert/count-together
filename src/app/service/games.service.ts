@@ -125,6 +125,13 @@ export class GamesService {
     this.socket.emit('game edit win', {gameId, lowerScoreWins});
   }
 
+  public gameEditIsTurnBased(gameId: string, isTurnBased: boolean): void {
+    if (gameId === 'offline') {
+      return;
+    }
+    this.socket.emit('game edit turn', {gameId, isTurnBased});
+  }
+
   public gameEditGameType(gameId: string, gameType: GameType): void {
     if (gameId === 'offline') {
       return;
@@ -282,6 +289,7 @@ export class GamesService {
         players: [{name: 'P1', scores: []}],
         gameType: 'free',
         lowerScoreWins: false,
+        isTurnBased: true,
       });
     }
   }

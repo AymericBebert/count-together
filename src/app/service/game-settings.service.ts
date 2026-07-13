@@ -21,7 +21,7 @@ export class GameSettingsService {
 
   public readonly gameSettings$: Observable<IGameSettings | null> = this.gamesService.currentGame$.pipe(
     delay(0),
-    map(g => g ? {lowerScoreWins: g.lowerScoreWins, gameType: g.gameType} : null),
+    map(g => g ? {lowerScoreWins: g.lowerScoreWins, gameType: g.gameType, isTurnBased: g.isTurnBased} : null),
   );
 
   private readonly _lowerScoreWins$ = new Subject<boolean>();
@@ -29,6 +29,9 @@ export class GameSettingsService {
 
   private readonly _gameType$ = new Subject<GameType>();
   public readonly gameType$ = this._gameType$.asObservable();
+
+  private readonly _isTurnBased$ = new Subject<boolean>();
+  public readonly isTurnBased$ = this._isTurnBased$.asObservable();
 
   private readonly _playerEdition$ = new Subject<PlayerEdition[]>();
   public readonly playerEdition$ = this._playerEdition$.asObservable();
@@ -39,6 +42,10 @@ export class GameSettingsService {
 
   public setGameType(gameType: GameType): void {
     this._gameType$.next(gameType);
+  }
+
+  public setIsTurnBased(isTurnBased: boolean): void {
+    this._isTurnBased$.next(isTurnBased);
   }
 
   public editPlayers(): void {

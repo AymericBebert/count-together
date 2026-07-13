@@ -45,17 +45,16 @@ mat-toolbar.slim > app-icon-crown.main-icon {
 
 .mat-mdc-list-item {
   &.selectable {
-    border-radius: 0;
-    $corner-border-radius: 24px;
+    border-radius: 24px;
 
-    &:nth-child(1 of .even), &:nth-child(1 of .odd) {
-      border-top-right-radius: $corner-border-radius;
-      border-top-left-radius: $corner-border-radius;
+    & + .mat-mdc-list-item.selectable {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
     }
 
-    &:nth-last-child(1 of .even), &:nth-last-child(1 of .odd) {
-      border-bottom-right-radius: $corner-border-radius;
-      border-bottom-left-radius: $corner-border-radius;
+    &:has( + .mat-mdc-list-item.selectable) {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 }

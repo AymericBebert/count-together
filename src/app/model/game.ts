@@ -7,12 +7,14 @@ export interface IGame {
   name: string;
   gameType: GameType;
   lowerScoreWins: boolean;
+  isTurnBased: boolean;
   players: Player[];
 }
 
 export interface IGameSettings {
   gameType: GameType;
   lowerScoreWins: boolean;
+  isTurnBased: boolean;
 }
 
 export interface IStoredGame {
@@ -37,6 +39,11 @@ export interface IGameEditName {
 export interface IGameEditWin {
   gameId: string;
   lowerScoreWins: boolean;
+}
+
+export interface IGameEditTurn {
+  gameId: string;
+  isTurnBased: boolean;
 }
 
 export interface IGameEditGameType {

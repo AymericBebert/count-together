@@ -87,6 +87,8 @@
       "min-wins": "Min score wins",
       "small-scores": "Small scores",
       "title": "Game settings",
+      "turn-based-false": "Free lines",
+      "turn-based-true": "Turn based",
       "win-or-lose": "Win or Lose"
     },
     "menu-title": "",

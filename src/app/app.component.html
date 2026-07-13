@@ -58,6 +58,21 @@
           <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
         </mat-list-item>
         <div style="height: 10px"></div>
+        @if (gameSettings.gameType === 'free') {
+          <mat-list-item (click)="gameSettingsService.setIsTurnBased(true)"
+                         class="selectable even"
+                         [class.selected]="gameSettings.isTurnBased">
+            <mat-icon>360</mat-icon>
+            <span>{{ 'nav.game-settings.turn-based-true' | translate }}</span>
+          </mat-list-item>
+          <mat-list-item (click)="gameSettingsService.setIsTurnBased(false)"
+                         class="selectable even"
+                         [class.selected]="!gameSettings.isTurnBased">
+            <mat-icon style="transform: rotate(180deg)">bar_chart</mat-icon>
+            <span>{{ 'nav.game-settings.turn-based-false' | translate }}</span>
+          </mat-list-item>
+          <div style="height: 10px"></div>
+        }
         <mat-list-item (click)="closeDrawer(); gameSettingsService.editPlayers()">
           <mat-icon>edit</mat-icon>
           <span>{{ 'nav.game-settings.edit-players' | translate }}</span>

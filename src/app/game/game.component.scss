@@ -75,6 +75,10 @@
       margin-top: 4px;
       text-align: center;
       cursor: pointer;
+
+      &.null-score {
+        opacity: 0.5;
+      }
     }
 
     & .cum-score {
@@ -119,6 +123,10 @@
   width: 100%;
   overflow-x: scroll;
   border-radius: 20px;
+
+  &.game-type-free {
+    border-bottom-left-radius: 8px;
+  }
 }
 
 @media (screen and min-width: 600px) {

@@ -87,6 +87,8 @@
       "min-wins": "Min gagne",
       "small-scores": "Petit scores",
       "title": "Options de partie",
+      "turn-based-false": "Tours libres",
+      "turn-based-true": "Tours de jeu",
       "win-or-lose": "Gagne ou Perd"
     },
     "menu-title": "",

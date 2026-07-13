@@ -13,7 +13,7 @@
       }
       <span (click)="editGameOpen()">{{ game.name.trim() || '...' }}</span>
     </div>
-    <div class="score-box mat-elevation-z2">
+    <div class="score-box mat-elevation-z2" [class]="'game-type-' + game.gameType">
       @for (player of players$ | async; track playerTrackByFn(player); let p = $index) {
         <div class="player-column-wrapper" style="flex: 1 1 auto">
           <div class="player-column" style="display: flex; flex-direction: column; align-items: center">
@@ -25,7 +25,7 @@
             @if (!game.gameType || game.gameType === 'free') {
               @for (score of player.scores; track i; let i = $index) {
                 <div class="cell free">
-                  <div class="add-score" (click)="editScoreOpen(p, i)">
+                  <div class="add-score" [class.null-score]="score == null" (click)="editScoreOpen(p, i)">
                     {{ score ?? '/' }}
                   </div>
                   <div class="cum-score">
@@ -52,7 +52,7 @@
                 <div class="cell win-or-lose" [class.win]="!!score" (click)="editScore(p, i, score ? 0 : 1)"></div>
               }
             }
-            @if (game.gameType === 'free') {
+            @if (!game.isTurnBased) {
               <button mat-icon-button class="color-tertiary" aria-label="Add Score" (click)="addScore(p)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -65,7 +65,7 @@
         </div>
       }
     </div>
-    @if (game.gameType !== 'free') {
+    @if (game.isTurnBased) {
       <div class="actions-bottom">
         <button mat-button class="color-tertiary" (click)="removeScoreLine()">
           <mat-icon>remove_circle_outline</mat-icon>

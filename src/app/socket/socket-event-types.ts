@@ -5,6 +5,7 @@ import {
   IGameEditPlayer,
   IGameEditPlayers,
   IGameEditScore,
+  IGameEditTurn,
   IGameEditWin,
   IGameRemovePlayer,
   IGameRemoveScore
@@ -29,6 +30,7 @@ export interface EmittedEventTypes {
   'game delete': string;
   'game edit name': IGameEditName;
   'game edit win': IGameEditWin;
+  'game edit turn': IGameEditTurn;
   'game edit type': IGameEditGameType;
   'game edit player': IGameEditPlayer;
   'game edit players': IGameEditPlayers;

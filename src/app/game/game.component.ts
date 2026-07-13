@@ -141,6 +141,10 @@ export class GameComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(gameType => this.setGameTypeOpen(gameType));
 
+    this.gameSettingsService.isTurnBased$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(isTurnBased => this.setIsTurnBased(isTurnBased));
+
     this.gameSettingsService.playerEdition$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(playerEdition => this.editPlayers(playerEdition));
@@ -240,7 +244,7 @@ export class GameComponent implements OnInit {
 
   public addScoreLine(): void {
     const currentGame = this.gameOrThrow;
-    this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, 0);
+    this.gamesService.gameEditScore(currentGame.gameId, -1, currentGame.players[0].scores.length, null);
     const increasedScoreLength = Math.max(...currentGame.players.map(p => p.scores.length)) + 1;
     currentGame.players.forEach(p => p.scores.push(...new Array(increasedScoreLength - p.scores.length).fill(0)));
     this.gamesService.updateSavedGame(currentGame);
@@ -252,7 +256,7 @@ export class GameComponent implements OnInit {
       return;
     }
     const maxScoreLength = Math.max(...currentGame.players.map(p => p.scores.length));
-    if (currentGame.players.filter(p => p.scores[maxScoreLength - 1] !== 0).length > 0) {
+    if (currentGame.players.filter(p => !!p.scores[maxScoreLength - 1]).length > 0) {
       this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
         ConfirmDialogComponent,
         {
@@ -302,6 +306,13 @@ export class GameComponent implements OnInit {
     const currentGame = this.gameOrThrow;
     currentGame.lowerScoreWins = lowerScoreWins;
     this.gamesService.gameEditWin(currentGame.gameId, currentGame.lowerScoreWins);
+    this.gamesService.updateSavedGame(currentGame);
+  }
+
+  private setIsTurnBased(isTurnBased: boolean): void {
+    const currentGame = this.gameOrThrow;
+    currentGame.isTurnBased = isTurnBased;
+    this.gamesService.gameEditIsTurnBased(currentGame.gameId, currentGame.isTurnBased);
     this.gamesService.updateSavedGame(currentGame);
   }
 

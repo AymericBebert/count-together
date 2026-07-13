@@ -80,6 +80,33 @@
         <span>{{ 'nav.game-settings.win-or-lose' | translate }}</span>
       </button>
     </mat-menu>
+
+    @if (gameSettings.controls.gameType.value === 'free') {
+      <button mat-stroked-button [matMenuTriggerFor]="isTurnBasedMenu" class="label-align-center"
+              style="margin-top: 12px">
+        @if (gameSettings.controls.isTurnBased.value) {
+          <ng-container>
+            <mat-icon>360</mat-icon>
+            <span>{{ 'nav.game-settings.turn-based-true' | translate }}</span>
+          </ng-container>
+        } @else {
+          <ng-container>
+            <mat-icon style="transform: rotate(180deg)">bar_chart</mat-icon>
+            <span>{{ 'nav.game-settings.turn-based-false' | translate }}</span>
+          </ng-container>
+        }
+      </button>
+      <mat-menu #isTurnBasedMenu="matMenu">
+        <button mat-menu-item (click)="gameSettings.controls.isTurnBased.setValue(true)">
+          <mat-icon>360</mat-icon>
+          <span>{{ 'nav.game-settings.turn-based-true' | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="gameSettings.controls.isTurnBased.setValue(false)">
+          <mat-icon style="transform: rotate(180deg)">bar_chart</mat-icon>
+          <span>{{ 'nav.game-settings.turn-based-false' | translate }}</span>
+        </button>
+      </mat-menu>
+    }
   </div>
 
   <div class="player-dnd-container">

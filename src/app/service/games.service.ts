@@ -68,30 +68,29 @@ export class GamesService {
         this.registerPlayers(playerNames);
       });
 
-    combineLatest([
+    const currentGameIdIfConnected$ = combineLatest([
       this.currentGameId$,
       this.socket.connected$,
     ])
-      .pipe(filter(([gameId, c]) => c && !!gameId && gameId !== 'offline'))
-      .subscribe(([gameId]) => {
+      .pipe(
+        filter(([gameId, c]) => c && !!gameId && gameId !== 'offline'),
+        map(([gameId]) => gameId),
+      );
+
+    currentGameIdIfConnected$
+      .subscribe(gameId => {
         this.socket.emit('game exit');
         this.socket.emit('game join', gameId);
       });
 
-    this.socket.connected$
-      .pipe(
-        filter(c => c),
-        switchMap(() => this.socket.on('display error').pipe(takeUntil(this.gameLeft$))),
-      )
+    currentGameIdIfConnected$
+      .pipe(switchMap(() => this.socket.on('display error').pipe(takeUntil(this.gameLeft$))))
       .subscribe(err => {
         this.apiError.displayError(err);
       });
 
-    this.socket.connected$
-      .pipe(
-        filter(c => c),
-        switchMap(() => this.socket.on('game').pipe(takeUntil(this.gameLeft$))),
-      )
+    currentGameIdIfConnected$
+      .pipe(switchMap(() => this.socket.on('game').pipe(takeUntil(this.gameLeft$))))
       .subscribe(g => {
         console.log('Received game update');
         this.currentGame$.next(g);

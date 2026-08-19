@@ -26,7 +26,7 @@ bootstrapApplication(AppComponent, {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideTranslateService({
-      loader: provideTranslateLoader(BundledTranslateLoader),
+      loader: provideTranslateLoader(() => new BundledTranslateLoader()),
     }),
   ],
 }).catch((err) => console.error(err));

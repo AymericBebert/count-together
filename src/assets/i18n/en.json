@@ -62,6 +62,7 @@
     "welcome": "Count the score for every player of your favorite games!"
   },
   "main-title": {
+    "sound-meter": "Sound meter",
     "sound-share": "Sound share",
     "sound-share-debug": "Sound share debug",
     "wheel": "Random Wheel"
@@ -75,6 +76,7 @@
   "nav-tool": {
     "duplicate": "Duplicate",
     "save-offline": "Save offline",
+    "sound-meter": "Sound meter",
     "sound-share": "Sound share",
     "sound-share-receive": "Receive a code",
     "wheel": "Random Wheel"
@@ -117,6 +119,19 @@
   },
   "share": {
     "copied": "Copied"
+  },
+  "sound-meter": {
+    "error": {
+      "NotAllowedError": "Microphone access denied",
+      "NotFoundError": "No microphone detected",
+      "NotSupportedError": "Browser not supported",
+      "UnknownError": "An error occurred"
+    },
+    "intro": "Press Start and allow microphone access to measure the sound level.",
+    "smoothing": "Smoothing",
+    "start": "Start",
+    "stop": "Stop",
+    "threshold": "Threshold"
   },
   "sound-sharing": {
     "debug": {

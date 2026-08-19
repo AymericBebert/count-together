@@ -66,6 +66,9 @@ export class HomeComponent implements OnInit {
           case 'nav-tool.sound-share-receive':
             void this.router.navigate(['sound-share'], {...btn.navigationExtras, relativeTo: this.route});
             break;
+          case 'nav-tool.sound-meter':
+            void this.router.navigate(['sound-meter'], {...btn.navigationExtras, relativeTo: this.route});
+            break;
         }
       });
   }

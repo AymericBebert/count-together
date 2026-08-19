@@ -16,6 +16,7 @@ export const routes: Routes = [
           navTools: [
             {name: marker('nav-tool.wheel'), icon: 'near_me'},
             {name: marker('nav-tool.sound-share-receive'), icon: 'mic'},
+            {name: marker('nav-tool.sound-meter'), icon: 'graphic_eq'},
           ],
         },
       },
@@ -59,6 +60,10 @@ export const routes: Routes = [
       {
         path: 'sound-share',
         loadChildren: () => import('./sound-sharing/sound-sharing.routes').then(mod => mod.soundSharingRoutes),
+      },
+      {
+        path: 'sound-meter',
+        loadChildren: () => import('./sound-meter/sound-meter.routes').then(mod => mod.soundMeterRoutes),
       },
     ],
   },

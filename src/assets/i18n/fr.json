@@ -62,6 +62,7 @@
     "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
   },
   "main-title": {
+    "sound-meter": "Sonomètre",
     "sound-share": "Partage sonore",
     "sound-share-debug": "Debug sonore",
     "wheel": "Roue Aléatoire"
@@ -75,6 +76,7 @@
   "nav-tool": {
     "duplicate": "Dupliquer",
     "save-offline": "Passer hors ligne",
+    "sound-meter": "Sonomètre",
     "sound-share": "Partage sonore",
     "sound-share-receive": "Recevoir un code",
     "wheel": "Roue Aléatoire"
@@ -117,6 +119,19 @@
   },
   "share": {
     "copied": "Lien copié"
+  },
+  "sound-meter": {
+    "error": {
+      "NotAllowedError": "Accès au micro refusé",
+      "NotFoundError": "Aucun micro détecté",
+      "NotSupportedError": "Navigateur non supporté",
+      "UnknownError": "Une erreur est survenue"
+    },
+    "intro": "Appuyez sur Démarrer et autorisez l'accès au micro pour mesurer le volume sonore.",
+    "smoothing": "Lissage",
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "threshold": "Seuil"
   },
   "sound-sharing": {
     "debug": {

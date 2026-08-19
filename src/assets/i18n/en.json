@@ -89,6 +89,8 @@
       "title": "Game settings",
       "turn-based-false": "Free lines",
       "turn-based-true": "Turn based",
+      "turn-offset": "Turn offset:",
+      "turn-show-number": "Show turn number",
       "win-or-lose": "Win or Lose"
     },
     "menu-title": "",

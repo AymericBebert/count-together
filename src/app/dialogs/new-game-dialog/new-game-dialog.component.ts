@@ -55,6 +55,8 @@ export class NewGameDialogComponent {
     gameType: new FormControl<GameType>(this.data.fromGame?.gameType || 'free', {nonNullable: true}),
     lowerScoreWins: new FormControl<boolean>(this.data.fromGame?.lowerScoreWins || false, {nonNullable: true}),
     isTurnBased: new FormControl<boolean>(this.data.fromGame?.isTurnBased ?? true, {nonNullable: true}),
+    showTurnNumber: new FormControl<boolean>(this.data.fromGame?.showTurnNumber ?? false, {nonNullable: true}),
+    turnNumberOffset: new FormControl<number>(this.data.fromGame?.turnNumberOffset ?? 0, {nonNullable: true}),
   });
 
   protected readonly playerName = new FormControl<string>('', {nonNullable: true});
@@ -91,6 +93,8 @@ export class NewGameDialogComponent {
         gameType: gameSettings.gameType,
         lowerScoreWins: gameSettings.lowerScoreWins,
         isTurnBased: gameSettings.isTurnBased,
+        showTurnNumber: gameSettings.showTurnNumber,
+        turnNumberOffset: gameSettings.turnNumberOffset,
         players: this.selectedPlayers().map(player => ({
           name: player.playerName,
           scores: [],

@@ -17,7 +17,7 @@ import {
   PlayerNameDialogResult
 } from '../dialogs/player-name-dialog/player-name-dialog.component';
 import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
-import {GameType, IGame, PlayerEdition} from '../model/game';
+import {GameType, IGame, IGameEditTurn, PlayerEdition} from '../model/game';
 import {EnrichedPlayer} from '../model/player';
 import {NavButtonsService} from '../nav/nav-buttons.service';
 import {RankIconComponent} from '../rank-icon/rank-icon.component';
@@ -75,6 +75,10 @@ export class GameComponent implements OnInit {
         };
       });
     }),
+  );
+
+  public readonly turns$: Observable<number[]> = this.players$.pipe(
+    map(players => Array.from({length: Math.max(...players.map(player => player.scores.length))}, (_, i) => i)),
   );
 
   public readonly connectionError = toSignal(this.socket.connectionError$, {initialValue: false});
@@ -311,10 +315,12 @@ export class GameComponent implements OnInit {
     this.gamesService.updateSavedGame(currentGame);
   }
 
-  private setIsTurnBased(isTurnBased: boolean): void {
+  private setIsTurnBased(isTurnBased: IGameEditTurn): void {
     const currentGame = this.gameOrThrow;
-    currentGame.isTurnBased = isTurnBased;
-    this.gamesService.gameEditIsTurnBased(currentGame.gameId, currentGame.isTurnBased);
+    currentGame.isTurnBased = isTurnBased.isTurnBased;
+    currentGame.showTurnNumber = isTurnBased.showTurnNumber;
+    currentGame.turnNumberOffset = isTurnBased.turnNumberOffset;
+    this.gamesService.gameEditIsTurnBased(currentGame.gameId, isTurnBased);
     this.gamesService.updateSavedGame(currentGame);
   }
 

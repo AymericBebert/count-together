@@ -1,14 +1,14 @@
 import {DestroyRef, inject, Injectable} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
-import {Observable, Subject} from 'rxjs';
-import {delay, filter, map} from 'rxjs/operators';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {delay, filter, map, skip} from 'rxjs/operators';
 import {
   NewGameDialogComponent,
   NewGameDialogData,
   NewGameDialogResult
 } from '../dialogs/new-game-dialog/new-game-dialog.component';
-import {GameType, IGameSettings, PlayerEdition} from '../model/game';
+import {GameType, IGameEditTurn, IGameSettings, PlayerEdition} from '../model/game';
 import {GamesService} from './games.service';
 
 @Injectable({
@@ -21,7 +21,13 @@ export class GameSettingsService {
 
   public readonly gameSettings$: Observable<IGameSettings | null> = this.gamesService.currentGame$.pipe(
     delay(0),
-    map(g => g ? {lowerScoreWins: g.lowerScoreWins, gameType: g.gameType, isTurnBased: g.isTurnBased} : null),
+    map(g => g ? {
+      lowerScoreWins: g.lowerScoreWins,
+      gameType: g.gameType,
+      isTurnBased: g.isTurnBased,
+      showTurnNumber: g.showTurnNumber,
+      turnNumberOffset: g.turnNumberOffset,
+    } : null),
   );
 
   private readonly _lowerScoreWins$ = new Subject<boolean>();
@@ -30,7 +36,7 @@ export class GameSettingsService {
   private readonly _gameType$ = new Subject<GameType>();
   public readonly gameType$ = this._gameType$.asObservable();
 
-  private readonly _isTurnBased$ = new Subject<boolean>();
+  private readonly _isTurnBased$ = new Subject<IGameEditTurn>();
   public readonly isTurnBased$ = this._isTurnBased$.asObservable();
 
   private readonly _playerEdition$ = new Subject<PlayerEdition[]>();
@@ -45,7 +51,21 @@ export class GameSettingsService {
   }
 
   public setIsTurnBased(isTurnBased: boolean): void {
-    this._isTurnBased$.next(isTurnBased);
+    const currentGet = this.getGameTurnSettings();
+    if (!currentGet) return;
+    this._isTurnBased$.next({...currentGet, isTurnBased});
+  }
+
+  public setShowTurnNumber(showTurnNumber: boolean): void {
+    const currentGet = this.getGameTurnSettings();
+    if (!currentGet) return;
+    this._isTurnBased$.next({...currentGet, showTurnNumber});
+  }
+
+  public setTurnNumberOffset(turnNumberOffset: number): void {
+    const currentGet = this.getGameTurnSettings();
+    if (!currentGet) return;
+    this._isTurnBased$.next({...currentGet, turnNumberOffset});
   }
 
   public editPlayers(): void {
@@ -82,5 +102,19 @@ export class GameSettingsService {
           this._playerEdition$.next(res.playerEdition);
         }
       });
+  }
+
+  private getGameTurnSettings(): IGameEditTurn | null {
+    const currentGame = this.gamesService.currentGame$.value;
+    if (!currentGame) {
+      console.error('getGameTurnSettings but no current game');
+      return null;
+    }
+    return {
+      gameId: currentGame.gameId,
+      isTurnBased: currentGame.isTurnBased,
+      showTurnNumber: currentGame.showTurnNumber,
+      turnNumberOffset: currentGame.turnNumberOffset,
+    };
   }
 }

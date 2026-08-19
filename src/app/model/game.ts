@@ -8,6 +8,8 @@ export interface IGame {
   gameType: GameType;
   lowerScoreWins: boolean;
   isTurnBased: boolean;
+  showTurnNumber: boolean;
+  turnNumberOffset: number;
   players: Player[];
 }
 
@@ -15,6 +17,8 @@ export interface IGameSettings {
   gameType: GameType;
   lowerScoreWins: boolean;
   isTurnBased: boolean;
+  showTurnNumber: boolean;
+  turnNumberOffset: number;
 }
 
 export interface IStoredGame {
@@ -44,6 +48,8 @@ export interface IGameEditWin {
 export interface IGameEditTurn {
   gameId: string;
   isTurnBased: boolean;
+  showTurnNumber: boolean;
+  turnNumberOffset: number;
 }
 
 export interface IGameEditGameType {

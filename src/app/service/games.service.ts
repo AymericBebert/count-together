@@ -16,7 +16,7 @@ import {
 } from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
 import {ApiErrorService} from '../api-error/api-error.service';
-import {GameType, IGame, IKnownPlayers, IRecentPlayer, IStoredGame, PlayerEdition} from '../model/game';
+import {GameType, IGame, IGameEditTurn, IKnownPlayers, IRecentPlayer, IStoredGame, PlayerEdition} from '../model/game';
 import {SocketService} from '../socket/socket.service';
 import {StorageService} from '../storage/storage.service';
 
@@ -124,11 +124,11 @@ export class GamesService {
     this.socket.emit('game edit win', {gameId, lowerScoreWins});
   }
 
-  public gameEditIsTurnBased(gameId: string, isTurnBased: boolean): void {
+  public gameEditIsTurnBased(gameId: string, isTurnBased: IGameEditTurn): void {
     if (gameId === 'offline') {
       return;
     }
-    this.socket.emit('game edit turn', {gameId, isTurnBased});
+    this.socket.emit('game edit turn', {...isTurnBased, gameId});
   }
 
   public gameEditGameType(gameId: string, gameType: GameType): void {
@@ -289,6 +289,8 @@ export class GamesService {
         gameType: 'free',
         lowerScoreWins: false,
         isTurnBased: true,
+        showTurnNumber: false,
+        turnNumberOffset: 0,
       });
     }
   }

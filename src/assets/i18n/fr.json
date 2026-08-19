@@ -85,10 +85,12 @@
       "free": "Points libres",
       "max-wins": "Max gagne",
       "min-wins": "Min gagne",
-      "small-scores": "Petit scores",
+      "small-scores": "Petits scores",
       "title": "Options de partie",
       "turn-based-false": "Tours libres",
       "turn-based-true": "Tours de jeu",
+      "turn-offset": "Décalage :",
+      "turn-show-number": "Afficher le tour",
       "win-or-lose": "Gagne ou Perd"
     },
     "menu-title": "",

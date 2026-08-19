@@ -3,7 +3,7 @@ import {Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {firstValueFrom, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
@@ -21,7 +21,7 @@ import {SoundSharingService} from '../sound-sharing.service';
   imports: [
     AsyncPipe,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     MatIcon,
     MatButton,
   ],

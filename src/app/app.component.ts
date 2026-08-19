@@ -9,7 +9,7 @@ import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ActivatedRoute, NavigationEnd, NavigationExtras, Router, RouterModule} from '@angular/router';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {APP_CONFIG} from '../config/app.config';
 import {IconCrownComponent} from './icons/icon-crown.component';
@@ -27,7 +27,7 @@ import {SettingsService} from './service/settings.service';
   imports: [
     AsyncPipe,
     RouterModule,
-    TranslateModule,
+    TranslatePipe,
     IconCrownComponent,
     ChangeLanguageComponent,
     MatBadgeModule,

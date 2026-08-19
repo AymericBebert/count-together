@@ -2,7 +2,7 @@ import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/commo
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfigTestingModule} from '../../testing/config-testing.module';
 import {translateTestingModule} from '../../testing/translate-testing-module';
@@ -29,6 +29,7 @@ describe('NewGameDialogComponent', () => {
             recentPlayers: [],
           },
         },
+        {provide: MatDialogRef, useValue: {close: () => void 0}},
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],

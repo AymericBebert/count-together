@@ -3,7 +3,7 @@ import {Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatSliderModule} from '@angular/material/slider';
 import {ActivatedRoute} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {SettingsService} from '../../service/settings.service';
@@ -15,7 +15,7 @@ import {WheelComponent} from '../wheel/wheel.component';
   styleUrls: ['./wheel-page.component.scss'],
   imports: [
     AsyncPipe,
-    TranslateModule,
+    TranslatePipe,
     MatSliderModule,
     MatButton,
     WheelComponent,

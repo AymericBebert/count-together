@@ -2,7 +2,7 @@ import {Component, DestroyRef, ElementRef, inject, OnInit, signal, viewChild} fr
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {first} from 'rxjs/operators';
 import {DebugItemComponent} from '../debug-item/debug-item.component';
 import {RECORDER_CONFIG, RecordService} from '../record.service';
@@ -18,7 +18,7 @@ import {RECORDER_CONFIG, RecordService} from '../record.service';
   imports: [
     DebugItemComponent,
     MatIcon,
-    TranslateModule,
+    TranslatePipe,
     MatButton,
   ],
 })

@@ -1,7 +1,7 @@
 import {Component, inject, output} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-language',
@@ -21,7 +21,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
     </div>`,
   styles: ['span.lang-flag { vertical-align: middle; }'],
   imports: [
-    TranslateModule,
+    TranslatePipe,
     MatMenuModule,
     MatIconModule,
   ],
@@ -37,8 +37,8 @@ export class ChangeLanguageComponent {
     unknown: '🏳️',
   };
 
-  public langToFlag(lang: string): string {
-    return this.flagMap[lang] || this.flagMap.unknown;
+  public langToFlag(lang: string | null): string {
+    return (lang && this.flagMap[lang]) || this.flagMap.unknown;
   }
 
   langClicked(lang: string): void {

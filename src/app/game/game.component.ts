@@ -5,7 +5,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Observable} from 'rxjs';
 import {filter, map, withLatestFrom} from 'rxjs/operators';
 import {APP_CONFIG, AppConfig} from '../../config/app.config';
@@ -32,7 +32,7 @@ import {SocketService} from '../socket/socket.service';
   styleUrls: ['./game.component.scss'],
   imports: [
     AsyncPipe,
-    TranslateModule,
+    TranslatePipe,
     RankIconComponent,
     MatButtonModule,
     MatIconModule,

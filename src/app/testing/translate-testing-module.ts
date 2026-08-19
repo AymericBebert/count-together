@@ -1,3 +1,10 @@
-import {TranslateModule} from '@ngx-translate/core';
+import {NgModule} from '@angular/core';
+import {provideTranslateService} from '@ngx-translate/core';
 
-export const translateTestingModule = TranslateModule.forRoot();
+@NgModule({
+  providers: [provideTranslateService()],
+})
+export class TranslateTestingModule {
+}
+
+export const translateTestingModule = TranslateTestingModule;

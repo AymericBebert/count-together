@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {IconCrownComponent} from '../../icons/icon-crown.component';
 import {GameType, IGame, IRecentPlayer, PlayerEdition} from '../../model/game';
 import {GamesService} from '../../service/games.service';
@@ -28,7 +28,7 @@ export interface NewGameDialogResult {
   templateUrl: './new-game-dialog.component.html',
   styleUrls: ['./new-game-dialog.component.scss'],
   imports: [
-    TranslateModule,
+    TranslatePipe,
     DragDropModule,
     ReactiveFormsModule,
     MatButtonModule,

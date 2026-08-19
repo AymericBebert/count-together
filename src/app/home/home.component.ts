@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {filter, switchMap} from 'rxjs/operators';
 import {
   NewGameDialogComponent,
@@ -25,7 +25,7 @@ import {ImmediateErrorStateMatcher} from '../utils/error-state-matcher';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
-    TranslateModule,
+    TranslatePipe,
     ReactiveFormsModule,
     RouterLink,
     MatButtonModule,

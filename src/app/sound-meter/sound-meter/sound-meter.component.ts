@@ -3,8 +3,14 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSliderModule} from '@angular/material/slider';
 import {TranslatePipe} from '@ngx-translate/core';
+import {StorageService} from '../../storage/storage.service';
 
 type MeterStatus = 'idle' | 'starting' | 'running' | 'error';
+
+const STORAGE_KEY_THRESHOLD = 'soundMeterThreshold';
+const STORAGE_KEY_WINDOW_SIZE = 'soundMeterWindowSize';
+const DEFAULT_THRESHOLD = 65;
+const DEFAULT_WINDOW_SIZE = 24;
 
 @Component({
   selector: 'app-sound-meter',
@@ -20,12 +26,13 @@ type MeterStatus = 'idle' | 'starting' | 'running' | 'error';
 export class SoundMeterComponent implements OnDestroy {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly storageService = inject(StorageService);
 
   public readonly status = signal<MeterStatus>('idle');
   public readonly errorName = signal<string>('');
   public readonly volume = signal<number>(0);
-  public readonly threshold = signal<number>(67);
-  public readonly windowSize = signal<number>(48);
+  public readonly threshold = signal<number>(this.readStoredNumber(STORAGE_KEY_THRESHOLD, DEFAULT_THRESHOLD));
+  public readonly windowSize = signal<number>(this.readStoredNumber(STORAGE_KEY_WINDOW_SIZE, DEFAULT_WINDOW_SIZE));
 
   public readonly overThreshold = computed(() => this.status() === 'running' && this.volume() >= this.threshold());
 
@@ -68,7 +75,7 @@ export class SoundMeterComponent implements OnDestroy {
     }
 
     const audioContextCtor = window.AudioContext
-      ?? (window as unknown as {webkitAudioContext: typeof AudioContext}).webkitAudioContext;
+      ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     this.audioContext = new audioContextCtor();
     const source = this.audioContext.createMediaStreamSource(this.stream);
     this.analyser = this.audioContext.createAnalyser();
@@ -109,13 +116,24 @@ export class SoundMeterComponent implements OnDestroy {
 
   public onThresholdChange(value: number): void {
     this.threshold.set(value);
+    this.storageService.setItem(STORAGE_KEY_THRESHOLD, JSON.stringify(value));
   }
 
   public onWindowSizeChange(value: number): void {
     this.windowSize.set(value);
+    this.storageService.setItem(STORAGE_KEY_WINDOW_SIZE, JSON.stringify(value));
     while (this.levelWindow.length > value) {
       this.levelWindow.shift();
     }
+  }
+
+  private readStoredNumber(key: string, fallback: number): number {
+    const stored = this.storageService.getItem(key);
+    if (stored === null) {
+      return fallback;
+    }
+    const parsed = Number(JSON.parse(stored));
+    return Number.isFinite(parsed) ? parsed : fallback;
   }
 
   private tick(): void {

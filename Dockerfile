@@ -1,4 +1,4 @@
-FROM node:24.18.0-bookworm-slim AS builder
+FROM node:24.19.0-bookworm-slim AS builder
 
 WORKDIR /count-together
 

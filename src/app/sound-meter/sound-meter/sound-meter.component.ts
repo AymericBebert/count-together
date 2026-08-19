@@ -16,6 +16,10 @@ const DEFAULT_WINDOW_SIZE = 24;
   selector: 'app-sound-meter',
   templateUrl: './sound-meter.component.html',
   styleUrls: ['./sound-meter.component.scss'],
+  host: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    '[class.over-threshold]': 'overThreshold()',
+  },
   imports: [
     TranslatePipe,
     MatButtonModule,

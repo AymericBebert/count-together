@@ -1,19 +1,14 @@
-<div class="sound-meter" [class.over-threshold]="overThreshold()">
-
+<div class="sound-meter__gauge">
   @if (status() === 'error') {
     <div class="sound-meter__message">
       <mat-icon>mic_off</mat-icon>
       <p>{{ ('sound-meter.error.' + errorName()) | translate }}</p>
     </div>
-  }
-
-  @if (status() === 'running') {
-    <div class="sound-meter__gauge">
-      <div class="sound-meter__value">{{ volume() }}</div>
-      <div class="sound-meter__bar">
-        <div class="sound-meter__bar-fill" [style.height.%]="volume()"></div>
-        <div class="sound-meter__threshold-line" [style.bottom.%]="threshold()"></div>
-      </div>
+  } @else if (status() === 'running') {
+    <div class="sound-meter__value">{{ volume() }}</div>
+    <div class="sound-meter__bar">
+      <div class="sound-meter__bar-fill" [style.height.%]="volume()"></div>
+      <div class="sound-meter__threshold-line" [style.bottom.%]="threshold()"></div>
     </div>
   } @else {
     <div class="sound-meter__message">
@@ -21,26 +16,25 @@
       <p>{{ 'sound-meter.intro' | translate }}</p>
     </div>
   }
+</div>
 
-  <div class="sound-meter__controls">
-    <div class="sound-meter__threshold">
-      <span>{{ 'sound-meter.threshold' | translate }} : {{ threshold() }}</span>
-      <mat-slider [max]="100" [min]="0" [step]="1" discrete>
-        <input matSliderThumb [value]="threshold()" (valueChange)="onThresholdChange($event)"/>
-      </mat-slider>
-    </div>
-
-    <div class="sound-meter__threshold">
-      <span>{{ 'sound-meter.smoothing' | translate }} : {{ windowSize() }}</span>
-      <mat-slider [max]="120" [min]="1" [step]="1" discrete>
-        <input matSliderThumb [value]="windowSize()" (valueChange)="onWindowSizeChange($event)"/>
-      </mat-slider>
-    </div>
-
-    <button mat-flat-button (click)="toggle()">
-      <mat-icon>{{ status() === 'running' ? 'stop' : 'mic' }}</mat-icon>
-      {{ (status() === 'running' ? 'sound-meter.stop' : 'sound-meter.start') | translate }}
-    </button>
+<div class="sound-meter__controls">
+  <div class="sound-meter__threshold">
+    <span>{{ 'sound-meter.threshold' | translate }} : {{ threshold() }}</span>
+    <mat-slider [max]="100" [min]="0" [step]="1" discrete>
+      <input matSliderThumb [value]="threshold()" (valueChange)="onThresholdChange($event)"/>
+    </mat-slider>
   </div>
 
+  <div class="sound-meter__threshold">
+    <span>{{ 'sound-meter.smoothing' | translate }} : {{ windowSize() }}</span>
+    <mat-slider [max]="120" [min]="1" [step]="1" discrete>
+      <input matSliderThumb [value]="windowSize()" (valueChange)="onWindowSizeChange($event)"/>
+    </mat-slider>
+  </div>
+
+  <button mat-flat-button (click)="toggle()">
+    <mat-icon>{{ status() === 'running' ? 'stop' : 'mic' }}</mat-icon>
+    {{ (status() === 'running' ? 'sound-meter.stop' : 'sound-meter.start') | translate }}
+  </button>
 </div>

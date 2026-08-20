@@ -115,6 +115,13 @@
       </mat-list-item>
 
       <mat-list-item>
+        <mat-slide-toggle [checked]="settingsService.keepAwake()"
+                          (change)="settingsService.setKeepAwake($event.checked, true)">
+          {{ 'misc.keep-awake' | translate }}
+        </mat-slide-toggle>
+      </mat-list-item>
+
+      <mat-list-item>
         <app-change-language (langSet)="closeDrawer(); navService.setLanguage($event)"></app-change-language>
       </mat-list-item>
 

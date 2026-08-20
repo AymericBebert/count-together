@@ -70,6 +70,7 @@
   "misc": {
     "connection-error": "Disconnected",
     "dark-mode": "Dark mode",
+    "keep-awake": "Keep screen awake",
     "language": "Language:",
     "version": "Version:"
   },

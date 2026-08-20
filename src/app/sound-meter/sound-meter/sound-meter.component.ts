@@ -2,6 +2,7 @@ import {Component, computed, DestroyRef, inject, NgZone, OnDestroy, signal} from
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSliderModule} from '@angular/material/slider';
+import {marker} from '@biesbjerg/ngx-translate-extract-marker';
 import {TranslatePipe} from '@ngx-translate/core';
 import {StorageService} from '../../storage/storage.service';
 
@@ -169,3 +170,12 @@ export class SoundMeterComponent implements OnDestroy {
     this.animationFrame = requestAnimationFrame(() => this.tick());
   }
 }
+
+/* eslint-disable @typescript-eslint/naming-convention */
+// noinspection JSUnusedLocalSymbols
+const errorTranslationMarkers = {
+  NotAllowedError: marker('sound-meter.error.NotAllowedError'),
+  NotFoundError: marker('sound-meter.error.NotFoundError'),
+  NotSupportedError: marker('sound-meter.error.NotSupportedError'),
+  UnknownError: marker('sound-meter.error.UnknownError'),
+};

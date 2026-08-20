@@ -70,6 +70,7 @@
   "misc": {
     "connection-error": "Déconnecté",
     "dark-mode": "Thème sombre",
+    "keep-awake": "Désactiver veille",
     "language": "Langue :",
     "version": "Version :"
   },

@@ -16,7 +16,7 @@
         map.get(tc.$neutral-palette, 10),
         map.get(tc.$primary-palette, 50),
         map.get(tc.$primary-palette, 50),
-        map.get(tc.$tertiary-palette, 50),
+        map.get(tc.$tertiary-palette, 60),
       );
     }
   }
@@ -55,13 +55,15 @@
         color: rgba($accent, 0.1);
       }
     }
-
-    &.turn {
-      color: rgba($accent, 0.5);
-    }
   }
 
-  .total.turn {
-    color: rgba($accent, 0.5);
+  .turn {
+    &.cell, &.total {
+      color: rgba($accent, 0.6);
+    }
+
+    &.total-cell {
+      border-color: rgba($accent, 0.6);
+    }
   }
 }

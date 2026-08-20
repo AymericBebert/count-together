@@ -25,6 +25,10 @@ class SocketTestingService {
     }
   }
 
+  public reconnectIfNeeded(): void {
+    // do nothing
+  }
+
   public on(event: string): Observable<string> {
     if (this.socket !== null) {
       throw new Error('on called but fake socket is disconnected');

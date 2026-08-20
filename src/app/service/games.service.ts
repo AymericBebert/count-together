@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, signal} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
-import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, EMPTY, fromEvent, Observable, of, Subject} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -97,6 +97,25 @@ export class GamesService {
       });
 
     this.gameLeft$.subscribe(() => console.log('game left'));
+
+    fromEvent(document, 'visibilitychange')
+      .pipe(filter(() => document.visibilityState === 'visible'))
+      .subscribe(() => this.refreshCurrentGameOnResume());
+  }
+
+  private refreshCurrentGameOnResume(): void {
+    this.socket.reconnectIfNeeded();
+    const currentGame = this.currentGame$.getValue();
+    if (!currentGame || currentGame.gameId === 'offline') {
+      return;
+    }
+    this.getGameNotFoundOk$(currentGame.gameId)
+      .pipe(catchError(() => EMPTY))
+      .subscribe(game => {
+        if (game) {
+          this.currentGame$.next(game);
+        }
+      });
   }
 
   public updateSavedGame(game: IGame): void {

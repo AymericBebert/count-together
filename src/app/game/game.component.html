@@ -15,11 +15,11 @@
     </div>
     <div class="score-box mat-elevation-z2" [class]="'game-type-' + game.gameType">
       @if (game.showTurnNumber) {
-        <div class="player-column-wrapper" style="flex: 0 0 26px">
+        <div class="player-column-wrapper turn" style="flex: 0 0 26px">
           <div class="player-column" style="display: flex; flex-direction: column; align-items: center">
             <div style="height: 61px"></div>
             <div class="total-cell" style="width: 100%">
-              <div class="total" style="opacity: 0.6">#</div>
+              <div class="total turn">#</div>
             </div>
             @for (turn of turns$ | async; track $index) {
               <div class="cell turn" [class]="game.gameType || 'free'">

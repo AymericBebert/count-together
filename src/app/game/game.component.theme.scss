@@ -29,6 +29,10 @@
 
   .player-column-wrapper:not(:last-child) {
     border-right: 1px solid rgba($border-color, 0.2);
+
+    &.turn {
+      border-width: 2px;
+    }
   }
 
   .win-or-lose.win {
@@ -51,5 +55,13 @@
         color: rgba($accent, 0.1);
       }
     }
+
+    &.turn {
+      color: rgba($accent, 0.5);
+    }
+  }
+
+  .total.turn {
+    color: rgba($accent, 0.5);
   }
 }

@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>{{ 'edit.game-name.header' | translate }}</h1>
+
+<form mat-dialog-content (ngSubmit)="ref.close(name.value)">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>{{ 'edit.game-name.label' | translate }}</mat-label>
+    <input matInput name="game" [formControl]="name" [autofocus]="true">
+    @if (name.invalid) {
+      <mat-error>{{ 'edit.game-name.invalid' | translate }}</mat-error>
+    }
+  </mat-form-field>
+</form>
+
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="undefined">
+    {{ 'edit.cancel' | translate }}
+  </button>
+  <button mat-flat-button [mat-dialog-close]="name.value" [disabled]="name.invalid">
+    {{ 'edit.confirm' | translate }}
+  </button>
+</div>

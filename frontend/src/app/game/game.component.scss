@@ -1,0 +1,154 @@
+:host {
+  position: relative;
+}
+
+.connection-error {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  padding: 5px 20px;
+  border-radius: 17px;
+  z-index: 10;
+
+  & > * {
+    vertical-align: middle
+  }
+}
+
+.header {
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-bottom: 10px;
+
+  mat-icon {
+    margin-right: 10px;
+    opacity: 0.4;
+    vertical-align: middle;
+  }
+
+  span {
+    margin-right: 10px;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+}
+
+.actions-bottom {
+  margin: 10px 0;
+}
+
+.wrapper {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.rank {
+  width: 32px;
+  height: 32px;
+}
+
+.player-column {
+  margin: auto;
+  padding-top: 8px;
+}
+
+.player-name {
+  height: 19px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.total-cell {
+  padding-bottom: 4px;
+
+  .total {
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.cell {
+  width: 100%;
+  height: 35px;
+  box-sizing: border-box;
+
+  &.free {
+    & .add-score {
+      margin-top: 4px;
+      text-align: center;
+      cursor: pointer;
+
+      &.null-score {
+        opacity: 0.5;
+      }
+    }
+
+    & .cum-score {
+      margin: -3px 0 0 2px;
+      text-align: left;
+      font-size: 0.8em;
+      opacity: 0.4;
+    }
+  }
+
+  &.small-scores {
+    padding-top: 1px;
+    padding-bottom: 2px;
+
+    & .buttons {
+      & mat-icon {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    & .overlay-score {
+      pointer-events: none;
+      user-select: none;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      text-align: center;
+      margin-top: 7px;
+    }
+  }
+
+  &.win-or-lose {
+    height: 39px;
+  }
+
+  &.turn {
+    font-size: 0.9em;
+    line-height: 35px;
+    vertical-align: middle;
+
+    &.winOrLose {
+      height: 35px;
+      line-height: 39px;
+    }
+  }
+}
+
+.score-box {
+  display: flex;
+  width: 100%;
+  overflow-x: scroll;
+  border-radius: 20px;
+
+  &.game-type-free {
+    border-bottom-left-radius: 8px;
+  }
+}
+
+@media (screen and min-width: 600px) {
+  .score-box {
+    width: fit-content;
+    min-width: 400px;
+    max-width: 100%;
+    margin: auto;
+  }
+}

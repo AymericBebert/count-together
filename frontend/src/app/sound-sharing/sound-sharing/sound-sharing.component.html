@@ -1,0 +1,62 @@
+@if (gameShareData$ | async; as gameShareData) {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button (click)="shareSound(gameShareData.gameId)">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
+      {{ 'sound-sharing.share' | translate }} {{ gameShareData.gameId }}
+    </button>
+    <p class="binary-payload">{{ gameShareData.gamePayload }}</p>
+  </div>
+}
+
+@if (soundSharing.analysing()) {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button class="color-tertiary" (click)="stopAnalysing()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">highlight_off</mat-icon>
+      {{ 'sound-sharing.stop-listening' | translate }}
+    </button>
+  </div>
+
+  <div class="frequency-bars">
+    @for (f of soundSharing.freqGraph(); track $index) {
+      <div class="frequency-bar" [style.transform]="'scaleX(' + f * 100 / 256 + ')'"></div>
+    }
+  </div>
+} @else {
+  <div style="margin-bottom: 20px">
+    <button mat-flat-button (click)="analyse()">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">mic</mat-icon>
+      {{ 'sound-sharing.listen' | translate }}
+    </button>
+  </div>
+}
+
+@if (soundSharing.receivedPayload(); as payload) {
+  <div class="binary-payload">
+    <span>{{ payload }}</span>
+  </div>
+}
+
+@if (soundSharing.receivedCode(); as code) {
+  <div style="margin-bottom: 20px">
+    <button mat-button [routerLink]="'/game/' + code">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">open_in_new</mat-icon>
+      {{ code }}
+    </button>
+  </div>
+}
+
+@if ((gameShareData$ | async) === null) {
+  <div style="margin: 20px 0">
+    <button mat-button (click)="shareSound('aym3ric5')">
+      <mat-icon style="vertical-align: middle; margin-right: 10px">volume_up</mat-icon>
+      {{ 'sound-sharing.share-test' | translate }}
+    </button>
+    <p class="binary-payload">* 10 34 22 03 27 18 12 05 #</p>
+  </div>
+}
+
+<div style="margin-bottom: 20px">
+  <button mat-button class="color-tertiary" routerLink="debug">
+    {{ 'sound-sharing.goto-debug' | translate }}
+  </button>
+</div>

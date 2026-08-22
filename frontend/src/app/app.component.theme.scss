@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '../theme-colors' as tc;
+
+@mixin component-theme($light-or-dark) {
+  app-root {
+    .mat-mdc-list-item.selectable.even {
+      background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.08);
+
+      &.selected {
+        background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.35);
+      }
+
+      &:hover {
+        background-color: rgba(map.get(tc.$tertiary-palette, 50), 0.45);
+      }
+    }
+
+    .mat-mdc-list-item.selectable.odd {
+      background-color: rgba(map.get(tc.$primary-palette, 50), 0.1);
+
+      &.selected {
+        background-color: rgba(map.get(tc.$primary-palette, 50), 0.4);
+      }
+
+      &:hover {
+        background-color: rgba(map.get(tc.$primary-palette, 50), 0.5);
+      }
+    }
+  }
+}

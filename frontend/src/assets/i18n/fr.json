@@ -1,0 +1,158 @@
+{
+  "app-name": "Count Together",
+  "edit": {
+    "cancel": "Annuler",
+    "confirm": "Ok",
+    "game-name": {
+      "header": "Nom de la partie",
+      "invalid": "Nom de partie invalide",
+      "label": "Nom de la partie"
+    },
+    "player-name": {
+      "header": "Nom du joueur",
+      "header-new": "Nouveau joueur",
+      "invalid": "Nom de joueur invalide",
+      "label": "Nom du joueur"
+    },
+    "score": {
+      "header": "Modification du score",
+      "header-new": "Nouveau score",
+      "label": "Score"
+    }
+  },
+  "game": {
+    "add-row": "Ligne",
+    "change-game-type-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "Les scores des joueurs peuvent en être affectés",
+      "title": "Changer le type de partie ?"
+    },
+    "remove-row": "Ligne",
+    "remove-score-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "",
+      "title": "Supprimer le dernier score de {{player}} ?"
+    },
+    "remove-score-line-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Annuler",
+      "message": "Les derniers scores seront perdus",
+      "title": "Supprimer la dernière ligne ?"
+    },
+    "share": {
+      "text": "Rejoins ma partie sur Count Together !",
+      "title": "Count Together"
+    }
+  },
+  "home": {
+    "form": {
+      "game-not-found": "Partie non trouvée",
+      "label": "Rejoindre une partie",
+      "placeholder": "8 caractères"
+    },
+    "new-game": "Nouvelle partie",
+    "offline": "Mode hors-ligne",
+    "visited-games": {
+      "delete": "Supprimer des parties",
+      "delete-stop": "Arrêter la suppression",
+      "title": "Parties précédentes"
+    },
+    "welcome": "Comptez les points de tous les joueurs de vos jeux favoris !"
+  },
+  "main-title": {
+    "sound-meter": "Sonomètre",
+    "sound-share": "Partage sonore",
+    "sound-share-debug": "Debug sonore",
+    "wheel": "Roue Aléatoire"
+  },
+  "misc": {
+    "connection-error": "Déconnecté",
+    "dark-mode": "Thème sombre",
+    "keep-awake": "Désactiver veille",
+    "language": "Langue :",
+    "version": "Version :"
+  },
+  "nav-tool": {
+    "duplicate": "Dupliquer",
+    "save-offline": "Passer hors ligne",
+    "sound-meter": "Sonomètre",
+    "sound-share": "Partage sonore",
+    "sound-share-receive": "Recevoir un code",
+    "wheel": "Roue Aléatoire"
+  },
+  "nav": {
+    "game-settings": {
+      "edit-players": "Modifier joueurs",
+      "free": "Points libres",
+      "max-wins": "Max gagne",
+      "min-wins": "Min gagne",
+      "small-scores": "Petits scores",
+      "title": "Options de partie",
+      "turn-based-false": "Tours libres",
+      "turn-based-true": "Tours de jeu",
+      "turn-offset": "Décalage :",
+      "turn-show-number": "Afficher le tour",
+      "win-or-lose": "Gagne ou Perd"
+    },
+    "menu-title": "",
+    "settings": "Paramètres",
+    "tools": "Outils",
+    "update-activated": "MàJ activée",
+    "update-available": "MàJ disponible"
+  },
+  "new-game": {
+    "dialog": {
+      "game-name": {
+        "invalid": "Nom de partie invalide",
+        "label": "Nom de partie"
+      },
+      "header": "Nouvelle partie",
+      "header-edit": "Modifier la partie",
+      "players": {
+        "invalid": "Nom de joueur invalide",
+        "new": "Nouveau joueur",
+        "others": "Autres joueurs",
+        "selected": "Joueurs"
+      }
+    }
+  },
+  "share": {
+    "copied": "Lien copié"
+  },
+  "sound-meter": {
+    "error": {
+      "NotAllowedError": "Accès au micro refusé",
+      "NotFoundError": "Aucun micro détecté",
+      "NotSupportedError": "Navigateur non supporté",
+      "UnknownError": "Une erreur est survenue"
+    },
+    "intro": "Appuyez sur Démarrer et autorisez l'accès au micro pour mesurer le volume sonore.",
+    "smoothing": "Lissage",
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "threshold": "Seuil"
+  },
+  "sound-sharing": {
+    "debug": {
+      "ask-permission": "Demander la permission",
+      "authorize": "Autorisez l'accès au micro",
+      "error": "Une erreur est survenue",
+      "not-allowed": "Accès au micro non reçu",
+      "not-found": "Aucun micro détecté",
+      "not-supported": "Navigateur non supporté",
+      "start-recording": "Commencer l'enregistrement",
+      "stop-recording": "Arrêter l'enregistrement"
+    },
+    "goto-debug": "Debug",
+    "listen": "Écouter",
+    "share": "Partager",
+    "share-test": "Test de partage",
+    "stop-listening": "Arrêter d'écouter"
+  },
+  "wheel": {
+    "players": "{{ nb }} joueurs",
+    "reset": "Reset"
+  }
+}

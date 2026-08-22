@@ -1,0 +1,44 @@
+:host {
+  padding: 20px;
+  text-align: center;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0
+  }
+}
+
+.record-indicator {
+  color: red;
+  animation: blinker 1.5s infinite;
+  display: inline-flex;
+  align-items: center;
+
+  span {
+    font-size: 16px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.frequency-bars {
+  margin: auto;
+  width: 300px;
+  background-color: #3b1ea244;
+  overflow: hidden;
+
+  .frequency-bar {
+    height: 8px;
+    width: 6px;
+    background-color: #3b1ea2;
+  }
+}
+
+.binary-payload {
+  margin: 5px 0;
+  color: #888888;
+  font-size: 75%;
+}

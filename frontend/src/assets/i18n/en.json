@@ -1,0 +1,158 @@
+{
+  "app-name": "Count Together",
+  "edit": {
+    "cancel": "Cancel",
+    "confirm": "Ok",
+    "game-name": {
+      "header": "Edit game name",
+      "invalid": "This game name is invalid",
+      "label": "Game name"
+    },
+    "player-name": {
+      "header": "Edit player name",
+      "header-new": "New player name",
+      "invalid": "This player name is invalid",
+      "label": "Player name"
+    },
+    "score": {
+      "header": "Edit score",
+      "header-new": "New score",
+      "label": "Score"
+    }
+  },
+  "game": {
+    "add-row": "Add row",
+    "change-game-type-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "Player scores can be altered",
+      "title": "Change game type?"
+    },
+    "remove-row": "Remove row",
+    "remove-score-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "",
+      "title": "Remove last score for {{player}}?"
+    },
+    "remove-score-line-dialog": {
+      "confirm": "Yes",
+      "dismiss": "Cancel",
+      "message": "Last scores will be lost",
+      "title": "Remove last score line ?"
+    },
+    "share": {
+      "text": "Join my game on Count Together",
+      "title": "Count Together"
+    }
+  },
+  "home": {
+    "form": {
+      "game-not-found": "Game not found",
+      "label": "Join a game",
+      "placeholder": "8 characters"
+    },
+    "new-game": "New game",
+    "offline": "Offline mode",
+    "visited-games": {
+      "delete": "Delete entries",
+      "delete-stop": "Stop deleting",
+      "title": "Visited games"
+    },
+    "welcome": "Count the score for every player of your favorite games!"
+  },
+  "main-title": {
+    "sound-meter": "Sound meter",
+    "sound-share": "Sound share",
+    "sound-share-debug": "Sound share debug",
+    "wheel": "Random Wheel"
+  },
+  "misc": {
+    "connection-error": "Disconnected",
+    "dark-mode": "Dark mode",
+    "keep-awake": "Keep screen awake",
+    "language": "Language:",
+    "version": "Version:"
+  },
+  "nav-tool": {
+    "duplicate": "Duplicate",
+    "save-offline": "Save offline",
+    "sound-meter": "Sound meter",
+    "sound-share": "Sound share",
+    "sound-share-receive": "Receive a code",
+    "wheel": "Random Wheel"
+  },
+  "nav": {
+    "game-settings": {
+      "edit-players": "Edit players",
+      "free": "Free points",
+      "max-wins": "Max score wins",
+      "min-wins": "Min score wins",
+      "small-scores": "Small scores",
+      "title": "Game settings",
+      "turn-based-false": "Free lines",
+      "turn-based-true": "Turn based",
+      "turn-offset": "Turn offset:",
+      "turn-show-number": "Show turn number",
+      "win-or-lose": "Win or Lose"
+    },
+    "menu-title": "",
+    "settings": "Settings",
+    "tools": "Tools",
+    "update-activated": "Update activated",
+    "update-available": "Update available"
+  },
+  "new-game": {
+    "dialog": {
+      "game-name": {
+        "invalid": "Invalid game name",
+        "label": "Game name"
+      },
+      "header": "New game",
+      "header-edit": "Edit game",
+      "players": {
+        "invalid": "Invalid player name",
+        "new": "New player",
+        "others": "Other players",
+        "selected": "Game players"
+      }
+    }
+  },
+  "share": {
+    "copied": "Copied"
+  },
+  "sound-meter": {
+    "error": {
+      "NotAllowedError": "Microphone access denied",
+      "NotFoundError": "No microphone detected",
+      "NotSupportedError": "Browser not supported",
+      "UnknownError": "An error occurred"
+    },
+    "intro": "Press Start and allow microphone access to measure the sound level.",
+    "smoothing": "Smoothing",
+    "start": "Start",
+    "stop": "Stop",
+    "threshold": "Threshold"
+  },
+  "sound-sharing": {
+    "debug": {
+      "ask-permission": "Request microphone access",
+      "authorize": "Please authorize microphone access",
+      "error": "An error occurred",
+      "not-allowed": "Microphone access not allowed",
+      "not-found": "No microphone detected",
+      "not-supported": "Browser not supported",
+      "start-recording": "Start recording",
+      "stop-recording": "Stop recording"
+    },
+    "goto-debug": "Debug",
+    "listen": "Listen",
+    "share": "Share",
+    "share-test": "Share test code",
+    "stop-listening": "Stop listening"
+  },
+  "wheel": {
+    "players": "{{ nb }} players",
+    "reset": "Reset"
+  }
+}

@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '../../../theme-colors' as tc;
+
+@mixin component-theme($light-or-dark) {
+  app-wheel-page {
+    @if $light-or-dark == light {
+      @include component-theme-light();
+    } @else {
+      @include component-theme-dark();
+    }
+  }
+}
+
+@mixin component-theme-light() {
+  @include mat.slider-color(tc.$light-theme, $color-variant: tertiary);
+}
+
+@mixin component-theme-dark() {
+  @include mat.slider-color(tc.$dark-theme, $color-variant: tertiary);
+}

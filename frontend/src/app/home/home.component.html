@@ -1,0 +1,49 @@
+<p style="margin: 0 0 24px">{{ 'home.welcome' | translate }}</p>
+
+<button mat-flat-button (click)="newGameOpen()">
+  {{ 'home.new-game' | translate }}
+</button>
+<br>
+<button mat-button [routerLink]="['game', 'offline']" style="margin-top: 16px">
+  {{ 'home.offline' | translate }}
+</button>
+
+<form style="display: flex; justify-content: center; margin-top: 16px">
+  <div style="width: 24px"></div>
+  <mat-form-field style="width: 184px; margin: 0 12px">
+    <mat-label>{{ 'home.form.label' | translate }}</mat-label>
+    <input matInput
+           type="text"
+           autocomplete="off"
+           maxlength="8"
+           [formControl]="gameFormControl"
+           [errorStateMatcher]="matcher"
+           [placeholder]="'home.form.placeholder' | translate">
+    @if (gameFormControl.errors?.gameNotFound) {
+      <mat-error>{{ 'home.form.game-not-found' | translate }}</mat-error>
+    }
+  </mat-form-field>
+  <div style="width: 24px">
+    @if (gameCheckPending()) {
+      <mat-spinner diameter="24" style="margin-top: 18px"></mat-spinner>
+    }
+  </div>
+</form>
+
+@if (visitedGames().length > 0) {
+  <h3 style="margin-top: 48px">{{ 'home.visited-games.title' | translate }}</h3>
+  @for (game of visitedGames(); track game.gameId) {
+    <div>
+      <button mat-button [class.color-warn]="deletion()" (click)="visitedGameClicked(game.gameId)">
+        {{ game.gameId }} - {{ game.name.length > 25 ? game.name.substring(0, 24) + '...' : game.name }}
+      </button>
+    </div>
+  }
+  <button mat-button (click)="toggleDeletion()" [style.opacity]="deletion() ? 1 : 0.4">
+    @if (deletion()) {
+      {{ 'home.visited-games.delete-stop' | translate }}
+    } @else {
+      {{ 'home.visited-games.delete' | translate }}
+    }
+  </button>
+}

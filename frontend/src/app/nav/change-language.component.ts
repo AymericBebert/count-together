@@ -1,0 +1,47 @@
+import {Component, inject, output} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+
+@Component({
+  selector: 'app-change-language',
+  template: `
+    <div (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu">
+      <mat-icon style="margin-right: 8px; vertical-align: text-bottom;">arrow_drop_down</mat-icon>
+      <span>{{ 'misc.language' | translate }}&ensp;
+        <span class="lang-flag">{{ langToFlag(translate.getCurrentLang()) }}</span>{{ translate.getCurrentLang() }}
+      </span>
+      <mat-menu #menu="matMenu">
+        @for (lang of translate.getLangs(); track $index) {
+          <button mat-menu-item (click)="langClicked(lang)">
+            <span class="lang-flag">{{ langToFlag(lang) }}</span>{{ lang }}
+          </button>
+        }
+      </mat-menu>
+    </div>`,
+  styles: ['span.lang-flag { vertical-align: middle; }'],
+  imports: [
+    TranslatePipe,
+    MatMenuModule,
+    MatIconModule,
+  ],
+})
+export class ChangeLanguageComponent {
+  public readonly translate = inject(TranslateService);
+
+  public readonly langSet = output<string>();
+
+  public flagMap: Record<string, string> = {
+    fr: '🇫🇷',
+    en: '🇬🇧',
+    unknown: '🏳️',
+  };
+
+  public langToFlag(lang: string | null): string {
+    return (lang && this.flagMap[lang]) || this.flagMap.unknown;
+  }
+
+  langClicked(lang: string): void {
+    this.langSet.emit(lang);
+  }
+}

@@ -15,7 +15,36 @@ services:
     networks:
       - proxy
 
+  count_together_backend:
+    image: aymericbernard/count-together-backend:latest
+    container_name: count_together_backend
+    restart: always
+    environment:
+      - VIRTUAL_HOST=count-together-backend.example.com
+      - LETSENCRYPT_HOST=count-together-backend.example.com
+      - LETSENCRYPT_EMAIL=contact@example.com
+      - MONGO_URL=mongodb://root:__password__@count_together_mongo:27017/count?authSource=admin
+    depends_on:
+      - count_together_mongo
+    networks:
+      - count_together_internal
+      - proxy
+
+  count_together_mongo:
+    image: mongo:latest
+    container_name: count_together_mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=count
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=__password__
+    volumes:
+      - /home/bebert/count_together_mongo_db:/data/db
+    networks:
+      - count_together_internal
+
 networks:
   proxy:
     external:
       name: nginx-proxy
+  count_together_internal:

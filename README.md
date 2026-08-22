@@ -2,38 +2,19 @@
 
 Count together the scores on your card or board games!
 
-## Installation
+This is a monorepo containing both the frontend and the backend of the project.
 
-```shell
-npm install
-```
+## Structure
 
-## Development server
+- [`frontend/`](./frontend) — the Angular web application
+- [`backend/`](./backend) — the Node.js API backend
 
-Run `npm run start` for a dev server. Navigate to `http://localhost:4500/`. The app will automatically reload if you change any of the source files.
+See each project's own `README.md` for installation, development and build instructions.
 
 ## Build and publish a new version
 
-We use GitHub Actions to build the new version on release.
+We use GitHub Actions to build the Docker images on release.
 
-In order to build a new version, you need to create a new release on GitHub, using semver tags.
-
-## Running unit tests
-
-```bash
-npm run test
-```
-
-## Run as static website
-
-```bash
-npm run build:serve
-```
-
-## Analyse bundle size
-
-```bash
-npm run build:stats
-```
-
-Then import your `dist/count-together/stats.json` file on [esbuild Bundle Size Analyzer](https://esbuild.github.io/analyze/)
+In order to build new versions, you need to create a new release on GitHub, using semver tags.
+Pushing a tag builds and publishes both the frontend (`count-together`) and backend
+(`count-together-backend`) Docker images.

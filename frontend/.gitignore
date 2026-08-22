@@ -1,14 +1,16 @@
-.git
-
+# compiled output
 /dist
 /tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
 
 # dependencies
 /node_modules
 
 # profiling files
-chrome-profiler-events.json
-speed-measure-plugin.json
+chrome-profiler-events*.json
+speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
@@ -21,9 +23,14 @@ speed-measure-plugin.json
 
 # IDE - VSCode
 .vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .history/*
 
 # misc
+/.angular/cache
 /.sass-cache
 /connect.lock
 /coverage
@@ -36,4 +43,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-._*

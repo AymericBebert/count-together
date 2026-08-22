@@ -2,7 +2,7 @@ version: "3"
 
 services:
   count_together:
-    image: aymericbernard/count-together:latest
+    image: aymericbernard/count-together:$VERSION
     container_name: count_together
     restart: always
     environment:
@@ -16,7 +16,7 @@ services:
       - proxy
 
   count_together_backend:
-    image: aymericbernard/count-together-backend:latest
+    image: aymericbernard/count-together-backend:$VERSION
     container_name: count_together_backend
     restart: always
     environment:
@@ -31,7 +31,7 @@ services:
       - proxy
 
   count_together_mongo:
-    image: mongo:latest
+    image: mongo:$MONGO_VERSION
     container_name: count_together_mongo
     restart: always
     environment:

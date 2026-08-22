@@ -92,7 +92,7 @@
       "title": "Options de partie",
       "turn-based-false": "Tours libres",
       "turn-based-true": "Tours de jeu",
-      "turn-offset": "Décalage :",
+      "turn-offset": "1er tour :",
       "turn-show-number": "Afficher le tour",
       "win-or-lose": "Gagne ou Perd"
     },

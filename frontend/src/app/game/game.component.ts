@@ -26,6 +26,9 @@ import {GamesService} from '../service/games.service';
 import {ShareService} from '../share/share.service';
 import {SocketService} from '../socket/socket.service';
 
+/** Only prompt to follow a duplication that happened within this window (10 minutes). */
+const DUPLICATE_FOLLOW_WINDOW_MS = 10 * 60 * 1000;
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -82,6 +85,9 @@ export class GameComponent implements OnInit {
   );
 
   public readonly connectionError = toSignal(this.socket.connectionError$, {initialValue: false});
+
+  /** Duplication targets already handled (prompted or self-initiated), to avoid prompting twice. */
+  private readonly handledDuplications = new Set<string>();
 
   private static cumSum(scores: (number | null)[]): { scoresCumSum: number[], total: number } {
     return scores.reduce(
@@ -152,6 +158,10 @@ export class GameComponent implements OnInit {
     this.gameSettingsService.playerEdition$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(playerEdition => this.editPlayers(playerEdition));
+
+    this.game$
+      .pipe(filter((game): game is IGame => !!game), takeUntilDestroyed(this.destroyRef))
+      .subscribe(game => this.maybePromptFollowDuplicate(game));
   }
 
   public editGameOpen(): void {
@@ -409,6 +419,35 @@ export class GameComponent implements OnInit {
           void this.router.navigate(['game', newGameId], {...navigationExtras});
         });
     }
+  }
+
+  private maybePromptFollowDuplicate(game: IGame): void {
+    const target = game.duplicatedTo;
+    if (!target || game.gameId === 'offline' || game.duplicatedAt === undefined) {
+      return;
+    }
+    if (Date.now() - game.duplicatedAt > DUPLICATE_FOLLOW_WINDOW_MS) {
+      return;
+    }
+    if (this.handledDuplications.has(target) || this.gamesService.wasDuplicatedFromHere(game.gameId)) {
+      return;
+    }
+    this.handledDuplications.add(target);
+    this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+      ConfirmDialogComponent,
+      {
+        data: {
+          title: this.translate.instant('game.follow-duplicate-dialog.title'),
+          message: this.translate.instant('game.follow-duplicate-dialog.message'),
+          confirm: this.translate.instant('game.follow-duplicate-dialog.confirm'),
+          dismiss: this.translate.instant('game.follow-duplicate-dialog.dismiss'),
+        },
+        closeOnNavigation: false,
+      },
+    )
+      .afterClosed()
+      .pipe(filter(res => !!res), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => void this.router.navigate(['game', target]));
   }
 
   private saveOffline(game: IGame | null, navigationExtras?: NavigationExtras): void {

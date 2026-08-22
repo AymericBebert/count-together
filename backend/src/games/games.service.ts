@@ -42,20 +42,29 @@ export class GamesService {
     await GameM.deleteMany({});
   }
 
-  public static async duplicateGame(gameId: string): Promise<Game> {
+  public static async duplicateGame(gameId: string): Promise<{ newGame: Game; originalGame: Game }> {
     const game = await GamesService.getGameById(gameId);
     if (!game) {
       throw new Error('Cannot duplicate: did not find game');
     }
-    return GamesService.addGame({
+    const newGameId = generateToken(8);
+    const newGame = await GamesService.addGame({
       ...game,
       players: game.players.map(player => ({
         ...player,
         scores: [],
       })),
-      gameId: generateToken(8),
+      gameId: newGameId,
       name: GamesService.duplicateGameName(game.name),
+      duplicatedTo: undefined,
+      duplicatedAt: undefined,
     });
+    const originalGame = await GamesService.updateGame({
+      ...game,
+      duplicatedTo: newGameId,
+      duplicatedAt: Date.now(),
+    });
+    return {newGame, originalGame};
   }
 
   public static async updateGameName(gameId: string, name: string): Promise<Game> {

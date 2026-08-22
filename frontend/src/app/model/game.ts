@@ -11,6 +11,8 @@ export interface IGame {
   showTurnNumber: boolean;
   turnNumberOffset: number;
   players: Player[];
+  duplicatedTo?: string;
+  duplicatedAt?: number;
 }
 
 export interface IGameSettings {

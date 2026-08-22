@@ -7,6 +7,7 @@ import {customErrorHandler} from './error/custom-error-handler';
 import {HttpError} from './error/http-error';
 import gamesRouter from './games/games.router';
 import {GameHotel} from './live/game-hotel';
+import {HotelProvider} from './live/hotel-provider';
 import {loggerMiddleware} from './middlewares/logger';
 import {onConnection} from './socket/on-connection';
 import {connectMongooseWithRetry} from './utils/mongodb-connect';
@@ -82,6 +83,7 @@ const io = new Server(
 
 // hotel
 const hotel = new GameHotel(io);
+HotelProvider.registerHotel(hotel);
 
 // Socket.IO new connection
 io.on('connection', (socket: Socket) => onConnection(socket, hotel));

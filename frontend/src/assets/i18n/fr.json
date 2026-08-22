@@ -28,6 +28,12 @@
       "message": "Les scores des joueurs peuvent en être affectés",
       "title": "Changer le type de partie ?"
     },
+    "follow-duplicate-dialog": {
+      "confirm": "Oui",
+      "dismiss": "Non",
+      "message": "Cette partie a été dupliquée dans une nouvelle. Voulez-vous rejoindre la nouvelle partie ?",
+      "title": "Rejoindre la nouvelle partie ?"
+    },
     "remove-row": "Ligne",
     "remove-score-dialog": {
       "confirm": "Oui",

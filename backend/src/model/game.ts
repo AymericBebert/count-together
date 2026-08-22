@@ -11,6 +11,8 @@ export interface Game {
   showTurnNumber: boolean;
   turnNumberOffset: number;
   players: Player[];
+  duplicatedTo?: string;
+  duplicatedAt?: number;
 }
 
 export interface StoredGame extends Omit<Game, 'players'> {
@@ -26,6 +28,8 @@ export const gameSchema = new mongoose.Schema<StoredGame>({
   showTurnNumber: Boolean,
   turnNumberOffset: Number,
   players: [playerSchema],
+  duplicatedTo: String,
+  duplicatedAt: Number,
 });
 
 export const GameM = mongoose.model<StoredGame>('Game', gameSchema);
@@ -41,4 +45,6 @@ export const pickGame = (game: Game): Game => ({
   showTurnNumber: game.showTurnNumber,
   turnNumberOffset: game.turnNumberOffset,
   players: [...game.players.map(p => pickPlayer(p))],
+  duplicatedTo: game.duplicatedTo,
+  duplicatedAt: game.duplicatedAt,
 });

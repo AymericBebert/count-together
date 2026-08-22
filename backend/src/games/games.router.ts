@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {HttpError} from '../error/http-error';
+import {HotelProvider} from '../live/hotel-provider';
 import {Game, pickGame,} from '../model/game';
 import {
   GameEditGameType,
@@ -32,8 +33,9 @@ router.post<{ gameId: string }, Game>(
   '/duplicate/:gameId',
   asyncHandler(async (request, response) => {
     const gameId = request.params.gameId;
-    const game = await GamesService.duplicateGame(gameId);
-    response.send(game);
+    const {newGame, originalGame} = await GamesService.duplicateGame(gameId);
+    HotelProvider.getInstance().updateGame(originalGame);
+    response.send(newGame);
   }),
 );
 

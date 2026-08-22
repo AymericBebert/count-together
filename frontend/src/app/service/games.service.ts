@@ -33,6 +33,9 @@ export class GamesService {
   public readonly gameCheckPending = signal<boolean>(false);
   public readonly gameCheck$ = new Subject<IGame | null>();
 
+  /** Ids of games we triggered a duplication from, so we don't prompt ourselves to follow the new game. */
+  private readonly duplicatedFromGameIds = new Set<string>();
+
   public readonly currentGame$ = new BehaviorSubject<IGame | null>(null);
   private readonly currentGameId$ = this.currentGame$.pipe(map(game => game?.gameId || ''), distinctUntilChanged());
 
@@ -231,12 +234,17 @@ export class GamesService {
   }
 
   public duplicateGame$(gameId: string): Observable<IGame> {
+    this.duplicatedFromGameIds.add(gameId);
     return this.http.post<IGame>(`${this.config.backendUrl}/games/duplicate/${gameId}`, null).pipe(
       catchError(error => {
         this.apiError.displayError('Could not duplicate game', error);
         return EMPTY;
       }),
     );
+  }
+
+  public wasDuplicatedFromHere(sourceGameId: string): boolean {
+    return this.duplicatedFromGameIds.has(sourceGameId);
   }
 
   public getVisitedGames(): IStoredGame[] {

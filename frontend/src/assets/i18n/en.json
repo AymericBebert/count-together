@@ -28,6 +28,12 @@
       "message": "Player scores can be altered",
       "title": "Change game type?"
     },
+    "follow-duplicate-dialog": {
+      "confirm": "Yes",
+      "dismiss": "No",
+      "message": "This game was duplicated into a new one. Do you want to follow to the new game?",
+      "title": "Follow to the new game?"
+    },
     "remove-row": "Remove row",
     "remove-score-dialog": {
       "confirm": "Yes",

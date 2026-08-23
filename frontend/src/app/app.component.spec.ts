@@ -2,7 +2,6 @@ import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/commo
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
 import {EMPTY} from 'rxjs';
 import {AppComponent} from './app.component';
@@ -21,7 +20,6 @@ describe('AppComponent', () => {
         translateTestingModule,
         UpdaterTestingModule,
         ConfigTestingModule,
-        NoopAnimationsModule,
       ],
       providers: [
         provideZonelessChangeDetection(),

@@ -3,9 +3,8 @@ import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {translateTestingModule} from '../../testing/translate-testing-module';
-import {PlayerNameDialogComponent} from './player-name-dialog.component';
+import {PlayerNameDialogComponent, PlayerNameDialogData} from './player-name-dialog.component';
 
 describe('PlayerNameDialogComponent', () => {
   let component: PlayerNameDialogComponent;
@@ -16,7 +15,6 @@ describe('PlayerNameDialogComponent', () => {
       imports: [
         PlayerNameDialogComponent,
         translateTestingModule,
-        NoopAnimationsModule,
       ],
       providers: [
         provideZonelessChangeDetection(),
@@ -24,8 +22,9 @@ describe('PlayerNameDialogComponent', () => {
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            editGame: true,
-          },
+            name: 'Player 1',
+            isNew: false,
+          } satisfies PlayerNameDialogData,
         },
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),

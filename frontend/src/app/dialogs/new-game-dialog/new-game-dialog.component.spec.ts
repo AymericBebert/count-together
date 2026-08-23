@@ -3,7 +3,6 @@ import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfigTestingModule} from '../../testing/config-testing.module';
 import {translateTestingModule} from '../../testing/translate-testing-module';
 import {NewGameDialogComponent} from './new-game-dialog.component';
@@ -19,7 +18,6 @@ describe('NewGameDialogComponent', () => {
         NewGameDialogComponent,
         translateTestingModule,
         ConfigTestingModule,
-        NoopAnimationsModule,
       ],
       providers: [
         provideZonelessChangeDetection(),

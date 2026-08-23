@@ -2,7 +2,6 @@ import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/commo
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ConfigTestingModule} from '../testing/config-testing.module';
 import {SocketTestingModule} from '../testing/socket-testing.module';
@@ -21,7 +20,6 @@ describe('HomeComponent', () => {
         SocketTestingModule,
         RouterTestingModule,
         ConfigTestingModule,
-        NoopAnimationsModule,
       ],
       providers: [
         provideZonelessChangeDetection(),

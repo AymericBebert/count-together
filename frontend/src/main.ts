@@ -1,4 +1,4 @@
-import {provideHttpClient, withFetch} from '@angular/common/http';
+import {provideHttpClient} from '@angular/common/http';
 import {isDevMode, provideZonelessChangeDetection} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
 import {provideRouter, withRouterConfig} from '@angular/router';
@@ -19,7 +19,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withRouterConfig({canceledNavigationResolution: 'computed'})),
-    provideHttpClient(withFetch()),
+    provideHttpClient(),
     {provide: APP_CONFIG, useFactory: appConfigFactory},
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

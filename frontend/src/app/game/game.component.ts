@@ -171,6 +171,7 @@ export class GameComponent implements OnInit {
       {
         data: {name: currentGame.name},
         closeOnNavigation: false,
+        panelClass: 'shifted-up-dialog',
       },
     )
       .afterClosed()
@@ -186,6 +187,7 @@ export class GameComponent implements OnInit {
       {
         data: {name: this.gameOrThrow.players[p].name, isNew},
         closeOnNavigation: false,
+        panelClass: 'shifted-up-dialog',
       },
     )
       .afterClosed()

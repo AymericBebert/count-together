@@ -1,3 +1,26 @@
-:host {
-  min-width: 220px;
+.keyboard {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 4px;
+}
+
+.keyboard-number, .keyboard-action {
+  font-size: 1.6em;
+}
+
+.keyboard-number {
+  background-color: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+  flex-grow: 1;
+}
+
+.keyboard-action {
+  background-color: color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
+  margin-left: 4px;
 }

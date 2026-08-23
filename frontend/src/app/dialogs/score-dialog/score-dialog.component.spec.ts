@@ -1,11 +1,8 @@
-import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
-import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideZonelessChangeDetection} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {translateTestingModule} from '../../testing/translate-testing-module';
-import {ScoreDialogComponent} from './score-dialog.component';
+import {ScoreDialogComponent, ScoreDialogData} from './score-dialog.component';
 
 describe('ScoreDialogComponent', () => {
   let component: ScoreDialogComponent;
@@ -16,7 +13,6 @@ describe('ScoreDialogComponent', () => {
       imports: [
         ScoreDialogComponent,
         translateTestingModule,
-        NoopAnimationsModule,
       ],
       providers: [
         provideZonelessChangeDetection(),
@@ -24,23 +20,15 @@ describe('ScoreDialogComponent', () => {
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            editGame: true,
-          },
+            label: 'Test label',
+          } satisfies ScoreDialogData,
         },
-        provideHttpClient(withXhr(), withInterceptorsFromDi()),
-        provideHttpClientTesting(),
       ],
     });
 
     fixture = TestBed.createComponent(ScoreDialogComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ScoreDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

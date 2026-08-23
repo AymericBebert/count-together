@@ -16,7 +16,7 @@ import {
   PlayerNameDialogData,
   PlayerNameDialogResult
 } from '../dialogs/player-name-dialog/player-name-dialog.component';
-import {EditScoreDialogData, ScoreDialogComponent} from '../dialogs/score-dialog/score-dialog.component';
+import {ScoreDialogComponent, ScoreDialogData} from '../dialogs/score-dialog/score-dialog.component';
 import {GameType, IGame, IGameEditTurn, PlayerEdition} from '../model/game';
 import {EnrichedPlayer} from '../model/player';
 import {NavButtonsService} from '../nav/nav-buttons.service';
@@ -201,10 +201,16 @@ export class GameComponent implements OnInit {
   }
 
   public editScoreOpen(p: number, i: number, isNew = false): void {
-    this.dialog.open<ScoreDialogComponent, EditScoreDialogData, number | null>(
+    this.dialog.open<ScoreDialogComponent, ScoreDialogData, number | null>(
       ScoreDialogComponent,
       {
-        data: {score: this.gameOrThrow.players[p].scores[i] ?? null, isNew},
+        data: {
+          label: isNew ? this.translate.instant('edit.score.header-new') : this.translate.instant('edit.score.header'),
+          initial: this.gameOrThrow.players[p].scores[i] ?? undefined
+        },
+        width: 'calc(100% - 16px)',
+        maxWidth: '340px',
+        autoFocus: '__nope__',
         closeOnNavigation: false,
       },
     )

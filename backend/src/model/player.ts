@@ -1,4 +1,4 @@
-import mongoose, {HydratedDocument} from 'mongoose';
+import mongoose, {type HydratedDocument} from 'mongoose';
 
 export interface Player {
   name: string;

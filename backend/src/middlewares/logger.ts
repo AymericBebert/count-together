@@ -1,4 +1,4 @@
-import express, {NextFunction} from 'express';
+import express, {type NextFunction} from 'express';
 
 export const loggerMiddleware = (request: express.Request, response: express.Response, next: NextFunction): void => {
   const bodyStr = JSON.stringify(request.body || {});

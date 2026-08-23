@@ -1,7 +1,7 @@
-import {ErrorRequestHandler} from 'express';
-import {errorString} from '../utils/error-string';
-import {hasOwnProperty} from '../utils/property';
-import {HttpError} from './http-error';
+import type {ErrorRequestHandler} from 'express';
+import {errorString} from '../utils/error-string.ts';
+import {hasOwnProperty} from '../utils/property.ts';
+import {HttpError} from './http-error.ts';
 
 export const customErrorHandler: ErrorRequestHandler =
   (err, req, res) => {

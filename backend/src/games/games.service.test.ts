@@ -1,7 +1,7 @@
 import {Connection} from 'mongoose';
-import {Game} from '../model/game';
-import {closeTestMongoose, connectTestMongoose} from '../utils/mongodb-test-connect';
-import {GamesService} from './games.service';
+import type {Game} from '../model/game.ts';
+import {closeTestMongoose, connectTestMongoose} from '../utils/mongodb-test-connect.ts';
+import {GamesService} from './games.service.ts';
 
 describe('GamesService', () => {
   let connection: Connection;

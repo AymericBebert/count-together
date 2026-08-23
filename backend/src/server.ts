@@ -1,16 +1,16 @@
 import cors from 'cors';
 import express from 'express';
-import {createServer, Server as HttpServer} from 'http';
-import {Server, Socket} from 'socket.io';
-import {config} from './config';
-import {customErrorHandler} from './error/custom-error-handler';
-import {HttpError} from './error/http-error';
-import gamesRouter from './games/games.router';
-import {GameHotel} from './live/game-hotel';
-import {HotelProvider} from './live/hotel-provider';
-import {loggerMiddleware} from './middlewares/logger';
-import {onConnection} from './socket/on-connection';
-import {connectMongooseWithRetry} from './utils/mongodb-connect';
+import {createServer, type Server as HttpServer} from 'http';
+import {Server, type Socket} from 'socket.io';
+import {config} from './config.ts';
+import {customErrorHandler} from './error/custom-error-handler.ts';
+import {HttpError} from './error/http-error.ts';
+import gamesRouter from './games/games.router.ts';
+import {GameHotel} from './live/game-hotel.ts';
+import {HotelProvider} from './live/hotel-provider.ts';
+import {loggerMiddleware} from './middlewares/logger.ts';
+import {onConnection} from './socket/on-connection.ts';
+import {connectMongooseWithRetry} from './utils/mongodb-connect.ts';
 
 // Since node 15, process exits when a promise is not handled. This is very dangerous.
 process.on('unhandledRejection', (reason) => {

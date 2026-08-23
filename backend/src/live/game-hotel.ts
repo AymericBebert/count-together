@@ -1,16 +1,16 @@
-import socketIO from 'socket.io';
-import {emitEvent} from '../events';
-import {GamesService} from '../games/games.service';
-import {Game} from '../model/game';
-import {GameRoom} from './game-room';
+import type {Server, Socket} from 'socket.io';
+import {emitEvent} from '../events.ts';
+import {GamesService} from '../games/games.service.ts';
+import type {Game} from '../model/game.ts';
+import {GameRoom} from './game-room.ts';
 
 export class GameHotel {
   private rooms: { [gameId: string]: GameRoom } = {};
 
-  constructor(private readonly io: socketIO.Server) {
+  constructor(private readonly io: Server) {
   }
 
-  public async addConnection(socket: socketIO.Socket, gameId: string): Promise<boolean> {
+  public async addConnection(socket: Socket, gameId: string): Promise<boolean> {
     if (!this.rooms[gameId]) {
       const game = await GamesService.getGameById(gameId).catch(err => console.error('addConnection err:', err));
       if (!game) {
@@ -28,7 +28,7 @@ export class GameHotel {
     return connected;
   }
 
-  public async removeConnection(socket: socketIO.Socket, gameId: string): Promise<boolean> {
+  public async removeConnection(socket: Socket, gameId: string): Promise<boolean> {
     if (!this.rooms[gameId]) {
       return false;
     }
@@ -43,7 +43,7 @@ export class GameHotel {
     return removed;
   }
 
-  public sendGame(socket: socketIO.Socket, gameId: string): boolean {
+  public sendGame(socket: Socket, gameId: string): boolean {
     if (!this.rooms[gameId]) {
       return false;
     }

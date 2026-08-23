@@ -1,4 +1,4 @@
-import {HttpError} from '../error/http-error';
+import {HttpError} from '../error/http-error.ts';
 
 export function errorString(err: unknown): string {
   if (err instanceof HttpError && err.customDetails) {

@@ -1,6 +1,6 @@
-import mongoose, {Connection} from 'mongoose';
-import {config} from '../config';
-import {errorString} from './error-string';
+import mongoose, {type Connection} from 'mongoose';
+import {config} from '../config.ts';
+import {errorString} from './error-string.ts';
 
 export async function connectMongooseWithRetry(maxTries = -1, uri?: string): Promise<Connection | null> {
   const connectUri = uri || config.mongoUrl;

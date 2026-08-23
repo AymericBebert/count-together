@@ -1,14 +1,14 @@
 import {Subject} from 'rxjs';
-import socketIO from 'socket.io';
-import {config} from '../config';
-import {EmittedEventTypes} from '../events';
-import {Game} from '../model/game';
+import type {Server, Socket} from 'socket.io';
+import {config} from '../config.ts';
+import type {EmittedEventTypes} from '../events.ts';
+import type {Game} from '../model/game.ts';
 
 export class GameRoom {
   public destroy$: Subject<void> = new Subject<void>();
   private readonly gameId: string;
 
-  constructor(private readonly io: socketIO.Server,
+  constructor(private readonly io: Server,
               private _game: Game) {
     this.gameId = _game.gameId;
   }
@@ -29,7 +29,7 @@ export class GameRoom {
     return this.gameId;
   }
 
-  public addConnection(socket: socketIO.Socket): boolean {
+  public addConnection(socket: Socket): boolean {
     try {
       void socket.join(this.room);
     } catch (e) {
@@ -39,7 +39,7 @@ export class GameRoom {
     return true;
   }
 
-  public removeConnection(socket: socketIO.Socket): boolean {
+  public removeConnection(socket: Socket): boolean {
     try {
       void socket.leave(this.room);
     } catch (e) {

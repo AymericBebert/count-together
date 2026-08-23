@@ -1,8 +1,8 @@
-import {Game, GameDocument, GameM, pickGame} from '../model/game';
-import {GameEditTurn, PlayerEdition} from '../model/game-edit-dtos';
-import {GameType} from '../model/game-type';
-import {Player, PlayerDocument} from '../model/player';
-import {generateToken} from '../utils/generate-token';
+import type {GameEditTurn, PlayerEdition} from '../model/game-edit-dtos.ts';
+import type {GameType} from '../model/game-type.ts';
+import {type Game, type GameDocument, GameM, pickGame} from '../model/game.ts';
+import type {Player, PlayerDocument} from '../model/player.ts';
+import {generateToken} from '../utils/generate-token.ts';
 
 export class GamesService {
 

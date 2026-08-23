@@ -1,9 +1,8 @@
-import {fromEvent, Observable} from 'rxjs';
+import {fromEvent, type Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {Socket} from 'socket.io';
-import {config} from './config';
-import {Game} from './model/game';
-import {
+import type {Socket} from 'socket.io';
+import {config} from './config.ts';
+import type {
   GameEditGameType,
   GameEditName,
   GameEditPlayer,
@@ -13,7 +12,8 @@ import {
   GameEditWin,
   GameRemovePlayer,
   GameRemoveScore
-} from './model/game-edit-dtos';
+} from './model/game-edit-dtos.ts';
+import type {Game} from './model/game.ts';
 
 export interface ReceivedEventTypes {
   'disconnect': void;

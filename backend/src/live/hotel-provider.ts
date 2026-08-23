@@ -1,4 +1,4 @@
-import {GameHotel} from './game-hotel';
+import {GameHotel} from './game-hotel.ts';
 
 export class HotelProvider {
   private static instance: GameHotel;

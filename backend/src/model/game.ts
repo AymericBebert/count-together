@@ -1,6 +1,6 @@
-import mongoose, {HydratedDocument} from 'mongoose';
-import {GameType} from './game-type';
-import {pickPlayer, Player, PlayerDocument, playerSchema} from './player';
+import mongoose, {type HydratedDocument} from 'mongoose';
+import type {GameType} from './game-type.ts';
+import {pickPlayer, type Player, type PlayerDocument, playerSchema} from './player.ts';
 
 export interface Game {
   gameId: string;

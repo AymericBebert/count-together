@@ -1,8 +1,7 @@
 import {Router} from 'express';
-import {HttpError} from '../error/http-error';
-import {HotelProvider} from '../live/hotel-provider';
-import {Game, pickGame,} from '../model/game';
-import {
+import {HttpError} from '../error/http-error.ts';
+import {HotelProvider} from '../live/hotel-provider.ts';
+import type {
   GameEditGameType,
   GameEditName,
   GameEditPlayer,
@@ -11,10 +10,11 @@ import {
   GameEditWin,
   GameRemovePlayer,
   GameRemoveScore
-} from '../model/game-edit-dtos';
-import {asyncHandler} from '../utils/async-handler';
-import {generateToken} from '../utils/generate-token';
-import {GamesService} from './games.service';
+} from '../model/game-edit-dtos.ts';
+import {type Game, pickGame} from '../model/game.ts';
+import {asyncHandler} from '../utils/async-handler.ts';
+import {generateToken} from '../utils/generate-token.ts';
+import {GamesService} from './games.service.ts';
 
 type NoParams = Record<string, never>
 

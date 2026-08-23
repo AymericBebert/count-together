@@ -2,15 +2,15 @@
   "name": "count-together-backend",
   "version": "1.0.0",
   "description": "Backend for Count Together",
+  "type": "module",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AymericBebert/count-together-backend"
+    "url": "https://github.com/AymericBebert/count-together"
   },
   "scripts": {
     "start": "npm run build && npm run serve",
-    "start:watch": "tsx watch src/server.ts",
-    "tsc": "tsc",
+    "start:watch": "node --watch --experimental-transform-types src/server.ts",
     "test": "jest --coverage --verbose",
     "build": "tsc -p tsconfig.build.json",
     "serve": "node dist/server.js",
@@ -39,7 +39,6 @@
     "jest": "^30.4.2",
     "ts-jest": "^29.4.12",
     "ts-mockito": "^2.6.1",
-    "tsx": "^4.23.12",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.67.0"
   },

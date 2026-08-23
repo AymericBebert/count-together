@@ -1,10 +1,10 @@
 import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
-import {Socket} from 'socket.io';
-import {emitEvent, EmittedEventTypes, fromEventTyped, ReceivedEventTypes} from '../events';
-import {GamesService} from '../games/games.service';
-import {GameHotel} from '../live/game-hotel';
-import {errorString} from '../utils/error-string';
+import type {Socket} from 'socket.io';
+import {emitEvent, type EmittedEventTypes, fromEventTyped, type ReceivedEventTypes} from '../events.ts';
+import {GamesService} from '../games/games.service.ts';
+import {GameHotel} from '../live/game-hotel.ts';
+import {errorString} from '../utils/error-string.ts';
 
 export function onConnection(socket: Socket<ReceivedEventTypes, EmittedEventTypes>, hotel: GameHotel): void {
   console.log(`New connection from ${socket.id}`);

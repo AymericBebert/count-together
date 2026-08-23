@@ -1,4 +1,4 @@
-import {GameType} from './game-type';
+import type {GameType} from './game-type.ts';
 
 export interface GameEditName {
   gameId: string;

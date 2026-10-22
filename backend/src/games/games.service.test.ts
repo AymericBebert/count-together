@@ -1,4 +1,4 @@
-import {Connection} from 'mongoose';
+import type {Connection} from 'mongoose';
 import type {Game} from '../model/game.ts';
 import {closeTestMongoose, connectTestMongoose} from '../utils/mongodb-test-connect.ts';
 import {GamesService} from './games.service.ts';

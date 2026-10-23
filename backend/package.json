@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm run build && npm run serve",
     "start:watch": "node --watch --experimental-transform-types src/server.ts",
-    "test": "jest --coverage --verbose",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage --verbose",
     "build": "tsc -p tsconfig.build.json",
     "serve": "node dist/server.js",
     "lint": "eslint .",
@@ -21,11 +21,11 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.9.3",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4",
     "rxjs": "^7.8.2",
-    "socket.io": "~4.8.3"
+    "socket.io": "~4.8.4"
   },
   "devDependencies": {
     "@eslint/js": "~10.0.1",
@@ -33,18 +33,19 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
-    "@types/ws": "^8.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
-    "eslint": "^10.9.0",
-    "jest": "^30.4.2",
-    "ts-jest": "^29.4.12",
+    "@types/ws": "^8.18.2",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "eslint": "^10.13.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15",
     "ts-mockito": "^2.6.1",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.67.0"
+    "typescript-eslint": "^8.72.0"
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
     "fsevents@2.3.3": true,
+    "@parcel/watcher@2.6.0": true,
     "unrs-resolver@1.12.2": true
   }
 }

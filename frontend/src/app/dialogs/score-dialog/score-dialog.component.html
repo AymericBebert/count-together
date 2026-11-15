@@ -1,4 +1,11 @@
 <mat-dialog-content>
+  <h3>
+    <span>{{ 'edit.score.player' | translate: {name: data.player} }}</span>
+    @if (data.turn) {
+      <span>{{ 'edit.score.turn' | translate: {turn: data.turn} }}</span>
+    }
+  </h3>
+
   <form style="display: flex; align-items: center" (ngSubmit)="ref.close(score())">
     <mat-form-field style="flex: 1 1 120px">
       <mat-label>{{ data.label }}</mat-label>

@@ -8,7 +8,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 export interface ScoreDialogData {
   label: string;
+  player: string;
   initial?: number | undefined;
+  turn?: number | undefined;
 }
 
 export type ScoreDialogResult = number | null;

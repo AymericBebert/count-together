@@ -203,12 +203,16 @@ export class GameComponent implements OnInit {
   }
 
   public editScoreOpen(p: number, i: number, isNew = false): void {
+    const currentGame = this.gameOrThrow;
+    const turnSettings = this.gameSettingsService.getGameTurnSettings();
     this.dialog.open<ScoreDialogComponent, ScoreDialogData, number | null>(
       ScoreDialogComponent,
       {
         data: {
           label: isNew ? this.translate.instant('edit.score.header-new') : this.translate.instant('edit.score.header'),
-          initial: this.gameOrThrow.players[p].scores[i] ?? undefined
+          player: currentGame.players[p].name,
+          initial: currentGame.players[p].scores[i] ?? undefined,
+          turn: turnSettings ? i + 1 + turnSettings.turnNumberOffset : undefined,
         },
         width: 'calc(100% - 16px)',
         maxWidth: '340px',

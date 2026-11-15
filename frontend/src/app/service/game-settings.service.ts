@@ -104,7 +104,7 @@ export class GameSettingsService {
       });
   }
 
-  private getGameTurnSettings(): IGameEditTurn | null {
+  public getGameTurnSettings(): IGameEditTurn | null {
     const currentGame = this.gamesService.currentGame$.value;
     if (!currentGame) {
       console.error('getGameTurnSettings but no current game');

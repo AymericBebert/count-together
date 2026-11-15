@@ -21,6 +21,7 @@ describe('ScoreDialogComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: {
             label: 'Test label',
+            player: 'Test player',
           } satisfies ScoreDialogData,
         },
       ],

@@ -17,7 +17,8 @@
     "score": {
       "header": "Edit score",
       "header-new": "New score",
-      "label": "Score"
+      "player": "Score for {{name}}",
+      "turn": ", turn {{turn}}"
     }
   },
   "game": {

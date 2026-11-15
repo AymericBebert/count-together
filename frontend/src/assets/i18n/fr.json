@@ -17,7 +17,8 @@
     "score": {
       "header": "Modification du score",
       "header-new": "Nouveau score",
-      "label": "Score"
+      "player": "Score de {{name}}",
+      "turn": ", tour {{turn}}"
     }
   },
   "game": {
